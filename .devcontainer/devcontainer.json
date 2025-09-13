@@ -1,0 +1,34 @@
+{
+    "name": "Business Card Manager",
+    "dockerComposeFile": "./docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "features": {
+      "ghcr.io/devcontainers/features/git:1": {},
+      "ghcr.io/devcontainers/features/github-cli:1": {},
+      "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
+    "postCreateCommand": "bundle install && npm install",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ruby-syntax-tree.vscode-syntax-tree",
+          "Shopify.ruby-lsp",
+          "bradlc.vscode-tailwindcss",
+          "ms-vscode.vscode-json"
+        ],
+        "settings": {
+          "rubyLsp.bundleGemfile": "Gemfile",
+          "rubyLsp.formatter": "auto",
+          "ruby.useLanguageServer": true,
+          "[ruby]": {
+            "editor.defaultFormatter": "Shopify.ruby-lsp",
+            "editor.formatOnSave": true
+          },
+          "ruby.lint": {
+            "rubocop": true
+          }
+        }
+      }
+    }
+  }
