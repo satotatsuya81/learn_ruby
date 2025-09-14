@@ -1,24 +1,245 @@
-# README
+# Business Card Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+モダンな名刺管理Webアプリケーション
 
-Things you may want to cover:
+## 🎯 プロジェクト目的
 
-* Ruby version
+このプロジェクトは、Ruby on Railsを使用した実用的な名刺管理システムの構築を通じて、以下の技術力を実証することを目的としています：
 
-* System dependencies
+- **Ruby/Rails習得**: Java経験者の効率的な技術移行
+- **プロダクト開発思考**: ユーザー価値を重視した機能設計
+- **モダン開発手法**: devcontainer、TDD、CI/CDの実践
+- **AI協働開発**: Claude Codeを活用した効率的な開発プロセス
 
-* Configuration
+## 🏗️ システム概要
 
-* Database creation
+### 主要機能
 
-* Database initialization
+#### 基本機能
+- **ユーザー管理**: 認証・認可、プロフィール管理
+- **名刺CRUD**: 名刺の登録・編集・削除・一覧表示
+- **検索・フィルタリング**: 名前・会社名・タグでの高速検索
+- **タグ管理**: 名刺の分類・整理機能
+- **画像アップロード**: 名刺写真の保存・表示
 
-* How to run the test suite
+#### 高度な機能
+- **OCR・自動データ抽出**: 名刺画像からの自動テキスト抽出
+- **データ品質管理**: 重複検出・データ補完・品質スコア算出
+- **人脈ネットワーク分析**: 関係性可視化・接触履歴管理
+- **統計・分析**: ダッシュボード・グラフ表示
+- **データエクスポート**: CSV/JSON形式でのデータ出力
 
-* Services (job queues, cache servers, search engines, etc.)
+#### UI/UX
+- **レスポンシブデザイン**: モバイル・タブレット・デスクトップ対応
+- **アクセシビリティ**: WCAG 2.1準拠
+- **モダンUI**: Bootstrap 5 + Stimulus + React/TypeScript
 
-* Deployment instructions
+### 技術スタック
 
-* ...
+#### バックエンド
+- **Ruby**: 3.3 + YJIT（パフォーマンス最適化）
+- **Rails**: 7.0
+- **データベース**: MySQL 8.0
+- **認証**: Rails標準（has_secure_password）
+- **ファイルストレージ**: Active Storage（開発）/ AWS S3（本番）
+
+#### フロントエンド
+- **基本UI**: Bootstrap 5 + Stimulus
+- **ダッシュボード**: React 18 + TypeScript 4.9
+- **スタイリング**: Sass + CSS Modules
+- **アイコン**: Bootstrap Icons
+
+#### 開発・運用
+- **開発環境**: devcontainer（Docker Compose）
+- **テスト**: RSpec + FactoryBot + Capybara
+- **CI/CD**: GitHub Actions
+- **デプロイ**: Heroku（初期）/ AWS（将来）
+- **監視**: Rails標準ログ + 外部監視サービス
+
+## 🚀 クイックスタート
+
+### 前提条件
+- Docker Desktop
+- VS Code + Dev Containers拡張機能
+
+### セットアップ手順
+
+1. **リポジトリのクローン**
+```bash
+git clone https://github.com/sato-tatsuya/business-card-manager.git
+cd business-card-manager
+```
+
+2. **VS Codeでdevcontainerを開く**
+```bash
+code .
+# VS Codeで「Reopen in Container」を選択
+```
+
+3. **データベースのセットアップ**
+```bash
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+4. **アプリケーションの起動**
+```bash
+rails server
+```
+
+5. **ブラウザでアクセス**
+```
+http://localhost:3000
+```
+
+### テスト実行
+```bash
+# 全テスト実行
+bundle exec rspec
+
+# 特定のテスト実行
+bundle exec rspec spec/models/
+bundle exec rspec spec/controllers/
+bundle exec rspec spec/system/
+```
+
+## 📊 プロジェクト進捗
+
+### 開発フェーズ
+
+- [x] **フェーズ1**: 開発環境構築とプロジェクト基盤
+- [ ] **フェーズ2**: 認証・ユーザー管理機能
+- [ ] **フェーズ3**: 名刺管理基本機能
+- [ ] **フェーズ4**: タグ管理機能
+- [ ] **フェーズ5**: 検索・フィルタリング機能
+- [ ] **フェーズ6**: 画像アップロード機能
+- [ ] **フェーズ7**: OCR・自動データ抽出機能
+- [ ] **フェーズ8**: データ品質管理機能
+- [ ] **フェーズ9**: 統計・分析機能
+- [ ] **フェーズ10**: データエクスポート機能
+- [ ] **フェーズ11**: UI/UX改善・レスポンシブ対応
+- [ ] **フェーズ12**: API実装
+- [ ] **フェーズ13**: テスト実装
+- [ ] **フェーズ14**: セキュリティ・パフォーマンス対策
+- [ ] **フェーズ15**: デプロイメント・運用
+
+### 主要マイルストーン
+
+- **MVP完成**: 基本的な名刺CRUD機能（フェーズ1-3）
+- **検索機能完成**: 高度な検索・フィルタリング（フェーズ4-5）
+- **画像機能完成**: アップロード・OCR機能（フェーズ6-7）
+- **分析機能完成**: 統計・ネットワーク分析（フェーズ8-9）
+- **本番リリース**: 全機能完成・デプロイ（フェーズ10-15）
+
+## 🤖 AI協働開発 - Claude Codeカスタムコマンド
+
+本プロジェクトでは、学習効率を最大化するためにClaude Code専用のカスタムスラッシュコマンドを活用しています。
+
+### 利用可能なカスタムコマンド
+
+#### `/make-road-map <タスク番号>`
+指定されたタスクの詳細な実装ロードマップを生成します。
+
+**用途:**
+- タスクの要件と受け入れ基準の確認
+- 実装に必要なファイル構造の把握
+- TDDベースの実装手順の取得
+- 具体的なコード例とベストプラクティスの学習
+
+**例:**
+```
+/make-road-map 4
+```
+
+#### `/review-task <タスク番号>`
+実装したタスクの包括的なレビューを実施します。
+
+**用途:**
+- Acceptance Criteriaとの適合性評価
+- コード品質・セキュリティ・パフォーマンスの診断
+- 具体的な改善提案の取得
+- 学習ポイントと次のステップの把握
+
+**例:**
+```
+/review-task 4
+```
+
+### 開発プロセスにおける活用法
+
+#### 1. **タスク開始時**
+```
+/make-road-map 8
+```
+- タスク8（名刺モデルの実装）の詳細なロードマップを取得
+- 要件のAcceptance Criteriaを確認
+- 必要なファイル構造と実装手順を把握
+- TDDアプローチでの開発計画を立案
+
+#### 2. **実装中**
+- ロードマップの実装手順に従って段階的に開発
+- テストファーストでの実装を実践
+- 各ステップでの完了基準を確認
+
+#### 3. **実装完了時**
+```
+/review-task 8
+```
+- 実装内容の包括的なレビューを実施
+- Acceptance Criteriaとの適合性を確認
+- コード品質・セキュリティの評価
+- 改善点と学習ポイントの把握
+
+#### 4. **継続的改善**
+- レビュー結果に基づく改善実施
+- 次のタスクへの学習事項の反映
+- 品質向上の継続的なサイクル
+
+### 学習効果の最大化
+
+このカスタムコマンドにより、以下の学習効果を実現しています：
+
+- **構造化された学習**: 各タスクの要件・実装・レビューの体系的なサイクル
+- **実践的スキル習得**: Rails規約・セキュリティ・パフォーマンスを含む包括的な学習
+- **品質意識の向上**: 継続的なコードレビューによる品質向上
+- **効率的な開発**: AI支援による学習時間の最適化
+
+## 🎓 学習・技術実証要素
+
+### Ruby/Rails習得実証
+- **Java → Ruby移行**: 5年のJava経験を活かした効率的学習
+- **Rails Way習得**: Convention over Configurationの実践
+- **ActiveRecord活用**: ORM設計・クエリ最適化
+- **テスト駆動開発**: RSpecによる包括的テスト実装
+
+### プロダクト開発思考
+- **ユーザー価値重視**: 実用的な機能設計による価値提供
+- **データドリブン**: 統計・分析機能による意思決定支援
+- **継続的改善**: フィードバックループの設計
+- **スケーラビリティ**: 大規模データ処理への対応
+
+### モダン開発手法
+- **devcontainer**: Docker による開発環境統一
+- **AI協働開発**: Claude Code活用による効率化
+- **CI/CD**: 自動テスト・デプロイパイプライン
+- **アジャイル**: 段階的リリース・継続的デリバリー
+
+## 🔗 関連リンク
+
+- **開発ドキュメント**: [DEVELOP.md](DEVELOP.md)
+- **要件定義書**: [.kiro/specs/namecard-manager/requirements.md](.kiro/specs/namecard-manager/requirements.md)
+- **設計書**: [.kiro/specs/namecard-manager/design.md](.kiro/specs/namecard-manager/design.md)
+- **タスクリスト**: [.kiro/specs/namecard-manager/tasks.md](.kiro/specs/namecard-manager/tasks.md)
+- **学習記録**: [dev/learning/](dev/learning/)
+- **技術比較**: [dev/comparison/](dev/comparison/)
+
+## 📞 連絡先
+
+**開発者**: 佐藤辰哉
+**GitHub**: https://github.com/sato-tatsuya
+**開発期間**: 2025年9月11日〜継続中
+
+## 📄 ライセンス
+
+このプロジェクトは学習・技術実証目的で作成されています。
