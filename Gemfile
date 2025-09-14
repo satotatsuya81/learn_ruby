@@ -17,8 +17,17 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Bootstrap framework for styling [https://getbootstrap.com]
+gem "bootstrap", "~> 5.3.0"
+
+# jQuery for Bootstrap's JavaScript plugins [https://jquery.com]
+gem "jquery-rails", "~> 4.4"
+
+# Use Sass to process CSS [https://sass-lang.com/documentation/rails]
+gem "sassc-rails", "~> 2.1"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -38,7 +47,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -49,6 +58,18 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Use RSpec for tests [https://rspec.info/]
+  gem "rspec-rails", "~> 7.0"
+
+  # Use Factory Bot for fixtures replacement [https://github.com/factory-bot/factory_bot_rails]
+  gem "factory_bot_rails", "~> 6.0"
+
+  # https://github.com/faker-ruby/faker
+  gem "faker", "~> 3.0"
+
+  # Use byebug for debugging [https://github.com/bbatsov/byebug]
+  gem "byebug", "~> 11.1", platforms: [ :mri ]
 end
 
 group :development do
@@ -57,10 +78,21 @@ group :development do
 
   # Ruby LSP for VS Code integration
   gem "ruby-lsp", require: false
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem "listen", "~> 3.3"
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem "spring"
+  # Use RuboCop for code style checking [https://rubocop.org]
+  gem "rubocop", require: false
+
+  # Additional RuboCop rules for Rails [https://github.com/rails/rubocop-rails]
+  gem "rubocop-rails", require: false
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
+  gem "capybara", "~> 3.0"
+  gem "selenium-webdriver", "~> 4.0"
 end
