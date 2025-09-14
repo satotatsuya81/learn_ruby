@@ -17,7 +17,11 @@
           "Shopify.ruby-lsp",
           "bradlc.vscode-tailwindcss",
           "ms-vscode.vscode-json",
-          "anthropic.claude-dev"
+          "anthropic.claude-dev",
+          "noku.rails-run-spec-vscode",
+          "misogi.ruby-rubocop",
+          "kaiwood.endwise",
+          "shopify.ruby-extensions-pack"
         ],
         "settings": {
           "rubyLsp.bundleGemfile": "Gemfile",

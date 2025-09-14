@@ -70,6 +70,9 @@ group :development, :test do
 
   # Use byebug for debugging [https://github.com/bbatsov/byebug]
   gem "byebug", "~> 11.1", platforms: [ :mri ]
+
+  # Support for controller/view specs in RSpec [https://github.com/rails/rails-controller-testing]
+  gem "rails-controller-testing", "~> 1.0"
 end
 
 group :development do
@@ -79,6 +82,8 @@ group :development do
   # Ruby LSP for VS Code integration
   gem "ruby-lsp", require: false
 
+  # Ruby LSP addon for RSpec
+  gem "ruby-lsp-rspec", "~> 0.1.28", require: false
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "listen", "~> 3.3"
 
