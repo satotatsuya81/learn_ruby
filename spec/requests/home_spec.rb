@@ -4,10 +4,8 @@ require 'rails_helper'
 # Request Testは、実際のHTTPリクエストを送信して、レスポンスが正しいかをテストします
 # Controller Testとの違い: より実際のユーザーの操作に近い状況をテストできる
 RSpec.describe "Home", type: :request do
-
   # GET / （ルートパス・トップページ）へのリクエストテストグループ
   describe "GET /" do
-
     # テスト1: ルートパス（http://localhost:3000/）へのアクセスが成功するかチェック
     # 目的: ユーザーがサイトにアクセスした時にエラーページが表示されないことを確認
     it "returns http success" do

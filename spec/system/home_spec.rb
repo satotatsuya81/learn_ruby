@@ -12,7 +12,6 @@ RSpec.describe 'Home page', type: :system do
 
   # ページ内容のテストグループ
   describe 'Page content' do
-
     # 日本語表示の場合のテスト
     context 'when locale is Japanese' do
       # テスト1: 日本語ロケール時に、すべてのコンテンツが日本語で表示されるかチェック
@@ -72,7 +71,6 @@ RSpec.describe 'Home page', type: :system do
 
   # ページ構造のテストグループ
   describe 'Page structure' do
-
     # テスト3: HTMLの意味的な構造が正しいかをチェック
     # 目的: SEO対策とアクセシビリティを確保するため、適切なHTML要素が使われていることを確認
     it 'has proper semantic HTML structure' do

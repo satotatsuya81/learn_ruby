@@ -12,7 +12,6 @@ RSpec.describe 'home/index.html.erb', type: :view do
 
   # ページ構造のテストグループ
   describe 'Page structure' do
-
     # テスト1: HTML構造が期待通りに生成されるかをチェック
     # 目的: デザインの基本構造が正しく、必要な要素がすべて含まれていることを確認
     it 'renders proper HTML structure' do
@@ -50,7 +49,6 @@ RSpec.describe 'home/index.html.erb', type: :view do
 
   # コンテンツ表示のテストグループ
   describe 'Content rendering' do
-
     # 日本語ロケールでのテスト
     context 'when locale is Japanese' do
       before { I18n.locale = :ja }    # テスト前に日本語ロケールに設定
@@ -189,7 +187,6 @@ RSpec.describe 'home/index.html.erb', type: :view do
 
   # アクセシビリティ（障害者対応）のテストグループ
   describe 'Accessibility' do
-
     # テスト11: 見出しの階層構造が正しいかをチェック
     # 目的: スクリーンリーダー使用者が内容を理解しやすいよう、見出しが適切に構造化されていることを確認
     it 'has proper heading hierarchy' do
@@ -218,7 +215,6 @@ RSpec.describe 'home/index.html.erb', type: :view do
 
   # レスポンシブデザイン（様々な画面サイズ対応）のテストグループ
   describe 'Responsive design' do
-
     # テスト13: Bootstrap グリッドシステムが正しく使われているかをチェック
     # 目的: スマホ・タブレット・PCで適切にレイアウトが調整されることを確認
     it 'includes responsive grid classes' do
