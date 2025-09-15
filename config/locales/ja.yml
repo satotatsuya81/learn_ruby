@@ -1,0 +1,60 @@
+ja:
+  application:
+    name: "Business Card Manager"
+    description: "効率的な名刺管理システム"
+
+  navigation:
+    home: "ホーム"
+    business_cards: "名刺一覧"
+    tags: "タグ管理"
+    statistics: "統計"
+    profile: "プロフィール"
+    logout: "ログアウト"
+
+  buttons:
+    new: "新規作成"
+    edit: "編集"
+    delete: "削除"
+    save: "保存"
+    cancel: "キャンセル"
+    search: "検索"
+    home: "ホームに戻る"
+    back: "戻る"
+    reload: "再読み込み"
+
+  messages:
+    welcome: "名刺管理システムへようこそ"
+    success: "正常に処理されました"
+    error: "エラーが発生しました"
+    no_data: "データがありません"
+
+  sections:
+        main_features: "主な機能"
+        future_plans: "今後の予定"
+        tech_stack: "技術スタック"
+
+  features:
+    card_management: "名刺の管理"
+    tagging: "タグ付けと分類"
+    search: "高速検索"
+    analytics: "統計・分析"
+
+  future_plans:
+    authentication: "ユーザー認証"
+    responsive: "レスポンシブ対応"
+    ocr: "OCR機能"
+    dashboard: "ダッシュボード"
+
+  tech_stack:
+    rails: "Ruby on Rails"
+    bootstrap: "Bootstrap 5"
+    mysql: "MySQL"
+    react: "React (予定)"
+
+  errors:
+    not_found:
+      title: "ページが見つかりません"
+      message: "お探しのページは存在しないか、移動または削除された可能性があります。"
+    internal_server_error:
+      title: "サーバーエラーが発生しました"
+      message: "申し訳ございません。システム内部でエラーが発生しました。しばらく時間をおいてから再度お試しください。"

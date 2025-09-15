@@ -1,31 +1,60 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  application:
+    name: "Business Card Manager"
+    description: "Efficient business card management system"
+
+  navigation:
+    home: "Home"
+    business_cards: "Business Cards"
+    tags: "Tag Management"
+    statistics: "Statistics"
+    profile: "Profile"
+    logout: "Logout"
+
+  buttons:
+    new: "New"
+    edit: "Edit"
+    delete: "Delete"
+    save: "Save"
+    cancel: "Cancel"
+    search: "Search"
+    home: "Back to Home"
+    back: "Go Back"
+    reload: "Reload"
+
+  messages:
+    welcome: "Welcome to Business Card Management System"
+    success: "Successfully processed"
+    error: "An error occurred"
+    no_data: "No data available"
+
+  sections:
+    main_features: "Main Features"
+    future_plans: "Future Plans"
+    tech_stack: "Tech Stack"
+
+  features:
+    card_management: "Business card management"
+    tagging: "Tagging and classification"
+    search: "Fast search"
+    analytics: "Statistics and analytics"
+
+  future_plans:
+    authentication: "User authentication"
+    responsive: "Responsive design"
+    ocr: "OCR functionality"
+    dashboard: "Dashboard"
+
+  tech_stack:
+    rails: "Ruby on Rails"
+    bootstrap: "Bootstrap 5"
+    mysql: "MySQL"
+    react: "React (planned)"
+
+  errors:
+    not_found:
+      title: "Page Not Found"
+      message: "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+    internal_server_error:
+      title: "Internal Server Error"
+      message: "We're sorry, but something went wrong on our end. Please try again later."
