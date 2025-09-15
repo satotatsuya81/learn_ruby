@@ -1,0 +1,18 @@
+<%# 最小限のログインフォームビュー（テスト用） %>
+<h1>ログイン</h1>
+
+<%= form_with scope: :session, url: login_path, local: true do |form| %>
+  <div class="field">
+    <%= form.label :email, "メールアドレス" %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :password, "パスワード" %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "ログイン" %>
+  </div>
+<% end %>

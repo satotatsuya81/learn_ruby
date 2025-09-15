@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # セッション管理のルート
+  get "/login", to: "sessions#new"
+  post "/login", to: "sessions#create"
   # エラーページルーティング（config.exceptions_app = self.routes 用）
   # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応
   match "/404", to: "errors#not_found", via: :all
