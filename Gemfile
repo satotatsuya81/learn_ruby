@@ -69,7 +69,7 @@ group :development, :test do
   gem "faker", "~> 3.0"
 
   # Use byebug for debugging [https://github.com/bbatsov/byebug]
-  gem "byebug", "~> 11.1", platforms: [ :mri ]
+  gem "byebug", "~> 12.0", platforms: [ :mri ]
 
   # Support for controller/view specs in RSpec [https://github.com/rails/rails-controller-testing]
   gem "rails-controller-testing", "~> 1.0"
