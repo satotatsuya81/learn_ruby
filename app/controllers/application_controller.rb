@@ -3,4 +3,12 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   # CSRFトークンの検証を有効にする
   protect_from_forgery with: :exception
+
+  # 例外ハンドリング設定
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+  rescue_from ActionController::RoutingError, with: :render_404
+
+  def render_404
+    redirect_to "/404"
+  end
 end

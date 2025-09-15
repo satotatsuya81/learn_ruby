@@ -10,4 +10,14 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  # エラーページルーティング（config.exceptions_app = self.routes 用）
+  # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
+  get "/errors/404", to: "errors#not_found", as: :not_found
+  get "/errors/500", to: "errors#internal_server_error", as: :internal_server_error
+
+  # すべての未知のルートを404エラーページへリダイレクト（最後に配置）
+  match "*path", to: "errors#not_found", via: :all
 end
