@@ -26,7 +26,7 @@ RSpec.describe SessionsController, type: :controller do
         expect(response).to redirect_to(root_path)
 
         # 成功フラッシュメッセージが設定されていること
-        expect(flash[:notice]).to eq("ログインしました")
+        expect(flash[:success]).to eq("ログインしました")
       end
     end
 
@@ -48,6 +48,42 @@ RSpec.describe SessionsController, type: :controller do
 
         # エラーフラッシュメッセージが設定されていること
         expect(flash.now[:alert]).to eq("メールアドレスまたはパスワードが正しくありません")
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:user) { create(:user) }
+    before do
+      # 事前にログインしておく
+      session[:user_id] = user.id
+    end
+
+    it "正常にログアウトし、ホームページにリダイレクトすること" do
+      delete :destroy
+
+      # セッションからユーザIDが削除されていること
+      expect(session[:user_id]).to be_nil
+
+      # ホームページにリダイレクトされること
+      expect(response).to redirect_to(root_path)
+
+      # ログアウトフラッシュメッセージが設定されていること
+      expect(flash[:success]).to eq("ログアウトしました")
+    end
+
+    context "ログインしていない状態でログアウトを試みる場合" do
+      it "ホームページにリダイレクトされ、フラッシュメッセージが表示されること" do
+        delete :destroy
+
+        # セッションからユーザIDが削除されていること
+        expect(session[:user_id]).to be_nil
+
+        # ホームページにリダイレクトされること
+        expect(response).to redirect_to(root_path)
+
+        # ログアウトフラッシュメッセージが設定されていること
+        expect(flash[:success]).to eq("ログアウトしました")
       end
     end
   end

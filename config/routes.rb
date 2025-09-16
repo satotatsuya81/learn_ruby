@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # セッション管理のルート
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
   # エラーページルーティング（config.exceptions_app = self.routes 用）
   # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応
   match "/404", to: "errors#not_found", via: :all
