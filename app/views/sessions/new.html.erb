@@ -1,10 +1,10 @@
-<% content_for :title, "Log in" %>
+<% content_for :title, t('authentication.login.title') %>
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h3 class="text-center">ログイン</h3>
+          <h3 class="text-center"><%= t('authentication.login.title') %></h3>
         </div>
         <div class="card-body">
           <% flash.each do |type, message| %>
@@ -16,22 +16,22 @@
 
           <%= form_with scope: :session, url: login_path, local: true, class: "needs-validation", novalidate: true do |form| %>
             <div class="mb-3">
-              <%= form.label :email, "メールアドレス", class: "form-label" %>
+              <%= form.label :email, t('authentication.login.email_label'), class: "form-label" %>
               <%= form.email_field :email, class: "form-control", required: true %>
             </div>
 
             <div class="mb-3">
-              <%= form.label :password, "パスワード", class: "form-label" %>
+              <%= form.label :password, t('authentication.login.password_label'), class: "form-label" %>
               <%= form.password_field :password, class: "form-control", required: true %>
             </div>
 
             <div class="mb-3 form-check">
               <%= form.check_box :remember_me, class: "form-check-input" %>
-              <%= form.label :remember_me, "ログイン情報を保持する", class: "form-check-label" %>
+              <%= form.label :remember_me, t('authentication.login.remember_me_label'), class: "form-check-label" %>
             </div>
 
             <div class="d-grid">
-              <%= form.submit "ログイン", class: "btn btn-primary" %>
+              <%= form.submit t('authentication.login.submit_button'), class: "btn btn-primary" %>
             </div>
           <% end %>
         </div>

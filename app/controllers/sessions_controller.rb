@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
       redirect_to root_path
     else
       # ログイン失敗時の処理（テストで期待される日本語メッセージ）
-      flash.now[:danger] = "メールアドレスまたはパスワードが正しくありません"
+      flash.now[:danger] = t("authentication.login.invalid_credentials")
       render :new, status: :unprocessable_content
     end
   end

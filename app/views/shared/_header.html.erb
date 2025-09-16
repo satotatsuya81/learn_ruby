@@ -16,15 +16,15 @@
             <% if logged_in? %>
             <li class="nav-item">
                 <span class="navbar-text me-3">
-                Welcome, <%= current_user.name %>!
+                <%= t('authentication.navigation.welcome_message', name: current_user.name) %>
                 </span>
             </li>
             <li class="nav-item">
-                <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
+                <%= link_to t('navigation.logout'), logout_path, method: :delete, class: "nav-link" %>
             </li>
             <% else %>
             <li class="nav-item">
-                <%= link_to "ログイン", login_path, class: "nav-link" %>
+                <%= link_to t('navigation.login'), login_path, class: "nav-link" %>
             </li>
             <% end %>
         </ul>
