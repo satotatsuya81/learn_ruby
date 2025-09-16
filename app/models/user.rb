@@ -59,7 +59,7 @@ class User < ApplicationRecord
   end
 
   # アカウント有効化関連のメソッド群
-  def send_activation_email
+  def activation_email
     UserMailer.activation_email(self).deliver_now
   end
 

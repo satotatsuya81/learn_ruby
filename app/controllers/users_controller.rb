@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       # ユーザ登録成功時の処理（例: ログイン、リダイレクトなど）
-      @user.send_activation_email
+      @user.activation_email
       flash[:info] = t("users.check_email_for_activation")
       redirect_to root_url
     else

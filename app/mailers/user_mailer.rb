@@ -3,6 +3,6 @@ class UserMailer < ApplicationMailer
 
   def activation_email(user)
     @user = user
-    mail(to: @user.email, subject: t("user_mailer.account_activation.subject"))
+    mail(to: @user.email, subject: t("user_mailer.activation_email.subject"))
   end
 end
