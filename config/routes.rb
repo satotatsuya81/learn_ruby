@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # ユーザー登録
+  get "/signup",  to: "users#new"
+  resources :users, only: [ :new, :create, :show ]
   # セッション管理のルート
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
@@ -24,4 +27,7 @@ Rails.application.routes.draw do
 
   # すべての未知のルートを404エラーページへリダイレクト（最後に配置）
   match "*path", to: "errors#not_found", via: :all
+
+  # アカウント有効化
+  resources :account_activations, only: [ :edit ]
 end

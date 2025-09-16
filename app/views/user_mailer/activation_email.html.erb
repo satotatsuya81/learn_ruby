@@ -1,0 +1,11 @@
+<%# アカウント有効化メールのHTMLテンプレート %>
+  <h1><%= t('user_mailer.activation_email.greeting', name: @user.name) %></h1>
+
+  <p><%= t('user_mailer.activation_email.body') %></p>
+
+  <p>
+    <%= link_to t('user_mailer.activation_email.activate_link'),
+                edit_account_activation_url(@user.activation_token, email: @user.email) %>
+  </p>
+
+  <p><%= t('user_mailer.activation_email.ignore_message') %></p>

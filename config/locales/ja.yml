@@ -63,6 +63,27 @@ ja:
     navigation:
       welcome_message: "ようこそ、%{name}さん！"
 
+  users:
+    sign_up: "ユーザー登録"
+    name: "名前"
+    email: "メールアドレス"
+    password: "パスワード"
+    password_confirmation: "パスワード（確認）"
+    create_account: "アカウント作成"
+    already_have_account: "すでにアカウントをお持ちですか？"
+    check_email_for_activation: "アカウント有効化のためメールをご確認ください。"
+    user_not_found: "ユーザーが見つかりません。"
+
+  user_mailer:
+    activation_email:
+      subject: "アカウント有効化"
+      greeting: "こんにちは、%{name}さん！"
+      body: "Business Card Managerへようこそ。以下のリンクをクリックしてアカウントを有効化してください："
+      activate_link: "アカウントを有効化"
+      ignore_message: "このメールに心当たりがない場合は、無視してください。アカウントは作成されていません。"
+      success: "アカウントが有効化されました。ログインしてください。"
+      invalid_link: "無効なアクティベーションリンクです。"
+
   errors:
     not_found:
       title: "ページが見つかりません"
