@@ -36,3 +36,6 @@
 
 # 作業用ファイル
 /task-*.md
+
+# simplecov
+/coverage/

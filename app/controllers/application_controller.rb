@@ -17,6 +17,6 @@ class ApplicationController < ActionController::Base
   end
 
   # 例外ハンドリング設定
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+  rescue_from ActiveRecord::RecordNotFound, with: :render_500
   rescue_from ActionController::RoutingError, with: :render_404
 end
