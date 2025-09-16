@@ -120,8 +120,65 @@ RSpec.describe User, type: :model do
         expect(first_token).not_to eq(second_token)
         expect(first_digest).not_to eq(second_digest)
       end
+    end
+    describe '#forget' do
+      it 'remember_digestがnilに設定されること' do
+        user.remember
+        expect(user.remember_digest).not_to be_nil
 
-      describe '#authenticated?' do
+        user.forget
+        expect(user.remember_digest).to be_nil
+      end
+
+      it 'foget後、認証が失敗すること' do
+        user.remember
+        expect(user.authenticated?(user.remember_token)).to be_truthy
+
+        user.forget
+        expect(user.authenticated?(user.remember_token)).to be_falsey
+      end
+    end
+  end
+  describe "アカウント有効化機能" do
+    let(:user) { create(:user) }
+
+    describe "#activation_email" do
+      it "アカウント有効化メールが送信されること" do
+        expect {
+          user.activation_email
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      it "有効化トークンとダイジェストが生成されること" do
+        user.activation_email
+        expect(user.activation_token).not_to be_nil
+        expect(user.activation_digest).not_to be_nil
+      end
+    end
+
+    describe "#authenticate_activation" do
+      before { user.activation_email }
+
+      it "正しいトークンで認証が成功すること" do
+        token = user.activation_token
+        expect(user.authenticated?(:activation, token)).to be_truthy
+      end
+
+      it "誤ったトークンで認証が失敗すること" do
+        expect(user.authenticated?(:activation, 'wrongtoken')).to be_falsey
+      end
+    end
+
+    describe "#activate" do
+      it "アカウントが有効化されること" do
+        expect(user.activated).to be_falsey
+        user.activate
+        expect(user.activated).to be_truthy
+        expect(user.activated_at).not_to be_nil
+      end
+    end
+
+    describe '#authenticated?' do
         it '正しいremember_tokenで認証が成功すること' do
           user.remember
           expect(user.authenticated?(user.remember_token)).to be_truthy
@@ -136,24 +193,5 @@ RSpec.describe User, type: :model do
           expect(user.authenticated?('anytoken')).to be_falsey
         end
       end
-
-      describe '#forget' do
-        it 'remember_digestがnilに設定されること' do
-          user.remember
-          expect(user.remember_digest).not_to be_nil
-
-          user.forget
-          expect(user.remember_digest).to be_nil
-        end
-
-        it 'foget後、認証が失敗すること' do
-          user.remember
-          expect(user.authenticated?(user.remember_token)).to be_truthy
-
-          user.forget
-          expect(user.authenticated?(user.remember_token)).to be_falsey
-        end
-      end
-    end
   end
 end

@@ -61,10 +61,15 @@ RSpec.describe UsersController, type: :controller do
         }
       end
 
-      it "ユーザが作成されないこと" do
+      it "データベースに保存されないこと" do
         expect {
           post :create, params: { user: invalid_attributes }
         }.not_to change(User, :count)
+      end
+
+      it "アクティベーションメールは送信されないこと" do
+        expect_any_instance_of(User).not_to receive(:activation_email)
+        post :create, params: { user: invalid_attributes }
       end
 
       it "newテンプレートが再表示されること" do
