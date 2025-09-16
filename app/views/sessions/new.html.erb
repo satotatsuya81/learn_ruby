@@ -1,18 +1,41 @@
-<%# 最小限のログインフォームビュー（テスト用） %>
-<h1>ログイン</h1>
+<% content_for :title, "Log in" %>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">ログイン</h3>
+        </div>
+        <div class="card-body">
+          <% flash.each do |type, message| %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <%= message %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <% end %>
 
-<%= form_with scope: :session, url: login_path, local: true do |form| %>
-  <div class="field">
-    <%= form.label :email, "メールアドレス" %>
-    <%= form.email_field :email %>
-  </div>
+          <%= form_with scope: :session, url: login_path, local: true, class: "needs-validation", novalidate: true do |form| %>
+            <div class="mb-3">
+              <%= form.label :email, "メールアドレス", class: "form-label" %>
+              <%= form.email_field :email, class: "form-control", required: true %>
+            </div>
 
-  <div class="field">
-    <%= form.label :password, "パスワード" %>
-    <%= form.password_field :password %>
-  </div>
+            <div class="mb-3">
+              <%= form.label :password, "パスワード", class: "form-label" %>
+              <%= form.password_field :password, class: "form-control", required: true %>
+            </div>
 
-  <div class="actions">
-    <%= form.submit "ログイン" %>
+            <div class="mb-3 form-check">
+              <%= form.check_box :remember_me, class: "form-check-input" %>
+              <%= form.label :remember_me, "ログイン情報を保持する", class: "form-check-label" %>
+            </div>
+
+            <div class="d-grid">
+              <%= form.submit "ログイン", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

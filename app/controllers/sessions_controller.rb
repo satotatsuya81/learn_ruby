@@ -4,25 +4,25 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # テストで要求されているログイン処理の最小実装
+    # テストで要求されているログイン処理の実装
     user = User.find_by(email: params[:session][:email].downcase)
 
     if user && user.authenticate(params[:session][:password])
       # ログイン成功時の処理
       log_in(user)  # セッションにユーザーIDを保存
-      flash[:success] = "ログインしました"
+      # Remember Me機能の実装
+      params[:session][:remember_me] == "1" ? remember(user) : forget(user)
       redirect_to root_path
     else
-      # ログイン失敗時の処理（追加されたテストに対応）
-      flash.now[:alert] = "メールアドレスまたはパスワードが正しくありません"
-      render :new, status: :unprocessable_entity
+      # ログイン失敗時の処理（テストで期待される日本語メッセージ）
+      flash.now[:danger] = "メールアドレスまたはパスワードが正しくありません"
+      render :new, status: :unprocessable_content
     end
   end
 
   def destroy
-    # ログアウト処理の最小実装
+    # ログアウト処理の実装
     log_out if logged_in?
-    flash[:success] = "ログアウトしました"
-    redirect_to root_path
+    redirect_to root_url
   end
 end
