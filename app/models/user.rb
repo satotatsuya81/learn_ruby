@@ -67,12 +67,6 @@ class User < ApplicationRecord
     update_columns(activated: true, activated_at: Time.zone.now)
   end
 
-  # def authenticated?(attribute, token)
-  #   digest = send("#{attribute}_digest")
-  #   return false if digest.nil?
-  #   BCrypt::Password.new(digest).is_password?(token)
-  # end
-
   private
 
   # アカウント有効化トークンとダイジェストを作成・代入する
