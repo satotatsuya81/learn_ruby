@@ -9,6 +9,7 @@ ja:
     tags: "タグ管理"
     statistics: "統計"
     profile: "プロフィール"
+    login: "ログイン"
     logout: "ログアウト"
 
   buttons:
@@ -50,6 +51,17 @@ ja:
     bootstrap: "Bootstrap 5"
     mysql: "MySQL"
     react: "React (予定)"
+
+  authentication:
+    login:
+      title: "ログイン"
+      email_label: "メールアドレス"
+      password_label: "パスワード"
+      remember_me_label: "ログイン情報を保持する"
+      submit_button: "ログイン"
+      invalid_credentials: "メールアドレスまたはパスワードが正しくありません"
+    navigation:
+      welcome_message: "ようこそ、%{name}さん！"
 
   errors:
     not_found:

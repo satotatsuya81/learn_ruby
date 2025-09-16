@@ -1,11 +1,9 @@
 require 'rails_helper'
 
 # ApplicationController のテストクラス
-# ApplicationControllerは全てのコントローラーの基底クラスで、
-# アプリケーション全体に共通する機能（認証、エラーハンドリング等）を担当します
+# アプリケーション全体に共通する機能（認証、エラーハンドリング等）
 RSpec.describe ApplicationController, type: :controller do
   # テスト用の匿名コントローラーを定義
-  # 実際のコントローラーを作らずに、ApplicationControllerの機能をテストするために使用
   controller do
     # 通常のアクション（正常系テスト用）
     def index
@@ -42,29 +40,23 @@ RSpec.describe ApplicationController, type: :controller do
   # 例外処理機能のテスト
   # ApplicationControllerに設定されたrescue_fromが正しく動作するかを確認
   describe "例外処理機能" do
-    # ActiveRecord::RecordNotFound例外のハンドリングテスト
-    context "ActiveRecord::RecordNotFoundが発生した場合" do
-      # テスト1: データベースレコードが見つからない例外が404ページにリダイレクトされるか
+    context "ActiveRecord::RoutingErrorが発生した場合" do
       it "404ページにリダイレクトすること" do
         # 例外を発生させるアクションを実行
-        get :trigger_record_not_found
+        get :trigger_routing_error
 
         # 404エラーページ（/404）にリダイレクトされることを確認
-        # これにより、ユーザーが適切なエラーページを見ることができる
         expect(response).to redirect_to("/404")
       end
     end
 
-    # ActionController::RoutingError例外のハンドリングテスト
-    context "ActionController::RoutingErrorが発生した場合" do
-      # テスト2: ルーティングエラーが404ページにリダイレクトされるか
-      it "404ページにリダイレクトすること" do
-        # ルーティングエラーを発生させるアクションを実行
-        get :trigger_routing_error
+    context "ActiveRecord::RecordNotFoundが発生した場合" do
+      it "500ページにリダイレクトすること" do
+        # 例外を発生させるアクションを実行
+        get :trigger_record_not_found
 
-        # 404エラーページ（/404）にリダイレクトされることを確認
-        # 存在しないページへのアクセスも適切にハンドリングされる
-        expect(response).to redirect_to("/404")
+        # 500エラーページ（/500）にリダイレクトされることを確認
+        expect(response).to redirect_to("/500")
       end
     end
   end

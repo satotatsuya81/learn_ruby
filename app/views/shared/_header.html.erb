@@ -11,10 +11,22 @@
             <li class="nav-item">
             <%= link_to t('navigation.home'), root_path, class: "nav-link" %>
             </li>
-            <!-- 将来追加予定のメニュー -->
-            <!-- <li class="nav-item">
-                <%= link_to t('navigation.business_cards'), "#", class: "nav-link" %>
-            </li> -->
+        </ul>
+        <ul class="navbar-nav">
+            <% if logged_in? %>
+            <li class="nav-item">
+                <span class="navbar-text me-3">
+                <%= t('authentication.navigation.welcome_message', name: current_user.name) %>
+                </span>
+            </li>
+            <li class="nav-item">
+                <%= link_to t('navigation.logout'), logout_path, method: :delete, class: "nav-link" %>
+            </li>
+            <% else %>
+            <li class="nav-item">
+                <%= link_to t('navigation.login'), login_path, class: "nav-link" %>
+            </li>
+            <% end %>
         </ul>
     </div>
 </div>
