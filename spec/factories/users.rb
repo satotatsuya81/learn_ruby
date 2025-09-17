@@ -7,5 +7,15 @@ FactoryBot.define do
     # has_secure_passwordで必要なpassword属性
     password { 'password123' }
     password_confirmation { 'password123' }
+
+    # 有効化フラグ
+    activated { false }
+    activated_at { nil }
+
+    # 有効化済みユーザ用のtrait
+    trait :activated do
+      activated { true }
+      activated_at { Time.zone.now }
+    end
   end
 end

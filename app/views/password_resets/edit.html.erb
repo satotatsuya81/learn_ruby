@@ -1,0 +1,32 @@
+<%# パスワード再設定フォーム %>
+<% provide(:title, t('password_resets.reset_password')) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0"><%= t('password_resets.reset_password') %></h4>
+      </div>
+      <div class="card-body">
+        <%= form_with(model: @user, url: password_reset_path(@user), local: true, class: "form") do |f| %>
+          <%= render 'shared/error_messages', object: f.object %>
+          <%= hidden_field_tag :token, params[:token] %>
+
+          <div class="mb-3">
+            <%= f.label :password, t('password_resets.password'), class: "form-label" %>
+            <%= f.password_field :password, class: "form-control", required: true, minlength: 6 %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password_confirmation, t('password_resets.password_confirmation'), class: "form-label" %>
+            <%= f.password_field :password_confirmation, class: "form-control", required: true, minlength: 6 %>
+          </div>
+
+          <div class="d-grid">
+            <%= f.submit t('password_resets.update_password'), class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

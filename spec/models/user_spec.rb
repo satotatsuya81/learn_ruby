@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   # ファクトリを使用してテスト用ユーザのオブジェクトを生成
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
 
   describe 'バリデーションのテスト' do
     it '有効なユーザの場合はバリデーションが通ること' do
@@ -179,19 +179,75 @@ RSpec.describe User, type: :model do
     end
 
     describe '#authenticated?' do
-        it '正しいremember_tokenで認証が成功すること' do
-          user.remember
-          expect(user.authenticated?(user.remember_token)).to be_truthy
-        end
-
-        it '誤ったremember_tokenで認証が失敗すること' do
-          user.remember
-          expect(user.authenticated?('wrongtoken')).to be_falsey
-        end
-
-        it 'remember_digestがnilの場合、認証が失敗すること' do
-          expect(user.authenticated?('anytoken')).to be_falsey
-        end
+      it '正しいremember_tokenで認証が成功すること' do
+        user.remember
+        expect(user.authenticated?(user.remember_token)).to be_truthy
       end
+
+      it '誤ったremember_tokenで認証が失敗すること' do
+        user.remember
+        expect(user.authenticated?('wrongtoken')).to be_falsey
+      end
+
+      it 'remember_digestがnilの場合、認証が失敗すること' do
+        expect(user.authenticated?('anytoken')).to be_falsey
+      end
+    end
+  end
+  describe "パスワードリセット機能" do
+    describe "#create_reset_digest" do
+      it "reset_tokenとreset_digestを生成する" do
+        # テスト実行前の状態確認
+        expect(user.reset_digest).to be_nil
+        expect(user.reset_sent_at).to be_nil
+
+        # メソッド実行
+        user.create_reset_digest
+
+        # 期待する結果の検証
+        expect(user.reset_token).to be_present # メモリ上のトークン
+        expect(user.reset_digest).to be_present # データベース保存されたハッシュ値
+        expect(user.reset_sent_at).to be_within(1.second).of(Time.zone.now)
+      end
+
+      it "reset_tokenとreset_digestは毎回異なる値を生成する" do
+        user.create_reset_digest
+        first_token = user.reset_token
+        first_digest = user.reset_digest
+
+        user.create_reset_digest
+        second_token = user.reset_token
+        second_digest = user.reset_digest
+
+        expect(first_token).not_to eq(second_token)
+        expect(first_digest).not_to eq(second_digest)
+      end
+    end
+    describe "#send_password_reset_email" do
+      it "パスワードリセットメールが送信されること" do
+        # メール送信のモック設定
+        mail_double = double("mail")
+        expect(mail_double).to receive(:deliver_now)
+        expect(UserMailer).to receive(:password_reset).with(user).and_return(mail_double)
+
+        user.send_password_reset_email
+      end
+    end
+    describe "#password_reset_expired?" do
+      it "2時間以内なら有効であること" do
+        user.reset_sent_at = 1.hour.ago
+        expect(user.password_reset_expired?).to be_falsey
+      end
+
+      it "2時間以上経過すると無効であること" do
+        user.reset_sent_at = 3.hours.ago
+        expect(user.password_reset_expired?).to be_truthy
+      end
+
+      it "reset_sent_atがnilの場合は無効であること" do
+        user.reset_sent_at = nil
+        expect(user.password_reset_expired?).to be_truthy
+      end
+    end
   end
 end

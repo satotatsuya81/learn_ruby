@@ -34,6 +34,10 @@
               <%= form.submit t('authentication.login.submit_button'), class: "btn btn-primary" %>
             </div>
           <% end %>
+
+          <div class="text-center mt-3">
+            <%= link_to t('password_resets.forgot_password'), new_password_reset_path, class: "text-decoration-none" %>
+          </div>
         </div>
       </div>
     </div>
