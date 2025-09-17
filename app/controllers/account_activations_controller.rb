@@ -1,4 +1,5 @@
 class AccountActivationsController < ApplicationController
+  # GET /account_activations/:id/edit?token=...
   def edit
     user = User.find_by(id: params[:id])
     if user && user.authenticated?(:activation, params[:token])

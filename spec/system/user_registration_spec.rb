@@ -82,7 +82,7 @@ RSpec.describe "ユーザー登録", type: :system do
           expect(page).to have_content(I18n.t("activerecord.errors.messages.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.messages.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.messages.too_short", count: 6))
-          expect(page).to have_content(I18n.t("activerecord.errors.messages.confirmation", attribute: I18n.t("users.password")))
+          expect(page).to have_content(I18n.t("activerecord.errors.messages.confirmation", attribute: I18n.t("activerecord.attributes.user.password")))
         end
       end
     end
