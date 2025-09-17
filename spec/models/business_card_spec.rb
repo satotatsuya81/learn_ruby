@@ -27,6 +27,12 @@ RSpec.describe BusinessCard, type: :model do
       should allow_value("test@example.com").for(:email)
       should_not allow_value("invalid_email").for(:email)
     end
+
+    it "webサイトURLのフォーマットチェック" do
+      should allow_value("http://example.com").for(:website)
+      should allow_value("https://example.com").for(:website)
+      should_not allow_value("invalid_url").for(:website)
+    end
   end
 
   describe "スコープメソッドのテスト" do
