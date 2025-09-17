@@ -3,9 +3,11 @@ class User < ApplicationRecord
   has_secure_password
   # remember_token属性を仮想的に追加
   attr_accessor :remember_token
-
   # activation_token属性を仮想的に追加
   attr_accessor :activation_token
+  # reset_token属性を仮想的に追加
+  attr_accessor :reset_token
+
   before_create :create_activation_digest
 
   # メールアドレスを小文字に変換して保存

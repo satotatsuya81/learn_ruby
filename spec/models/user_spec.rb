@@ -179,19 +179,38 @@ RSpec.describe User, type: :model do
     end
 
     describe '#authenticated?' do
-        it '正しいremember_tokenで認証が成功すること' do
-          user.remember
-          expect(user.authenticated?(user.remember_token)).to be_truthy
-        end
-
-        it '誤ったremember_tokenで認証が失敗すること' do
-          user.remember
-          expect(user.authenticated?('wrongtoken')).to be_falsey
-        end
-
-        it 'remember_digestがnilの場合、認証が失敗すること' do
-          expect(user.authenticated?('anytoken')).to be_falsey
-        end
+      it '正しいremember_tokenで認証が成功すること' do
+        user.remember
+        expect(user.authenticated?(user.remember_token)).to be_truthy
       end
+
+      it '誤ったremember_tokenで認証が失敗すること' do
+        user.remember
+        expect(user.authenticated?('wrongtoken')).to be_falsey
+      end
+
+      it 'remember_digestがnilの場合、認証が失敗すること' do
+        expect(user.authenticated?('anytoken')).to be_falsey
+      end
+    end
+  end
+  describe "パスワードリセット機能" do
+    it "reset_digestカラムとreset_sent_atカラムが設定されること" do
+      expect(User.column_names).to include('reset_digest')
+      expect(User.column_names).to include('reset_sent_at')
+    end
+
+    it "reset_digestとreset_sent_atにnilが設定できること" do
+      user.update(reset_digest: nil, reset_sent_at: nil)
+      expect(user.reset_digest).to be_nil
+      expect(user.reset_sent_at).to be_nil
+    end
+
+    it "reset_digestとreset_sent_atに値が設定できること" do
+      time = Time.current
+      user.update(reset_digest: 'somedigest', reset_sent_at: time)
+      expect(user.reset_digest).to eq('somedigest')
+      expect(user.reset_sent_at.to_i).to eq(time.to_i)
+    end
   end
 end
