@@ -14,12 +14,12 @@
 
           <div class="mb-3">
             <%= f.label :password, t('password_resets.password'), class: "form-label" %>
-            <%= f.password_field :password, class: "form-control", required: true %>
+            <%= f.password_field :password, class: "form-control", required: true, minlength: 6 %>
           </div>
 
           <div class="mb-3">
             <%= f.label :password_confirmation, t('password_resets.password_confirmation'), class: "form-label" %>
-            <%= f.password_field :password_confirmation, class: "form-control", required: true %>
+            <%= f.password_field :password_confirmation, class: "form-control", required: true, minlength: 6 %>
           </div>
 
           <div class="d-grid">

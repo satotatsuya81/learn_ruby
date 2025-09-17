@@ -35,4 +35,19 @@ RSpec.describe "password_resets/edit", type: :view do
     # トークンが隠しフィールドとして含まれることを確認
     expect(rendered).to have_selector('input[name="token"]', visible: false)
   end
+
+  it "パスワード入力欄にHTML5バリデーション属性が設定される" do
+    # required属性の確認
+    expect(rendered).to have_selector('input[name="user[password]"][required]')
+    expect(rendered).to have_selector('input[name="user[password_confirmation]"][required]')
+
+    # password type属性の確認
+    expect(rendered).to have_selector('input[name="user[password]"][type="password"]')
+    expect(rendered).to have_selector('input[name="user[password_confirmation]"][type="password"]')
+  end
+
+  it "パスワード入力欄に最小長属性が設定される" do
+    # minlength属性の確認（セキュリティ要件）
+    expect(rendered).to have_selector('input[name="user[password]"][minlength]')
+  end
 end
