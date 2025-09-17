@@ -56,15 +56,7 @@
               <div class="row">
                 <% @similar_cards.each do |similar_card| %>
                   <div class="col-md-4 mb-2">
-                    <div class="card border-light">
-                      <div class="card-body p-2">
-                        <h6 class="card-title mb-1"><%= similar_card.name %></h6>
-                        <% if similar_card.job_title.present? %>
-                          <p class="card-text small text-muted mb-1"><%= similar_card.job_title %></p>
-                        <% end %>
-                        <%= link_to "詳細", similar_card, class: "btn btn-outline-primary btn-sm" %>
-                      </div>
-                    </div>
+                    <%= render 'business_card', business_card: similar_card, compact: true %>
                   </div>
                 <% end %>
               </div>
