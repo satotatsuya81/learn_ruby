@@ -71,9 +71,9 @@ require 'rails_helper'
         expect(rendered).to have_link('ホーム', href: "/")
       end
 
-      it "ログアウトリンクが表示されること" do
+      it "ログアウトボタンが表示されること" do
         render
-        expect(rendered).to have_link('ログアウト', href: "/logout")
+        expect(rendered).to have_button('ログアウト')
       end
 
       it "ログインリンクが表示されないこと" do
