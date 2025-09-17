@@ -7,16 +7,16 @@
         <%= render 'shared/error_messages', object: @user %>
 
         <%= f.label :name, t('users.name') %>
-        <%= f.text_field :name, class: 'form-control' %>
+        <%= f.text_field :name, class: 'form-control', required: true %>
 
         <%= f.label :email, t('users.email') %>
-        <%= f.email_field :email, class: 'form-control' %>
+        <%= f.email_field :email, class: 'form-control', required: true %>
 
         <%= f.label :password, t('users.password') %>
-        <%= f.password_field :password, class: 'form-control' %>
+        <%= f.password_field :password, class: 'form-control', required: true %>
 
         <%= f.label :password_confirmation, t('users.password_confirmation') %>
-        <%= f.password_field :password_confirmation, class: 'form-control' %>
+        <%= f.password_field :password_confirmation, class: 'form-control', required: true %>
 
         <%= f.submit t('users.create_account'), class: "btn btn-primary" %>
       <% end %>

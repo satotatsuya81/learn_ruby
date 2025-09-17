@@ -29,7 +29,19 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
         <% end %>
-
+        <% flash.each do |type, message| %>
+          <% bootstrap_class = case type.to_s
+                               when 'notice' then 'alert-success'
+                               when 'alert' then 'alert-danger'
+                               when 'info' then 'alert-info'
+                               when 'warning' then 'alert-warning'
+                         else 'alert-primary'
+                         end %>
+            <div class="alert <%= bootstrap_class %> alert-dismissible fade show" role="alert">
+              <%= message %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% end %>
         <%= yield %>
       </main>
 

@@ -11,6 +11,8 @@ en:
     profile: "Profile"
     login: "Log in"
     logout: "Log out"
+    sign_up: "Sign up"
+    welcome_message: "Welcome, %{name}!"
 
   buttons:
     new: "New"
@@ -60,8 +62,6 @@ en:
       remember_me_label: "Remember me"
       submit_button: "Log in"
       invalid_credentials: "Invalid email or password"
-    navigation:
-      welcome_message: "Welcome, %{name}!"
   users:
     sign_up: "Sign up"
     name: "Name"
@@ -82,6 +82,7 @@ en:
       ignore_message: "If you did not request this email, you can safely ignore it."
       success: "Your account has been activated. Please log in."
       invalid_link: "Invalid activation link."
+      already_activated: "Your account is already activated."
 
   errors:
     not_found:
@@ -90,3 +91,24 @@ en:
     internal_server_error:
       title: "Internal Server Error"
       message: "We're sorry, but something went wrong on our end. Please try again later."
+
+  activerecord:
+    errors:
+      template:
+        header:
+          one: "%{count} error prohibited this %{model} from being saved"
+          other: "%{count} errors prohibited this %{model} from being saved"
+        body: "There were problems with the following fields:"
+      messages:
+        blank: "can't be blank"
+        invalid: "is invalid"
+        too_short: "is too short (minimum is %{count} characters)"
+        confirmation: "doesn't match %{attribute}"
+    models:
+      user: "user"
+    attributes:
+      user:
+        name: "Name"
+        email: "Email"
+        password: "Password"
+        password_confirmation: "Password confirmation"

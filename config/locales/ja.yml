@@ -11,6 +11,8 @@ ja:
     profile: "プロフィール"
     login: "ログイン"
     logout: "ログアウト"
+    signup: "ユーザー登録"
+    welcome_message: "ようこそ、%{name}さん！"
 
   buttons:
     new: "新規作成"
@@ -60,8 +62,7 @@ ja:
       remember_me_label: "ログイン情報を保持する"
       submit_button: "ログイン"
       invalid_credentials: "メールアドレスまたはパスワードが正しくありません"
-    navigation:
-      welcome_message: "ようこそ、%{name}さん！"
+      account_not_activated: "アカウントが有効化されていません。メールをご確認ください。"
 
   users:
     sign_up: "ユーザー登録"
@@ -83,6 +84,7 @@ ja:
       ignore_message: "このメールに心当たりがない場合は、無視してください。アカウントは作成されていません。"
       success: "アカウントが有効化されました。ログインしてください。"
       invalid_link: "無効なアクティベーションリンクです。"
+      already_activated: "アカウントは既に有効化されています。"
 
   errors:
     not_found:
@@ -91,3 +93,24 @@ ja:
     internal_server_error:
       title: "サーバーエラーが発生しました"
       message: "申し訳ございません。システム内部でエラーが発生しました。しばらく時間をおいてから再度お試しください。"
+
+  activerecord:
+    errors:
+      template:
+        header:
+          one: "%{model}に%{count}個のエラーが発生しました"
+          other: "%{model}に%{count}個のエラーが発生しました"
+        body: "次の項目を確認してください:"
+      messages:
+        blank: "を入力してください"
+        invalid: "は不正な値です"
+        too_short: "は%{count}文字以上で入力してください"
+        confirmation: "と%{attribute}の入力が一致しません"
+    models:
+      user: "ユーザー"
+    attributes:
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"

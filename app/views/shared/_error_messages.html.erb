@@ -1,0 +1,16 @@
+ <% if object.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        <strong>
+          <%= t('activerecord.errors.template.header',
+                count: object.errors.count,
+                model: object.class.model_name.human.downcase) %>
+        </strong>
+        <ul class="mb-0">
+          <% object.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>

@@ -12,6 +12,7 @@ require 'rails_helper'
       allow(view).to receive(:t).with('navigation.login').and_return('ログイン')
       allow(view).to receive(:t).with('navigation.signup').and_return('ユーザー登録')
       allow(view).to receive(:t).with('navigation.logout').and_return('ログアウト')
+      allow(view).to receive(:t).with('navigation.profile').and_return('プロフィール')
     end
 
     context "未ログインユーザの場合" do
@@ -50,7 +51,8 @@ require 'rails_helper'
       before do
         allow(view).to receive(:logged_in?).and_return(true)
         allow(view).to receive(:current_user).and_return(user)
-        allow(view).to receive(:t).with('authentication.navigation.welcome_message', name: "テストユーザ")
+        allow(view).to receive(:user_path).with(user).and_return("/users/#{user.id}")
+        allow(view).to receive(:t).with('navigation.welcome_message', name: "テストユーザ")
                                   .and_return("ようこそ、テストユーザさん")
       end
 
