@@ -12,10 +12,6 @@ class BusinessCard < ApplicationRecord
   validates :phone, length: { maximum: 50 }, allow_blank: true
   validates :mobile, length: { maximum: 50 }, allow_blank: true
   validates :address, length: { maximum: 500 }, allow_blank: true
-  validates :email, format: {
-      with: URI::MailTo::EMAIL_REGEXP,
-      message: "は有効なメールアドレス形式で入力してください"
-    }, allow_blank: true
   validates :website, format: {
       with: /\A#{URI.regexp}\z/,
       message: "は有効なURL形式で入力してください"
