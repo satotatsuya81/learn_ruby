@@ -60,11 +60,11 @@ require 'rails_helper'
       end
 
       it "一覧に戻るリンクが存在すること" do
-        expect(rendered).to have_link("一覧に戻る", href: business_cards_path)
+        expect(rendered).to have_link(I18n.t('business_cards.show.back_to_list'), href: business_cards_path)
       end
 
       it "ページタイトルが正しく設定されること" do
-        expect(view.content_for(:title)).to eq("田中太郎 - 名刺詳細")
+        expect(view.content_for(:title)).to eq("田中太郎 - #{I18n.t('business_cards.show.title')}")
       end
     end
 
@@ -77,7 +77,7 @@ require 'rails_helper'
         end
 
         it "類似名刺セクションが表示されること" do
-          expect(rendered).to include("同じ会社の名刺")
+          expect(rendered).to include(I18n.t('business_cards.show.similar_cards_title'))
         end
 
         it "類似名刺の名前と役職が表示されること" do
@@ -88,8 +88,8 @@ require 'rails_helper'
         end
 
         it "各類似名刺に詳細リンクが存在すること" do
-          expect(rendered).to have_link("詳細", href: business_card_path(similar_card1))
-          expect(rendered).to have_link("詳細", href: business_card_path(similar_card2))
+          expect(rendered).to have_link(I18n.t('business_cards.card.view_details_short'), href: business_card_path(similar_card1))
+          expect(rendered).to have_link(I18n.t('business_cards.card.view_details_short'), href: business_card_path(similar_card2))
         end
 
         it "類似名刺がカード形式で表示されること" do

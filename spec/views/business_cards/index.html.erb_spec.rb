@@ -30,7 +30,7 @@ RSpec.describe "business_cards/index", type: :view do
     end
 
     it "ページタイトルが正しく表示されること" do
-      expect(rendered).to match(/名刺一覧/)
+      expect(rendered).to match(/#{I18n.t('business_cards.index.title')}/)
     end
 
     it "各名刺がカード形式で表示されること" do
@@ -56,10 +56,10 @@ RSpec.describe "business_cards/index", type: :view do
     end
 
     it "各名刺に詳細ページへのリンクが存在すること" do
-      expect(rendered).to have_link("詳細を見る", count: 2)
+      expect(rendered).to have_link(I18n.t('business_cards.card.view_details'), count: 2)
       # 具体的なリンクパスもチェック
-      expect(rendered).to have_link("詳細を見る", href: business_card_path(business_card1))
-      expect(rendered).to have_link("詳細を見る", href: business_card_path(business_card2))
+      expect(rendered).to have_link(I18n.t('business_cards.card.view_details'), href: business_card_path(business_card1))
+      expect(rendered).to have_link(I18n.t('business_cards.card.view_details'), href: business_card_path(business_card2))
     end
 
     it "レスポンシブ対応のCSSクラスが適用されていること" do
@@ -77,7 +77,7 @@ RSpec.describe "business_cards/index", type: :view do
     end
 
     it "空状態のメッセージが表示されること" do
-      expect(rendered).to include("まだ名刺が登録されていません")
+      expect(rendered).to include(I18n.t('business_cards.index.no_business_cards'))
     end
 
     it "カードが表示されないこと" do

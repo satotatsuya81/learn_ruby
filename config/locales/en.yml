@@ -112,6 +112,46 @@ en:
     password_empty: "Password can't be blank"
     password_reset_expired: "Password reset has expired"
 
+  business_cards:
+    index:
+      title: "Business Cards"
+      no_business_cards: "No business cards have been registered yet."
+      new_business_card: "Add New Business Card"
+    show:
+      title: "Business Card Details"
+      back_to_list: "Back to List"
+      edit_business_card: "Edit"
+      delete_business_card: "Delete"
+      similar_cards_title: "Other Cards from Same Company"
+    form:
+      name_label: "Name"
+      company_name_label: "Company"
+      department_label: "Department"
+      job_title_label: "Job Title"
+      email_label: "Email"
+      phone_label: "Phone"
+      mobile_label: "Mobile"
+      website_label: "Website"
+      address_label: "Address"
+      notes_label: "Notes"
+    card:
+      view_details: "View Details"
+      view_details_short: "Details"
+      name_label: "Name"
+      company_label: "Company"
+      department_label: "Department"
+      job_title_label: "Job Title"
+      email_label: "Email"
+      phone_label: "Phone"
+      mobile_label: "Mobile"
+      website_label: "Website"
+      address_label: "Address"
+      notes_label: "Notes"
+      send_email: "Send Email"
+      make_call: "Make Call"
+      call_mobile: "Call Mobile"
+      visit_website: "Visit Website"
+
   errors:
     not_found:
       title: "Page Not Found"
@@ -134,9 +174,21 @@ en:
         confirmation: "doesn't match %{attribute}"
     models:
       user: "user"
+      business_card: "business card"
     attributes:
       user:
         name: "Name"
         email: "Email"
         password: "Password"
         password_confirmation: "Password confirmation"
+      business_card:
+        name: "Name"
+        company_name: "Company"
+        department: "Department"
+        job_title: "Job Title"
+        email: "Email"
+        phone: "Phone"
+        mobile: "Mobile"
+        website: "Website"
+        address: "Address"
+        notes: "Notes"
