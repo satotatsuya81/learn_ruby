@@ -20,7 +20,7 @@ RSpec.describe "Account Activation", type: :system do
       it "ログイン状態になること" do
         with_locale(:ja) do  # 一時的に日本語ロケールに切り替え
           visit edit_account_activation_path(id: user.id, token: user.activation_token)
-          expect(page).to have_link(I18n.t("navigation.logout"))
+          expect(page).to have_button(I18n.t("navigation.logout"))
         end
       end
 

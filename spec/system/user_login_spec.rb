@@ -37,7 +37,7 @@ RSpec.describe "User Authentication", type: :system do
 
             # ダッシュボードにリダイレクトされることを確認
             expect(current_path).to eq(root_path)
-            expect(page).to have_link(I18n.t('navigation.logout'))
+            expect(page).to have_button(I18n.t('navigation.logout'))
             # ウェルカムメッセージが日本語で表示されることを確認
             expect(page).to have_content(I18n.t('navigation.welcome_message', name: user.name))
           end
@@ -60,7 +60,7 @@ RSpec.describe "User Authentication", type: :system do
             expect(page.driver.browser.rack_mock_session.cookie_jar['remember_token']).to be_present
             # ログイン状態が維持されていることも確認
             expect(current_path).to eq(root_path)
-            expect(page).to have_link(I18n.t('navigation.logout'))
+            expect(page).to have_button(I18n.t('navigation.logout'))
           end
         end
       end
@@ -86,7 +86,7 @@ RSpec.describe "User Authentication", type: :system do
 
             # ダッシュボードにリダイレクトされることを確認
             expect(current_path).to eq(root_path)
-            expect(page).to have_link(I18n.t('navigation.logout'))
+            expect(page).to have_button(I18n.t('navigation.logout'))
             # ウェルカムメッセージが英語で表示されることを確認
             expect(page).to have_content(I18n.t('navigation.welcome_message', name: user.name))
           end
@@ -113,7 +113,7 @@ RSpec.describe "User Authentication", type: :system do
             expect(current_path).to eq(login_path)
             expect(page).to have_content(I18n.t('authentication.login.invalid_credentials'))
             expect(page).to have_link(I18n.t('navigation.login'))
-            expect(page).not_to have_link(I18n.t('navigation.logout'))
+            expect(page).not_to have_button(I18n.t('navigation.logout'))
           end
         end
 
@@ -152,7 +152,7 @@ RSpec.describe "User Authentication", type: :system do
             expect(current_path).to eq(login_path)
             expect(page).to have_content(I18n.t('authentication.login.invalid_credentials'))
             expect(page).to have_link(I18n.t('navigation.login'))
-            expect(page).not_to have_link(I18n.t('navigation.logout'))
+            expect(page).not_to have_button(I18n.t('navigation.logout'))
           end
         end
       end
@@ -175,12 +175,12 @@ RSpec.describe "User Authentication", type: :system do
       # 目的: セッション破棄が正しく行われ、適切にホームページにリダイレクトされることを確認
       it '正常にログアウトし、ホームページにリダイレクトされ、日本語UIが表示されること' do
         with_locale(:ja) do  # 一時的に日本語ロケールに切り替え
-          click_link I18n.t('navigation.logout')
+          click_button I18n.t('navigation.logout')
 
           # ホームページにリダイレクトされることを確認
           expect(current_path).to eq(root_path)
           expect(page).to have_link(I18n.t('navigation.login'))
-          expect(page).not_to have_link(I18n.t('navigation.logout'))
+          expect(page).not_to have_button(I18n.t('navigation.logout'))
         end
       end
     end
@@ -201,12 +201,12 @@ RSpec.describe "User Authentication", type: :system do
       # 目的: 英語ユーザーに対してもログアウト機能が正しく動作することを確認
       it '正常にログアウトし、ホームページにリダイレクトされ、英語UIが表示されること' do
         with_locale(:en) do  # 一時的に英語ロケールに切り替え
-          click_link I18n.t('navigation.logout')
+          click_button I18n.t('navigation.logout')
 
           # ホームページにリダイレクトされることを確認
           expect(current_path).to eq(root_path)
           expect(page).to have_link(I18n.t('navigation.login'))
-          expect(page).not_to have_link(I18n.t('navigation.logout'))
+          expect(page).not_to have_button(I18n.t('navigation.logout'))
         end
       end
     end
