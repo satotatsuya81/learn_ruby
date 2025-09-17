@@ -1,0 +1,77 @@
+<% content_for :title, "#{@business_card.name} - 名刺詳細" %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+          <h1><%= @business_card.name %></h1>
+        </div>
+        <div class="card-body">
+          <h5 class="text-primary"><%= @business_card.company_name %></h5>
+
+          <% if @business_card.job_title.present? %>
+            <p><strong>役職:</strong> <%= @business_card.job_title %></p>
+          <% end %>
+
+          <% if @business_card.department.present? %>
+            <p><strong>部署:</strong> <%= @business_card.department %></p>
+          <% end %>
+
+          <% if @business_card.email.present? %>
+            <p><strong>Email:</strong> <%= mail_to @business_card.email %></p>
+          <% end %>
+
+          <% if @business_card.phone.present? %>
+            <p><strong>電話番号:</strong> <%= @business_card.phone %></p>
+          <% end %>
+
+          <% if @business_card.mobile.present? %>
+            <p><strong>携帯番号:</strong> <%= @business_card.mobile %></p>
+          <% end %>
+
+          <% if @business_card.website.present? %>
+            <p><strong>ウェブサイト:</strong> <%= link_to @business_card.website, @business_card.website, target: "_blank" %></p>
+          <% end %>
+
+          <% if @business_card.address.present? %>
+            <p><strong>住所:</strong><br><%= simple_format(@business_card.address) %></p>
+          <% end %>
+
+          <% if @business_card.notes.present? %>
+            <p><strong>メモ:</strong><br><%= simple_format(@business_card.notes) %></p>
+          <% end %>
+        </div>
+        <div class="card-footer">
+          <%= link_to "一覧に戻る", business_cards_path, class: "btn btn-secondary" %>
+        </div>
+
+        <!-- 類似名刺セクション -->
+        <% if @similar_cards.any? %>
+          <div class="card mt-4">
+            <div class="card-header">
+              <h5>同じ会社の名刺</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <% @similar_cards.each do |similar_card| %>
+                  <div class="col-md-4 mb-2">
+                    <div class="card border-light">
+                      <div class="card-body p-2">
+                        <h6 class="card-title mb-1"><%= similar_card.name %></h6>
+                        <% if similar_card.job_title.present? %>
+                          <p class="card-text small text-muted mb-1"><%= similar_card.job_title %></p>
+                        <% end %>
+                        <%= link_to "詳細", similar_card, class: "btn btn-outline-primary btn-sm" %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

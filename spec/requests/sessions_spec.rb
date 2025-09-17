@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Sessions", type: :request do
-  let(:user) { create(:user, activated: true) }
+  let(:user) { create(:user, :activated) }
 
   describe "GET /login" do
     it "ログインページが表示されること" do

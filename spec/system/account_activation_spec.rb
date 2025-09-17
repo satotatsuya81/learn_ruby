@@ -4,7 +4,7 @@ RSpec.describe "Account Activation", type: :system do
   before do
     driven_by(:rack_test)
   end
-  let(:user) { create(:user, activated: false) }
+  let(:user) { create(:user) }
 
   describe "アカウント有効化の成功シナリオ" do
     context "有効なトークンとユーザーIDの場合" do

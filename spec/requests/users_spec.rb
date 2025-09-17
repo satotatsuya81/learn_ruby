@@ -125,7 +125,7 @@ require 'rails_helper'
       end
 
       describe "GET /users/:id" do
-        let(:user) { create(:user, activated: true) }
+        let(:user) { create(:user, :activated) }
         let(:unactivated_user) { create(:user, activated: false) }
 
         it "有効なユーザのプロフィールが表示されること" do

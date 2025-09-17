@@ -1,0 +1,31 @@
+<% content_for :title, "名刺一覧" %>
+
+<div class="container">
+  <h1>名刺一覧</h1>
+
+  <% if @business_cards.any? %>
+    <div class="row">
+      <% @business_cards.each do |business_card| %>
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= business_card.name %></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%= business_card.company_name %></h6>
+              <p class="card-text">
+                <% if business_card.job_title.present? %>
+                  <strong><%= business_card.job_title %></strong><br>
+                <% end %>
+                <% if business_card.department.present? %>
+                  <%= business_card.department %><br>
+                <% end %>
+              </p>
+              <%= link_to "詳細を見る", business_card, class: "btn btn-primary btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">まだ名刺が登録されていません。</p>
+  <% end %>
+</div>
