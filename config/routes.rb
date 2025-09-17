@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # ユーザー登録
   # GET /signup
   get "/signup",  to: "users#new"
-  resources :users, only: [ :new, :create, :show ]
+  resources :users, only: [ :new, :create, :edit, :show ]
   # セッション管理のルート
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
@@ -23,6 +23,11 @@ Rails.application.routes.draw do
   # アカウント有効化
   # /account_activations/:token/edit
   resources :account_activations, only: [ :edit ]
+
+    # パスワードリセット
+    # /password_resets/new, /password_resets (POST), /password_resets/:id/edit, /password_resets/:id (PATCH)
+    resources :password_resets, only: [ :new, :create, :edit, :update ]
+
   # エラーページルーティング（config.exceptions_app = self.routes 用）
   # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応
   match "/404", to: "errors#not_found", via: :all

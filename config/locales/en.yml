@@ -83,6 +83,16 @@ en:
       success: "Your account has been activated. Please log in."
       invalid_link: "Invalid activation link."
       already_activated: "Your account is already activated."
+    password_reset:
+      subject: "Password Reset"
+      greeting: "Hello, %{name}!"
+      body: "We received a request to reset your password. Please click the link below to reset your password:"
+      reset_link: "Reset your password"
+      ignore_message: "If you did not request this email, you can safely ignore it."
+      email_sent: "Password reset email has been sent."
+      invalid_link: "Invalid password reset link."
+      expired_link: "Password reset link has expired. Please request a new one."
+      password_updated: "Your password has been successfully updated. Please log in."
 
   errors:
     not_found:
