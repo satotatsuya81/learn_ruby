@@ -1,7 +1,12 @@
 class AccountActivationsController < ApplicationController
   def edit
     user = User.find_by(id: params[:id])
-    if user && !user.activated? && user.authenticated?(:activation, params[:token])
+    if user && user.authenticated?(:activation, params[:token])
+      if user.activated?
+        flash[:info] = t("user_mailer.activation_email.already_activated")
+        redirect_to root_url
+        return
+      end
       user.activate
       log_in user
       flash[:success] = t("user_mailer.activation_email.success")

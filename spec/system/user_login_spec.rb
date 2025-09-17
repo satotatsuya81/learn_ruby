@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 # User Authentication（ユーザー認証）のシステムテスト
-# System Test は、ブラウザでの実際のユーザー操作をシミュレートするテストです
-# Request Test との違い: JavaScriptの動作やCSS表示なども含めて、より実際の使用環境に近いテストができる
 RSpec.describe "User Authentication", type: :system do
   before do
-    # rack_test: 軽量なテストドライバー（JavaScriptは動作しないが高速）
-    # selenium_chrome_headless: より本格的（JavaScript動作、画面表示確認可能だが低速）
     driven_by(:rack_test)
   end
 
-  let(:user) { create(:user, email: "user@example.com", password: "password", password_confirmation: "password", name: "Test User") }
+  let(:user) { create(:user, email: "user@example.com",
+                            password: "password",
+                            password_confirmation: "password",
+                            name: "Test User",
+                            activated: true) }
 
   # ログイン機能のテストグループ
   describe 'ログイン機能' do
@@ -39,7 +39,7 @@ RSpec.describe "User Authentication", type: :system do
             expect(current_path).to eq(root_path)
             expect(page).to have_link(I18n.t('navigation.logout'))
             # ウェルカムメッセージが日本語で表示されることを確認
-            expect(page).to have_content(I18n.t('authentication.navigation.welcome_message', name: user.name))
+            expect(page).to have_content(I18n.t('navigation.welcome_message', name: user.name))
           end
         end
 
@@ -88,7 +88,7 @@ RSpec.describe "User Authentication", type: :system do
             expect(current_path).to eq(root_path)
             expect(page).to have_link(I18n.t('navigation.logout'))
             # ウェルカムメッセージが英語で表示されることを確認
-            expect(page).to have_content(I18n.t('authentication.navigation.welcome_message', name: user.name))
+            expect(page).to have_content(I18n.t('navigation.welcome_message', name: user.name))
           end
         end
       end
