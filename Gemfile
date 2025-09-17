@@ -103,4 +103,6 @@ group :test do
 
   # Code coverage reporting [https://github.com/simplecov-ruby/simplecov]
   gem "simplecov", require: false
+  # Simplifies the use of shoulda matchers with RSpec and Minitest [https://github.com/shoulda/shoulda-matchers]
+  gem "shoulda-matchers", "~> 5.0"
 end

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  # ユーザは複数の名刺を持つことができる
+  has_many :business_cards, dependent: :destroy
   # パスワードのハッシュ化と認証機能を追加
   has_secure_password
   # remember_token属性を仮想的に追加
