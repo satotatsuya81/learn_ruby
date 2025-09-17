@@ -1,0 +1,106 @@
+<%#
+  名刺表示用のパーシャル - Bootstrap Cardコンポーネントを使用
+  local variables:
+    business_card: 表示する名刺オブジェクト（必須）
+    show_details: 詳細情報も表示するか（デフォルト: false）
+    show_action: アクションボタンを表示するか（デフォルト: true）
+    compact: コンパクト表示モード（デフォルト: false）
+%>
+<%
+  show_details = local_assigns.fetch(:show_details, false)
+  show_action = local_assigns.fetch(:show_action, true)
+  compact = local_assigns.fetch(:compact, false)
+  card_classes = compact ? "card border-light" : "card mb-3"
+  body_classes = compact ? "card-body p-2" : "card-body"
+  title_classes = compact ? "card-title mb-1" : "card-title"
+  subtitle_classes = compact ? "card-subtitle mb-1 text-muted small" : "card-subtitle mb-2 text-muted"
+%>
+
+<div class="<%= card_classes %>">
+  <div class="<%= body_classes %>">
+    <%# 名前（必須項目） %>
+    <% if compact %>
+      <h6 class="<%= title_classes %>" aria-label="<%= t('business_cards.card.name_label') %>"><%= h business_card.name %></h6>
+    <% else %>
+      <h5 class="<%= title_classes %>" aria-label="<%= t('business_cards.card.name_label') %>"><%= h business_card.name %></h5>
+    <% end %>
+
+    <%# 会社名（必須項目） %>
+    <div class="<%= subtitle_classes %>" aria-label="<%= t('business_cards.card.company_label') %>"><%= h business_card.company_name %></div>
+
+    <%# 基本情報（役職・部署） %>
+    <% if business_card.job_title.present? && !compact %>
+      <p class="card-text">
+        <span class="text-muted" aria-label="<%= t('business_cards.card.job_title_label') %>"><%= t('business_cards.card.job_title_label') %>:</span> <%= h business_card.job_title %>
+      </p>
+    <% elsif business_card.job_title.present? && compact %>
+      <p class="card-text small text-muted mb-1"><%= h business_card.job_title %></p>
+    <% end %>
+
+    <% if business_card.department.present? && !compact %>
+      <p class="card-text" aria-label="<%= t('business_cards.card.department_label') %>">
+        <span class="text-muted"><%= t('business_cards.card.department_label') %>:</span> <%= h business_card.department %>
+      </p>
+    <% end %>
+
+    <%# 詳細情報（show_details=trueの場合のみ表示） %>
+    <% if show_details %>
+      <%# メールアドレス %>
+      <% if business_card.email.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.email_label') %>"><%= t('business_cards.card.email_label') %>:</span>
+          <a href="mailto:<%= h business_card.email %>" aria-label="<%= t('business_cards.card.send_email') %>"><%= h business_card.email %></a>
+        </p>
+      <% end %>
+
+      <%# 電話番号 %>
+      <% if business_card.phone.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.phone_label') %>"><%= t('business_cards.card.phone_label') %>:</span>
+          <a href="tel:<%= h business_card.phone %>" aria-label="<%= t('business_cards.card.make_call') %>"><%= h business_card.phone %></a>
+        </p>
+      <% end %>
+
+      <%# 携帯番号 %>
+      <% if business_card.mobile.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.mobile_label') %>"><%= t('business_cards.card.mobile_label') %>:</span>
+          <a href="tel:<%= h business_card.mobile %>" aria-label="<%= t('business_cards.card.call_mobile') %>"><%= h business_card.mobile %></a>
+        </p>
+      <% end %>
+
+      <%# ウェブサイト %>
+      <% if business_card.website.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.website_label') %>"><%= t('business_cards.card.website_label') %>:</span>
+          <a href="<%= h business_card.website %>" target="_blank" rel="noopener" aria-label="<%= t('business_cards.card.visit_website') %>"><%= h business_card.website %></a>
+        </p>
+      <% end %>
+
+      <%# 住所 %>
+      <% if business_card.address.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.address_label') %>"><%= t('business_cards.card.address_label') %>:</span><br>
+          <%= simple_format(h(business_card.address)) %>
+        </p>
+      <% end %>
+
+      <%# メモ %>
+      <% if business_card.notes.present? %>
+        <p class="card-text">
+          <span class="text-muted" aria-label="<%= t('business_cards.card.notes_label') %>"><%= t('business_cards.card.notes_label') %>:</span><br>
+          <%= simple_format(h(business_card.notes)) %>
+        </p>
+      <% end %>
+    <% end %>
+
+    <%# アクションボタン %>
+    <% if show_action %>
+      <% if compact %>
+        <%= link_to t('business_cards.card.view_details_short'), business_card, class: "btn btn-outline-primary btn-sm" %>
+      <% else %>
+        <%= link_to t('business_cards.card.view_details'), business_card, class: "btn btn-primary btn-sm" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

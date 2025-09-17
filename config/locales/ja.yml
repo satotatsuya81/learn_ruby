@@ -114,6 +114,46 @@ ja:
     password_empty: "パスワードを入力してください"
     password_reset_expired: "パスワードリセットの有効期限が切れています"
 
+  business_cards:
+    index:
+      title: "名刺一覧"
+      no_business_cards: "まだ名刺が登録されていません。"
+      new_business_card: "新しい名刺を追加"
+    show:
+      title: "名刺詳細"
+      back_to_list: "一覧に戻る"
+      edit_business_card: "編集"
+      delete_business_card: "削除"
+      similar_cards_title: "同じ会社の名刺"
+    form:
+      name_label: "名前"
+      company_name_label: "会社名"
+      department_label: "部署"
+      job_title_label: "役職"
+      email_label: "メールアドレス"
+      phone_label: "電話番号"
+      mobile_label: "携帯番号"
+      website_label: "ウェブサイト"
+      address_label: "住所"
+      notes_label: "メモ"
+    card:
+      view_details: "詳細を見る"
+      view_details_short: "詳細"
+      name_label: "名前"
+      company_label: "会社名"
+      department_label: "部署"
+      job_title_label: "役職"
+      email_label: "メール"
+      phone_label: "電話"
+      mobile_label: "携帯"
+      website_label: "サイト"
+      address_label: "住所"
+      notes_label: "メモ"
+      send_email: "メールを送信"
+      make_call: "電話をかける"
+      call_mobile: "携帯に電話をかける"
+      visit_website: "ウェブサイトを開く"
+
   errors:
     not_found:
       title: "ページが見つかりません"
@@ -136,9 +176,21 @@ ja:
         confirmation: "と%{attribute}の入力が一致しません"
     models:
       user: "ユーザー"
+      business_card: "名刺"
     attributes:
       user:
         name: "名前"
         email: "メールアドレス"
         password: "パスワード"
         password_confirmation: "パスワード（確認）"
+      business_card:
+        name: "名前"
+        company_name: "会社名"
+        department: "部署"
+        job_title: "役職"
+        email: "メールアドレス"
+        phone: "電話番号"
+        mobile: "携帯番号"
+        website: "ウェブサイト"
+        address: "住所"
+        notes: "メモ"

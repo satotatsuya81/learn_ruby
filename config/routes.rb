@@ -28,6 +28,10 @@ Rails.application.routes.draw do
     # /password_resets/new, /password_resets (POST), /password_resets/:id/edit, /password_resets/:id (PATCH)
     resources :password_resets, only: [ :new, :create, :edit, :update ]
 
+  # 名刺管理のルート
+  # /business_cards, /business_cards/:id
+  resources :business_cards, only: [ :index, :show ]
+
   # エラーページルーティング（config.exceptions_app = self.routes 用）
   # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応
   match "/404", to: "errors#not_found", via: :all

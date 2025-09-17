@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_17_051702) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_17_104505) do
+  create_table "business_cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.string "company_name"
+    t.string "department"
+    t.string "job_title"
+    t.string "email"
+    t.string "phone"
+    t.string "mobile"
+    t.text "address"
+    t.string "website"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_business_cards_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "email", null: false
@@ -25,4 +42,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_17_051702) do
     t.datetime "reset_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "business_cards", "users"
 end
