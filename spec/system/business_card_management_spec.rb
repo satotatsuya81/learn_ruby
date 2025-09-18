@@ -34,8 +34,9 @@ RSpec.describe "Business Card Management", type: :system do
         fill_in "住所", with: "東京都千代田区1-1-1"
         fill_in "メモ", with: "テスト用の名刺です。"
         click_button "名刺を作成"
-        expect(page).to have_current_path(business_card_path(BusinessCard.last))
+        expect(page).to have_current_path(business_cards_path)
         expect(page).to have_content("名刺が正常に作成されました。")
+        expect(page).to have_content("田中太郎")  # 作成した名刺が一覧に表示されることを確認
       end
 
       it "無効な情報では名刺を作成できず、エラーメッセージが表示されること" do

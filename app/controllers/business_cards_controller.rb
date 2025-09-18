@@ -30,8 +30,8 @@ class BusinessCardsController < ApplicationController
 
     if @business_card.save
       flash[:success] = "名刺が正常に作成されました。"
-      # 成功時: 名刺詳細ページにリダイレクト & 成功メッセージ表示
-      redirect_to @business_card
+      # 成功時: 名刺一覧ページにリダイレクト & 成功メッセージ表示
+      redirect_to business_cards_path
     else
       # 失敗時: 新規作成フォームを再表示（エラーメッセージ付き）
       render :new, status: :unprocessable_content

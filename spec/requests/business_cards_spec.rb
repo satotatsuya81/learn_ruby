@@ -155,10 +155,9 @@ RSpec.describe "BusinessCards", type: :request do
           }.to change(BusinessCard, :count).by(1)
         end
 
-        it "作成後に名刺の詳細ページにリダイレクトされること" do
+        it "作成後に名刺の一覧ページにリダイレクトされること" do
           post business_cards_path, params: valid_params
-          new_card = BusinessCard.last
-          expect(response).to redirect_to(business_card_path(new_card))
+          expect(response).to redirect_to(business_cards_path)
         end
 
         it "作成した名刺が正しく保存されること" do
