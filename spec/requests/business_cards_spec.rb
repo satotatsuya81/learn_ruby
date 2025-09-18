@@ -220,7 +220,7 @@ RSpec.describe "BusinessCards", type: :request do
     end
   end
   describe "DELETE /business_cards/:id" do
-    context "ログインしている場合" do
+    context "自分の名刺を削除しようとする場合" do
       before do
         post login_path, params: { session: { email: user.email, password: user.password } }
       end
@@ -237,7 +237,50 @@ RSpec.describe "BusinessCards", type: :request do
         expect(response).to redirect_to(business_cards_path)
 
         # 削除成功のフラッシュメッセージが設定されることを確認
-        expect(flash[:success]).to eq("名刺が正常に削除されました。")
+        expect(flash[:notice]).to eq("名刺が正常に削除されました。")
+      end
+    end
+
+    context "他人の名刺を削除しようとする場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "削除されず、エラーメッセージが表示される" do
+        other_user = create(:user)
+        other_card = create(:business_card, user: other_user, name: "他人太郎")
+
+        expect {
+          delete business_card_path(other_card)
+        }.not_to change(BusinessCard, :count)
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq("指定されたページは存在しません。")
+      end
+    end
+
+    context "存在しない名刺を削除しようとする場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "エラーメッセージが表示され、ルートページにリダイレクトされる" do
+        non_existent_id = 99999
+
+        expect {
+          delete business_card_path(non_existent_id)
+        }.not_to change(BusinessCard, :count)
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq("指定されたページは存在しません。")
+      end
+    end
+
+    context "ログインしていない場合" do
+      it "ログインページにリダイレクトされること" do
+        card = create(:business_card, user: user, name: "削除太郎")
+
+        delete business_card_path(card)
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
       end
     end
   end

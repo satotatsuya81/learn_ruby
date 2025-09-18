@@ -59,9 +59,9 @@ class BusinessCardsController < ApplicationController
   # 名刺削除処理
   def destroy
     if @business_card.destroy
-      flash[:success] = "名刺が正常に削除されました。"
+      flash[:notice] = "名刺が正常に削除されました。"
     else
-      flash[:error] = "名刺の削除に失敗しました。"
+      flash[:alert] = "名刺の削除に失敗しました。"
     end
     redirect_to business_cards_path
   end
