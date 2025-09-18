@@ -1,0 +1,68 @@
+<%# 名刺フォームの部分テンプレート %>
+<%= form_with(model: business_card, local: true, data: { turbo: false }) do |form| %>
+
+  <%# 必須項目 %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :name, "名前", class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", placeholder: "山田太郎" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= form.label :company_name, "会社名", class: "form-label" %>
+      <%= form.text_field :company_name, class: "form-control", placeholder: "株式会社サンプル" %>
+    </div>
+  </div>
+
+  <%# オプション項目 %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :job_title, "役職", class: "form-label" %>
+      <%= form.text_field :job_title, class: "form-control", placeholder: "営業部長" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= form.label :department, "部署", class: "form-label" %>
+      <%= form.text_field :department, class: "form-control", placeholder: "営業部" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :email, "メール", class: "form-label" %>
+      <%= form.email_field :email, class: "form-control", placeholder: "yamada@example.com" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= form.label :phone, "電話番号", class: "form-label" %>
+      <%= form.text_field :phone, class: "form-control", placeholder: "03-1234-5678" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :mobile, "携帯電話", class: "form-label" %>
+      <%= form.text_field :mobile, class: "form-control", placeholder: "090-1234-5678" %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= form.label :website, "ウェブサイト", class: "form-label" %>
+      <%= form.url_field :website, class: "form-control", placeholder: "https://example.com" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :address, "住所", class: "form-label" %>
+    <%= form.text_area :address, rows: 2, class: "form-control", placeholder: "東京都千代田区1-1-1" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :notes, "メモ", class: "form-label" %>
+    <%= form.text_area :notes, rows: 3, class: "form-control", placeholder: "その他メモ" %>
+  </div>
+
+  <%# 送信ボタン %>
+  <div class="mb-3">
+    <% if business_card.persisted? %>
+      <%= form.submit "名刺を更新", class: "btn btn-primary" %>
+    <% else %>
+      <%= form.submit "名刺を作成", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+<% end %>

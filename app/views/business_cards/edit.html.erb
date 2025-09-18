@@ -1,10 +1,10 @@
-<%# 名刺新規作成ページ %>
-<% content_for :title, "名刺新規作成" %>
+<%# 名刺編集ページ %>
+<% content_for :title, "名刺編集" %>
 
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h1 class="h3 mb-4">名刺新規作成</h1>
+      <h1 class="h3 mb-4">名刺編集</h1>
 
       <%# エラーメッセージ表示 %>
       <% if @business_card.errors.any? %>
@@ -18,12 +18,13 @@
         </div>
       <% end %>
 
-      <%# 名刺作成フォーム %>
+      <%# 名刺編集フォーム %>
       <%= render 'form', business_card: @business_card %>
 
       <%# 戻るリンク %>
       <div class="mt-3">
-        <%= link_to "名刺一覧に戻る", business_cards_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "名刺詳細", @business_card, class: "btn btn-outline-secondary me-2" %>
+        <%= link_to "名刺一覧", business_cards_path, class: "btn btn-outline-secondary" %>
       </div>
     </div>
   </div>
