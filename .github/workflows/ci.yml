@@ -6,6 +6,34 @@ on:
     branches: [ main ]
 
 jobs:
+  # TypeScript 品質チェックジョブ（新規追加）
+  typescript_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: TypeScript type checking
+        run: npm run type-check
+
+      - name: ESLint for TypeScript
+        run: npx eslint app/javascript/**/*.ts --max-warnings 0
+
+      - name: TypeScript tests
+        run: npm run test:ci
+
+      - name: Build TypeScript for production
+        run: npm run build
+
   scan_ruby:
     runs-on: ubuntu-latest
 
@@ -29,13 +57,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Scan for security vulnerabilities in npm dependencies
+        run: npm audit --audit-level moderate
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Scan for security vulnerabilities in JavaScript dependencies
+      - name: Scan for security vulnerabilities in JavaScript dependencies (importmap)
         run: bin/importmap audit
 
   lint:
@@ -55,6 +95,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: [typescript_quality]  # TypeScript品質チェック完了後に実行
 
     services:
       mysql:
@@ -77,6 +118,18 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Build assets for testing
+        run: npm run build
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
