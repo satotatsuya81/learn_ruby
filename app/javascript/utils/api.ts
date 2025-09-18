@@ -30,8 +30,8 @@ class ApiClient {
   // HTMLヘッダーからCSRFトークンを取得
   // Railsが自動生成するCSRFトークンを読み取り
   private getCSRFToken(): string {
-    const meta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
-    return meta ? meta.content : '';
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta !== null ? (meta as HTMLMetaElement).content : '';
   }
 
   // 型安全なHTTPリクエスト共通メソッド
@@ -58,11 +58,11 @@ class ApiClient {
       });
 
       if (!response.ok) {
-        const error: ApiError = await response.json();
+        const error = await response.json() as ApiError;
         throw new Error(error.error || 'API request failed');
       }
 
-      const data: T = await response.json();
+      const data = await response.json() as T;
       return { data, success: true };
     } catch (error) {
       console.error('API Error:', error);

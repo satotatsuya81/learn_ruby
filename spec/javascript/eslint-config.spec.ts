@@ -16,16 +16,16 @@
     env?: Record<string, boolean>;
   }
 
-  describe('ESLint + TypeScript Configuration', () => {
+  describe('ESLint設定のテスト', () => {
     const eslintConfigPath = path.join(process.cwd(), '.eslintrc.json');
 
     // ESLint設定ファイルが存在することを確認
-    test('should have ESLint configuration file', () => {
+    test('ESLint設定ファイルが存在すること', () => {
       expect(fs.existsSync(eslintConfigPath)).toBe(true);
     });
 
     // ESLint設定にTypeScriptパーサーが含まれていることを確認
-    test('should configure TypeScript parser in ESLint', () => {
+    test('TypeScriptパーサーがESLintに設定されていること', () => {
       const eslintConfigContent = fs.readFileSync(eslintConfigPath, 'utf8');
       const eslintConfig: ESLintConfig = JSON.parse(eslintConfigContent);
 
@@ -34,7 +34,7 @@
     });
 
     // TypeScriptファイルに対してESLintが実行できることを確認
-    test('should be able to run ESLint on TypeScript files', async () => {
+    test('TypeScriptファイルに対してESLintが実行できること', async () => {
       try {
         // TypeScriptファイルに対してESLintを実行
         await execAsync('npx eslint app/javascript/**/*.ts --format json');
@@ -48,7 +48,7 @@
     });
 
     // TypeScript固有のルールが設定されていることを確認
-    test('should have TypeScript-specific ESLint rules', () => {
+    test('TypeScript固有のESLintルールが設定されていること', () => {
       const eslintConfigContent = fs.readFileSync(eslintConfigPath, 'utf8');
       const eslintConfig: ESLintConfig = JSON.parse(eslintConfigContent);
 

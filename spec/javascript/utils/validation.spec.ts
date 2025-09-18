@@ -7,7 +7,7 @@ import {
   } from '../../../app/javascript/utils/validation';
   import { BusinessCardFormData } from '../../../app/javascript/types/business_card';
 
-  describe('validation utilities', () => {
+  describe('バリデーションユーティリティ', () => {
     describe('validateEmail', () => {
       it('有効なメールアドレスの場合はtrueを返す', () => {
         // 有効なメールアドレスのテストケース

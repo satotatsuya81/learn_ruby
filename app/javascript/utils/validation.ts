@@ -71,7 +71,7 @@ export interface ValidationResult {
 
   // 必須フィールドのバリデーション
   export function validateRequiredField(value: string | null | undefined, fieldName: string): ValidationResult {
-    if (!value || value.trim() === '') {
+    if (value === null || value === undefined || value.trim() === '') {
       return { isValid: false, message: `${fieldName}は必須です` };
     }
 
@@ -94,21 +94,21 @@ export interface ValidationResult {
     }
 
     // オプショナルフィールドのバリデーション（値が存在する場合のみ）
-    if (formData.email) {
+    if (formData.email !== undefined && formData.email !== null) {
       const emailValidation = validateEmail(formData.email);
       if (!emailValidation.isValid) {
         errors.email = emailValidation.message;
       }
     }
 
-    if (formData.phone) {
+    if (formData.phone !== undefined && formData.phone !== null) {
       const phoneValidation = validatePhone(formData.phone);
       if (!phoneValidation.isValid) {
         errors.phone = phoneValidation.message;
       }
     }
 
-    if (formData.website) {
+    if (formData.website !== undefined && formData.website !== null) {
       const websiteValidation = validateWebsite(formData.website);
       if (!websiteValidation.isValid) {
         errors.website = websiteValidation.message;
