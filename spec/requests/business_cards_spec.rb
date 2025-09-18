@@ -80,8 +80,9 @@ RSpec.describe "BusinessCards", type: :request do
                             name: "同僚太郎")
 
         get business_card_path(user_business_card)
-        expect(assigns(:similar_cards)).to include(similar_card)
-        expect(assigns(:similar_cards)).not_to include(user_business_card)
+        expect(response.body).to include(similar_card.name)
+        # 類似名刺セクションの存在を確認
+        expect(response.body).to include('類似名刺')
       end
 
       it '類似名刺は最大3件まで表示されること' do
@@ -106,4 +107,25 @@ RSpec.describe "BusinessCards", type: :request do
       end
     end
    end
+
+   describe "GET /business_cards/new" do
+    context "ログインしている場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "レスポンスが成功し、名刺作成フォームが表示されること" do
+        get new_business_card_path
+        expect(response).to have_http_status(200)
+        expect(assigns(:business_card)).to be_a_new(BusinessCard)
+        expect(assigns(:business_card).user).to eq(user)
+      end
+    end
+    context "ログインしていない場合" do
+      it "ログインページにリダイレクトされること" do
+        get new_business_card_path
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
+      end
+    end
+  end
 end

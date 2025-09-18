@@ -17,6 +17,10 @@ class BusinessCardsController < ApplicationController
                                 .limit(3)
   end
 
+  def new
+      @business_card = current_user.business_cards.build
+  end
+
   private
 
   # ログインが必要なページへのアクセス制限
