@@ -27,5 +27,7 @@ module.exports = {
   collectCoverageFrom: [
     'app/javascript/**/*.{ts,tsx}',
     '!app/javascript/**/*.d.ts'
-  ]
+  ],
+
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx']
 };

@@ -108,7 +108,7 @@
   - Rails ERBからReactコンポーネントへの段階的置き換え
   - _要件: Requirement 12_
 
-- [ ] 13. Redux状態管理の導入
+- [ ] 14. Redux状態管理の導入
   - Redux Toolkit の設定と初期化
   - Business Cards用のSliceとActionの実装
   - 型安全なRedux Store の構築

@@ -4,6 +4,7 @@
     "lib": ["ES2022", "DOM"],
     "module": "ESNext",
     "moduleResolution": "node",
+    "jsx": "react-jsx",
     "allowJs": true,
     "checkJs": false,
     "strict": true,
@@ -34,5 +35,5 @@
     "node_modules",
     "dist",
     "tmp"
-  ]
+  ],
 }

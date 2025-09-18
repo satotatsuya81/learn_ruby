@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom';
+
 // Jest グローバル設定ファイル
 // DOM 環境のセットアップと共通モックの設定
 
