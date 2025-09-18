@@ -1,6 +1,6 @@
 class BusinessCardsController < ApplicationController
   before_action :require_login
-  before_action :set_business_card, only: [ :show ]
+  before_action :set_business_card, only: [ :show, :edit, :update ]
 
   # GET /business_cards
   # 現在ログインしているユーザーの名刺一覧を表示
@@ -17,6 +17,43 @@ class BusinessCardsController < ApplicationController
                                 .limit(3)
   end
 
+  # GET /business_cards/new
+  # 新規名刺作成フォームを表示
+  def new
+      @business_card = current_user.business_cards.build
+  end
+
+  # POST /business_cards
+  # 名刺作成処理
+  def create
+    @business_card = current_user.business_cards.build(business_card_params)
+
+    if @business_card.save
+      flash[:success] = "名刺が正常に作成されました。"
+      # 成功時: 名刺一覧ページにリダイレクト & 成功メッセージ表示
+      redirect_to business_cards_path
+    else
+      # 失敗時: 新規作成フォームを再表示（エラーメッセージ付き）
+      render :new, status: :unprocessable_content
+    end
+  end
+
+  # GET /business_cards/:id/edit
+  # 名刺編集フォームを表示
+  def edit
+  end
+
+  # PATCH/PUT /business_cards/:id
+  # 名刺更新処理
+  def update
+    if @business_card.update(business_card_params)
+      flash[:success] = "名刺が正常に更新されました。"
+      redirect_to @business_card
+    else
+      # 失敗時: 編集フォームを再表示（エラーメッセージ付き）
+      render :edit, status: :unprocessable_content
+    end
+  end
   private
 
   # ログインが必要なページへのアクセス制限
@@ -30,9 +67,16 @@ class BusinessCardsController < ApplicationController
   def set_business_card
     @business_card = current_user.business_cards.find_by(id: params[:id])
     unless @business_card
+      flash[:error] = "指定されたページは存在しません。"
       redirect_to root_path
     end
   rescue ActiveRecord::RecordNotFound
+    flash[:error] = "指定されたページは存在しません。"
     redirect_to root_path
+  end
+
+  # Strong Parameters: 許可するパラメータを明示的に定義
+  def business_card_params
+    params.require(:business_card).permit(:name, :company_name, :job_title, :department, :email, :phone, :mobile, :address, :website, :notes)
   end
 end

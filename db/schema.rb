@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_17_104505) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
     t.index ["user_id"], name: "index_business_cards_on_user_id"
   end
 

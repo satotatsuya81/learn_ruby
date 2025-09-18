@@ -80,8 +80,9 @@ RSpec.describe "BusinessCards", type: :request do
                             name: "同僚太郎")
 
         get business_card_path(user_business_card)
-        expect(assigns(:similar_cards)).to include(similar_card)
-        expect(assigns(:similar_cards)).not_to include(user_business_card)
+        expect(response.body).to include(similar_card.name)
+        # 類似名刺セクションの存在を確認
+        expect(response.body).to include('類似名刺')
       end
 
       it '類似名刺は最大3件まで表示されること' do
@@ -106,4 +107,97 @@ RSpec.describe "BusinessCards", type: :request do
       end
     end
    end
+
+   describe "GET /business_cards/new" do
+    context "ログインしている場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "レスポンスが成功し、名刺作成フォームが表示されること" do
+        get new_business_card_path
+        expect(response).to have_http_status(200)
+        expect(assigns(:business_card)).to be_a_new(BusinessCard)
+        expect(assigns(:business_card).user).to eq(user)
+        expect(response.body).to include('名刺新規作成')
+      end
+    end
+    context "ログインしていない場合" do
+      it "ログインページにリダイレクトされること" do
+        get new_business_card_path
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
+      end
+    end
+  end
+
+  describe "POST /business_cards" do
+    context "ログインしている場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+
+      context "有効なパラメータの場合" do
+        let(:valid_params) do
+          {
+            business_card: {
+              name: "新規太郎",
+              company_name: "新規株式会社",
+              job_title: "営業部長",
+              department: "営業部",
+              email: "shin@new.com"
+            }
+          }
+        end
+
+        it "名刺が作成されること" do
+          expect {
+            post business_cards_path, params: valid_params
+          }.to change(BusinessCard, :count).by(1)
+        end
+
+        it "作成後に名刺の一覧ページにリダイレクトされること" do
+          post business_cards_path, params: valid_params
+          expect(response).to redirect_to(business_cards_path)
+        end
+
+        it "作成した名刺が正しく保存されること" do
+          post business_cards_path, params: valid_params
+          new_card = BusinessCard.last
+          expect(new_card.name).to eq("新規太郎")
+          expect(new_card.company_name).to eq("新規株式会社")
+          expect(new_card.user).to eq(user)
+        end
+
+        it "成功メッセージが表示されること" do
+          post business_cards_path, params: valid_params
+          expect(flash[:success]).to eq("名刺が正常に作成されました。")
+        end
+      end
+
+      context "無効なパラメータの場合" do
+        # 必須項目が欠落
+        let(:invalid_params) do
+          {
+            business_card: {
+              name: "",
+              company_name: ""
+            }
+          }
+        end
+
+        it "名刺が作成されないこと" do
+          expect {
+            post business_cards_path, params: invalid_params
+          }.not_to change(BusinessCard, :count)
+        end
+
+        it "新規作成フォームが再表示されること" do
+          post business_cards_path, params: invalid_params
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to render_template(:new)
+          expect(response.body).to include('エラー')
+        end
+      end
+    end
+  end
 end

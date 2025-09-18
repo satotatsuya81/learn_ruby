@@ -8,11 +8,11 @@ RSpec.describe BusinessCard, type: :model do
   end
   describe "バリデーション機能" do
     it "名前の必須チェック" do
-      should validate_presence_of(:name)
+      should validate_presence_of(:name).with_message("名前を入力してください")
     end
 
     it "会社名の必須チェック" do
-      should validate_presence_of(:company_name)
+      should validate_presence_of(:company_name).with_message("会社名を入力してください")
     end
 
     it "名前の文字数制限" do

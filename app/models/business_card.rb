@@ -2,8 +2,8 @@ class BusinessCard < ApplicationRecord
   belongs_to :user
 
   # 必須項目のバリデーション
-  validates :name, presence: true, length: { maximum: 100 }
-  validates :company_name, presence: true, length: { maximum: 100 }
+  validates :name, presence: { message: "名前を入力してください" }, length: { maximum: 100 }
+  validates :company_name, presence: { message: "会社名を入力してください" }, length: { maximum: 100 }
 
   # オプション項目のバリデーション
   validates :department, length: { maximum: 100 }, allow_blank: true
