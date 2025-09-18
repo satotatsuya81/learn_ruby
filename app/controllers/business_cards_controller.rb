@@ -29,7 +29,7 @@ class BusinessCardsController < ApplicationController
     @business_card = current_user.business_cards.build(business_card_params)
 
     if @business_card.save
-      flash[:success] = "名刺が正常に作成されました。"
+      flash[:success] = t("business_cards.messages.created_successfully")
       # 成功時: 名刺一覧ページにリダイレクト & 成功メッセージ表示
       redirect_to business_cards_path
     else
@@ -47,7 +47,7 @@ class BusinessCardsController < ApplicationController
   # 名刺更新処理
   def update
     if @business_card.update(business_card_params)
-      flash[:success] = "名刺が正常に更新されました。"
+      flash[:success] = t("business_cards.messages.updated_successfully")
       redirect_to @business_card
     else
       # 失敗時: 編集フォームを再表示（エラーメッセージ付き）
@@ -59,9 +59,9 @@ class BusinessCardsController < ApplicationController
   # 名刺削除処理
   def destroy
     if @business_card.destroy
-      flash[:notice] = "名刺が正常に削除されました。"
+      flash[:notice] = t("business_cards.messages.deleted_successfully")
     else
-      flash[:alert] = "名刺の削除に失敗しました。"
+      flash[:alert] = t("business_cards.messages.delete_failed")
     end
     redirect_to business_cards_path
   end
@@ -78,11 +78,11 @@ class BusinessCardsController < ApplicationController
   def set_business_card
     @business_card = current_user.business_cards.find_by(id: params[:id])
     unless @business_card
-      flash[:error] = "指定されたページは存在しません。"
+      flash[:error] = t("business_cards.messages.not_found")
       redirect_to root_path
     end
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = "指定されたページは存在しません。"
+    flash[:error] = t("business_cards.messages.not_found")
     redirect_to root_path
   end
 

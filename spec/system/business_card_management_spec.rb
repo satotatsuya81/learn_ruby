@@ -130,7 +130,7 @@ RSpec.describe "Business Card Management", type: :system do
         # JavaScriptを使わずに直接削除リクエストをテスト
         click_link "削除"
         expect(page).to have_current_path(business_cards_path)
-        expect(page).to have_content("名刺が正常に削除されました。")
+        expect(page).to have_content(I18n.t('business_cards.messages.deleted_successfully'))
         expect(page).not_to have_content("田中太郎")  # 名刺が一覧から消えていることを確認
       end
 
@@ -138,7 +138,7 @@ RSpec.describe "Business Card Management", type: :system do
         other_business_card = create(:business_card, user: other_user, name: "山田花子", company_name: "他社株式会社")
         visit business_card_path(other_business_card)
         expect(page).not_to have_link("名刺を削除")
-        expect(page).to have_content("指定されたページは存在しません。")
+        expect(page).to have_content(I18n.t('business_cards.messages.not_found'))
       end
     end
   end

@@ -128,6 +128,12 @@ ja:
       edit: "編集"
       delete: "削除"
       delete_confirm: "%{name}さんの名刺を削除しますか？この操作は取り消せません。"
+    messages:
+      created_successfully: "名刺が正常に作成されました。"
+      updated_successfully: "名刺が正常に更新されました。"
+      deleted_successfully: "名刺が正常に削除されました。"
+      delete_failed: "名刺の削除に失敗しました。"
+      not_found: "指定されたページは存在しません。"
     form:
       name_label: "名前"
       company_name_label: "会社名"

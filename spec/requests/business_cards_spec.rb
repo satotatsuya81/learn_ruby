@@ -237,7 +237,7 @@ RSpec.describe "BusinessCards", type: :request do
         expect(response).to redirect_to(business_cards_path)
 
         # 削除成功のフラッシュメッセージが設定されることを確認
-        expect(flash[:notice]).to eq("名刺が正常に削除されました。")
+        expect(flash[:notice]).to eq(I18n.t('business_cards.messages.deleted_successfully'))
       end
     end
 
@@ -254,7 +254,7 @@ RSpec.describe "BusinessCards", type: :request do
         }.not_to change(BusinessCard, :count)
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq("指定されたページは存在しません。")
+        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
       end
     end
 
@@ -270,7 +270,7 @@ RSpec.describe "BusinessCards", type: :request do
         }.not_to change(BusinessCard, :count)
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq("指定されたページは存在しません。")
+        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
       end
     end
 
