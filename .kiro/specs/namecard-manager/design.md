@@ -22,8 +22,10 @@ Business Card Managerは、名刺管理Webアプリケーションです。Ruby 
 │                    Client Layer                              │
 ├─────────────────────────────────────────────────────────────┤
 │  Web Browser (Chrome, Firefox, Safari, Edge)               │
-│  - Bootstrap 5 + Stimulus (基本UI)                         │
-│  - React/TypeScript (ダッシュボード)                        │
+│  - Bootstrap 5 + Stimulus (基本UI) → 段階的にReactへ移行    │
+│  - React/TypeScript + Redux (コンポーネントベースUI)        │
+│  - esbuild (高速ビルドシステム)                             │
+│  - ESLint + TypeScript (品質管理・型安全性)                 │
 └─────────────────────────────────────────────────────────────┘
                               │ HTTPS
 ┌─────────────────────────────────────────────────────────────┐
@@ -219,6 +221,279 @@ CREATE TABLE business_card_tags (
   INDEX idx_business_card_tags_tag_id (tag_id)
 );
 ```
+
+## フロントエンド技術移行アーキテクチャ
+
+### 段階的移行戦略
+
+#### フェーズ1: TypeScript基盤構築
+```
+既存ERBビュー → TypeScript導入 → esbuild設定
+├── app/javascript/application.ts
+├── tsconfig.json
+├── package.json (既存依存関係活用)
+└── esbuild.config.js
+```
+
+#### フェーズ2: Reactコンポーネント化
+```
+Rails ERB → React TSX コンポーネント → Redux状態管理
+├── 名刺一覧 (BusinessCardList.tsx)
+├── 削除確認 (DeleteConfirmModal.tsx)
+├── フラッシュ通知 (FlashMessage.tsx)
+└── 検索・フィルター (SearchFilter.tsx)
+```
+
+#### フェーズ3: Redux統合・API連携
+```
+Local State → Redux Store → Rails API
+├── Redux Toolkit設定
+├── 型安全なAPI呼び出し
+├── 楽観的更新
+└── エラーハンドリング
+```
+
+### TypeScript型定義設計
+
+#### ドメインモデル型
+```typescript
+// Domain Types
+interface BusinessCard {
+  id: number;
+  name: string;
+  company: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  tags: Tag[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  admin: boolean;
+  activated: boolean;
+}
+
+interface Tag {
+  id: number;
+  name: string;
+  color: string;
+}
+```
+
+#### API レスポンス型
+```typescript
+// API Response Types
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data?: T;
+  errors?: Record<string, string[]>;
+}
+
+interface PaginatedResponse<T> extends ApiResponse<T[]> {
+  meta: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    perPage: number;
+  };
+}
+```
+
+#### Redux State型
+```typescript
+// Redux State Types
+interface RootState {
+  businessCards: BusinessCardsState;
+  ui: UiState;
+  auth: AuthState;
+}
+
+interface BusinessCardsState {
+  items: BusinessCard[];
+  loading: boolean;
+  error: string | null;
+  filters: {
+    searchTerm: string;
+    selectedTags: number[];
+    company: string;
+  };
+}
+```
+
+### React コンポーネント設計
+
+#### コンポーネント階層
+```
+App (最上位)
+├── Layout
+│   ├── Header (認証情報、ナビゲーション)
+│   ├── FlashMessages (通知表示)
+│   └── Footer
+├── BusinessCardsList (一覧画面)
+│   ├── SearchFilter (検索・フィルター)
+│   ├── BusinessCardGrid (カード表示)
+│   │   └── BusinessCardItem (個別カード)
+│   └── Pagination
+├── BusinessCardDetail (詳細画面)
+│   ├── BusinessCardInfo (基本情報)
+│   ├── TagList (タグ表示)
+│   └── ActionButtons (編集・削除)
+└── Modals
+    ├── DeleteConfirmModal (削除確認)
+    └── BusinessCardFormModal (作成・編集)
+```
+
+#### コンポーネント設計原則
+- **単一責任**: 各コンポーネントは1つの責任のみ
+- **再利用性**: 共通コンポーネントの抽出と再利用
+- **型安全性**: PropsとStateの完全な型定義
+- **テスタビリティ**: 単体テスト可能な設計
+
+### Redux Store設計
+
+#### Store構成
+```typescript
+// Store Configuration
+import { configureStore } from '@reduxjs/toolkit';
+import businessCardsSlice from './slices/businessCardsSlice';
+import uiSlice from './slices/uiSlice';
+import authSlice from './slices/authSlice';
+
+export const store = configureStore({
+  reducer: {
+    businessCards: businessCardsSlice,
+    ui: uiSlice,
+    auth: authSlice,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST'],
+      },
+    }),
+});
+```
+
+#### 非同期アクション（Thunk）
+```typescript
+// Async Actions
+export const fetchBusinessCards = createAsyncThunk(
+  'businessCards/fetchBusinessCards',
+  async (params: SearchParams, { rejectWithValue }) => {
+    try {
+      const response = await api.businessCards.fetchAll(params);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+```
+
+### API通信層設計
+
+#### HTTP クライアント
+```typescript
+// HTTP Client Configuration
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: '/api/v1',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  },
+});
+
+// CSRF トークン設定
+api.defaults.headers.common['X-CSRF-Token'] =
+  document.querySelector('[name="csrf-token"]')?.getAttribute('content') || '';
+```
+
+#### API サービス層
+```typescript
+// Business Cards API Service
+export const businessCardsApi = {
+  fetchAll: (params: SearchParams): Promise<ApiResponse<BusinessCard[]>> =>
+    api.get('/business_cards', { params }).then(res => res.data),
+
+  create: (data: BusinessCardFormData): Promise<ApiResponse<BusinessCard>> =>
+    api.post('/business_cards', data).then(res => res.data),
+
+  update: (id: number, data: BusinessCardFormData): Promise<ApiResponse<BusinessCard>> =>
+    api.put(`/business_cards/${id}`, data).then(res => res.data),
+
+  delete: (id: number): Promise<ApiResponse<void>> =>
+    api.delete(`/business_cards/${id}`).then(res => res.data),
+};
+```
+
+### ビルドシステム設計
+
+#### esbuild設定
+```javascript
+// esbuild.config.js
+const esbuild = require('esbuild');
+
+esbuild.build({
+  entryPoints: ['app/javascript/application.ts'],
+  bundle: true,
+  sourcemap: true,
+  outdir: 'app/assets/builds',
+  publicPath: '/assets',
+  target: ['es2020'],
+  format: 'esm',
+  splitting: true,
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+  },
+}).catch(() => process.exit(1));
+```
+
+#### TypeScript設定
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "app/javascript/**/*"
+  ]
+}
+```
+
+### パフォーマンス最適化
+
+#### コード分割
+- **Dynamic Imports**: 画面単位でのコード分割
+- **Lazy Loading**: 必要時のみコンポーネント読み込み
+- **Tree Shaking**: 未使用コードの削除
+
+#### 状態管理最適化
+- **Memoization**: React.memo, useMemo, useCallback活用
+- **仮想化**: 大量データのリスト仮想化
+- **楽観的更新**: UIレスポンス向上のための楽観的更新
 
 ## コンポーネント設計
 
