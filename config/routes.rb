@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
   # 名刺管理のルート
   # /business_cards, /business_cards/:id
-  resources :business_cards, only: [ :index, :show, :new, :create, :edit, :update ]
+  resources :business_cards, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
 
   # エラーページルーティング（config.exceptions_app = self.routes 用）
   # 全HTTPメソッドでアクセス可能にして、あらゆるエラー状況に対応

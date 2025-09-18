@@ -1,6 +1,6 @@
 class BusinessCardsController < ApplicationController
   before_action :require_login
-  before_action :set_business_card, only: [ :show, :edit, :update ]
+  before_action :set_business_card, only: [ :show, :edit, :update, :destroy ]
 
   # GET /business_cards
   # 現在ログインしているユーザーの名刺一覧を表示
@@ -53,6 +53,17 @@ class BusinessCardsController < ApplicationController
       # 失敗時: 編集フォームを再表示（エラーメッセージ付き）
       render :edit, status: :unprocessable_content
     end
+  end
+
+  # DELETE /business_cards/:id
+  # 名刺削除処理
+  def destroy
+    if @business_card.destroy
+      flash[:success] = "名刺が正常に削除されました。"
+    else
+      flash[:error] = "名刺の削除に失敗しました。"
+    end
+    redirect_to business_cards_path
   end
   private
 
