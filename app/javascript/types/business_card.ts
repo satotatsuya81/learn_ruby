@@ -1,36 +1,33 @@
 // BusinessCard関連の型定義
-// RailsのBusinessCardモデルと厳密に一致する型構造を定義
 
 // 基本的な名刺情報を表すインターフェース
-// データベーススキーマとBusinessCardモデルに厳密に基づく型定義
 export interface BusinessCard {
-  // データベースの主キー（必須）
   id: number;
   // 名前（必須）
   name: string;
-  // 会社名（必須）- データベースフィールド名
+  // 会社名（必須）
   company_name: string;
-  // 部署（オプショナル）
+  // 部署
   department?: string;
-  // 役職（オプショナル）
+  // 役職
   job_title?: string;
-  // メールアドレス（オプショナル）
+  // メールアドレス
   email?: string;
-  // 固定電話（オプショナル）
+  // 固定電話
   phone?: string;
-  // 携帯電話（オプショナル）
+  // 携帯電話
   mobile?: string;
-  // 住所（オプショナル）
+  // 住所
   address?: string;
-  // ウェブサイト（オプショナル）
+  // ウェブサイト
   website?: string;
-  // メモ（オプショナル）
+  // メモ
   notes?: string;
-  // タイトル（オプショナル）- 現在のスキーマに存在
+  // タイトル
   title?: string;
-  // 作成日時（ISO形式文字列、必須）
+  // 作成日時（必須）
   created_at: string;
-  // 更新日時（ISO形式文字列、必須）
+  // 更新日時（必須）
   updated_at: string;
   // 所有者のユーザーID（必須）
   user_id: number;
@@ -44,40 +41,38 @@ export interface BusinessCardFormData {
   name: string;
   // 会社名（必須）- データベースフィールド名
   company_name: string;
-  // 部署（オプショナル）
+  // 部署
   department?: string;
-  // 役職（オプショナル）
+  // 役職
   job_title?: string;
-  // メールアドレス（オプショナル）
+  // メールアドレス
   email?: string;
-  // 固定電話（オプショナル）
+  // 固定電話
   phone?: string;
-  // 携帯電話（オプショナル）
+  // 携帯電話
   mobile?: string;
-  // 住所（オプショナル）
+  // 住所
   address?: string;
-  // ウェブサイト（オプショナル）
+  // ウェブサイト
   website?: string;
-  // メモ（オプショナル）
+  // メモ
   notes?: string;
-  // タイトル（オプショナル）
+  // タイトル
   title?: string;
 }
 
 // 検索パラメータの型
-// 全てのフィールドがオプショナル（フィルタリング用）
-// 現在実装されている検索機能のみ含む
 export interface BusinessCardSearchParams {
-  // 名前や会社名での検索クエリ（オプショナル）
+  // 名前や会社名での検索クエリ
   query?: string;
-  // 会社名での絞り込み（オプショナル）- データベースフィールド名
+  // 会社名での絞り込み
   company_name?: string;
-  // 部署での絞り込み（オプショナル）
+  // 部署での絞り込み
   department?: string;
-  // 役職での絞り込み（オプショナル）
+  // 役職での絞り込み
   job_title?: string;
-  // 作成日の開始日（オプショナル、YYYY-MM-DD形式）
+  // 作成日の開始日
   created_from?: string;
-  // 作成日の終了日（オプショナル、YYYY-MM-DD形式）
+  // 作成日の終了日
   created_to?: string;
 }
