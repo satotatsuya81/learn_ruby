@@ -62,7 +62,7 @@ RSpec.describe 'home/index.html.erb', type: :view do
         # 国際化（i18n）された文字列が正しく表示されることを確認
         expect(rendered).to include(I18n.t('application.name'))        # アプリケーション名
         expect(rendered).to include(I18n.t('application.description')) # アプリケーション説明
-        expect(rendered).to include(I18n.t('messages.welcome'))        # 歓迎メッセージ
+        expect(rendered).to include(I18n.t('common.messages.welcome'))        # 歓迎メッセージ
       end
 
       # テスト4: セクション見出しが日本語で表示されるかをチェック
@@ -134,7 +134,7 @@ RSpec.describe 'home/index.html.erb', type: :view do
         # 英語での翻訳確認
         expect(rendered).to include(I18n.t('application.name'))        # "Business Card Manager"
         expect(rendered).to include(I18n.t('application.description')) # "Efficient business card management system"
-        expect(rendered).to include(I18n.t('messages.welcome'))        # "Welcome to Business Card Management System"
+        expect(rendered).to include(I18n.t('common.messages.welcome'))        # "Welcome to Business Card Management System"
       end
 
       # テスト8: セクション見出しが英語で表示されるかをチェック

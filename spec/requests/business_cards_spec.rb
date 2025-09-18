@@ -199,5 +199,89 @@ RSpec.describe "BusinessCards", type: :request do
         end
       end
     end
+
+    context "ログインしていない場合" do
+      let(:valid_params) do
+        {
+          business_card: {
+            name: "新規太郎",
+            company_name: "新規株式会社",
+            job_title: "営業部長",
+            department: "営業部",
+            email: "shin@new.com"
+          }
+        }
+      end
+      it "ログインページにリダイレクトされること" do
+        post business_cards_path, params: valid_params
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
+      end
+    end
+  end
+  describe "DELETE /business_cards/:id" do
+    context "自分の名刺を削除しようとする場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+
+      it "名刺が削除され、一覧にリダイレクトすること" do
+        card = create(:business_card, user: user, name: "削除太郎")
+
+        # 削除リクエストを送信し、データベースのレコード数が1つ減ることを確認
+        expect {
+          delete business_card_path(card)
+        }.to change(BusinessCard, :count).by(-1)
+
+        # 削除後は名刺一覧ページにリダイレクトされることを確認
+        expect(response).to redirect_to(business_cards_path)
+
+        # 削除成功のフラッシュメッセージが設定されることを確認
+        expect(flash[:notice]).to eq(I18n.t('business_cards.messages.deleted_successfully'))
+      end
+    end
+
+    context "他人の名刺を削除しようとする場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "削除されず、エラーメッセージが表示される" do
+        other_user = create(:user)
+        other_card = create(:business_card, user: other_user, name: "他人太郎")
+
+        expect {
+          delete business_card_path(other_card)
+        }.not_to change(BusinessCard, :count)
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
+      end
+    end
+
+    context "存在しない名刺を削除しようとする場合" do
+      before do
+        post login_path, params: { session: { email: user.email, password: user.password } }
+      end
+      it "エラーメッセージが表示され、ルートページにリダイレクトされる" do
+        non_existent_id = 99999
+
+        expect {
+          delete business_card_path(non_existent_id)
+        }.not_to change(BusinessCard, :count)
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
+      end
+    end
+
+    context "ログインしていない場合" do
+      it "ログインページにリダイレクトされること" do
+        card = create(:business_card, user: user, name: "削除太郎")
+
+        delete business_card_path(card)
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
+      end
+    end
   end
 end

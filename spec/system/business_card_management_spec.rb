@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Business Card Management", type: :system do
-  before do
+    before do
     driven_by(:rack_test)
   end
 
@@ -100,6 +100,45 @@ RSpec.describe "Business Card Management", type: :system do
         visit edit_business_card_path(business_card)
         expect(page).to have_current_path(root_path)
         expect(page).to have_content("指定されたページは存在しません。")
+      end
+    end
+  end
+
+  describe "名刺削除機能" do
+    context "削除ダイアログ" do
+      before do
+        @business_card = create(:business_card, user: user, name: "田中太郎", company_name: "テスト株式会社")
+        visit login_path
+        fill_in "メールアドレス", with: user.email
+        fill_in "パスワード", with: user.password
+        click_button "ログイン"
+        visit business_card_path(@business_card)
+      end
+
+      it "削除ボタンが確認ダイアログ付きで表示されること" do
+        expect(page).to have_link("削除")
+        # 削除リンクがdata-confirm属性を持っていることを確認（JavaScript確認ダイアログの設定）
+        delete_link = page.find_link("削除")
+        expect(delete_link[:"data-confirm"]).to be_present
+        expect(delete_link[:"data-confirm"]).to include("削除")
+        # DELETEメソッドで実装されていることを確認
+        expect(delete_link[:"data-method"]).to eq("delete")
+      end
+
+      it "削除ボタンをクリックすると名刺が削除されること" do
+        expect(page).to have_link("削除")
+        # JavaScriptを使わずに直接削除リクエストをテスト
+        click_link "削除"
+        expect(page).to have_current_path(business_cards_path)
+        expect(page).to have_content(I18n.t('business_cards.messages.deleted_successfully'))
+        expect(page).not_to have_content("田中太郎")  # 名刺が一覧から消えていることを確認
+      end
+
+      it "他のユーザーの名刺削除を試みるとアクセスが拒否されること" do
+        other_business_card = create(:business_card, user: other_user, name: "山田花子", company_name: "他社株式会社")
+        visit business_card_path(other_business_card)
+        expect(page).not_to have_link("名刺を削除")
+        expect(page).to have_content(I18n.t('business_cards.messages.not_found'))
       end
     end
   end

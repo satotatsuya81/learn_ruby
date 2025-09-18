@@ -42,9 +42,20 @@
             <p><strong><%= t('business_cards.card.notes_label') %>:</strong><br><%= simple_format(@business_card.notes) %></p>
           <% end %>
         </div>
-        <div class="card-footer">
-          <%= link_to t('business_cards.show.back_to_list'), business_cards_path, class: "btn btn-secondary" %>
-        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <div>
+              <%= link_to t('business_cards.show.back_to_list'), business_cards_path, class: "btn btn-secondary" %>
+            </div>
+            <div>
+              <%= link_to t('business_cards.show.edit'), edit_business_card_path(@business_card), class: "btn btn-primary" %>
+              <%= link_to t('business_cards.show.delete'), business_card_path(@business_card),
+                  method: :delete,
+                  data: {
+                    confirm: t('business_cards.show.delete_confirm', name: @business_card.name)
+                  },
+                  class: "btn btn-danger ms-2" %>
+            </div>
+          </div>
 
         <!-- 類似名刺セクション -->
         <% if @similar_cards.any? %>

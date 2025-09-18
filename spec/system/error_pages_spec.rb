@@ -27,7 +27,7 @@ RSpec.describe "Error Pages", type: :system do
       expect(page).to have_content("404")
       expect(page).to have_content(I18n.t('errors.not_found.title'))
       expect(page).to have_content(I18n.t('errors.not_found.message'))
-      expect(page).to have_link(I18n.t('buttons.home'), href: root_path)
+      expect(page).to have_link(I18n.t('common.buttons.home'), href: root_path)
     end
 
     it "存在しないページにアクセスしたときにカスタム404ページが表示されること" do
@@ -35,7 +35,7 @@ RSpec.describe "Error Pages", type: :system do
       expect(page).to have_content("404")
       expect(page).to have_content(I18n.t('errors.not_found.title'))
       expect(page).to have_content(I18n.t('errors.not_found.message'))
-      expect(page).to have_link(I18n.t('buttons.home'), href: root_path)
+      expect(page).to have_link(I18n.t('common.buttons.home'), href: root_path)
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe "Error Pages", type: :system do
       expect(page).to have_content("500")
       expect(page).to have_content(I18n.t('errors.internal_server_error.title'))
       expect(page).to have_content(I18n.t('errors.internal_server_error.message'))
-      expect(page).to have_link(I18n.t('buttons.home'), href: root_path)
+      expect(page).to have_link(I18n.t('common.buttons.home'), href: root_path)
     end
   end
 end

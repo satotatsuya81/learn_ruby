@@ -5,31 +5,19 @@ en:
 
   navigation:
     home: "Home"
-    business_cards: "Business Cards"
-    tags: "Tag Management"
-    statistics: "Statistics"
     profile: "Profile"
     login: "Log in"
     logout: "Log out"
     sign_up: "Sign up"
     welcome_message: "Welcome, %{name}!"
 
-  buttons:
-    new: "New"
-    edit: "Edit"
-    delete: "Delete"
-    save: "Save"
-    cancel: "Cancel"
-    search: "Search"
-    home: "Back to Home"
-    back: "Go Back"
-    reload: "Reload"
-
-  messages:
-    welcome: "Welcome to Business Card Management System"
-    success: "Successfully processed"
-    error: "An error occurred"
-    no_data: "No data available"
+  common:
+    buttons:
+      home: "Back to Home"
+      back: "Go Back"
+      reload: "Reload"
+    messages:
+      welcome: "Welcome to Business Card Management System"
 
   sections:
     main_features: "Main Features"
@@ -62,6 +50,7 @@ en:
       remember_me_label: "Remember me"
       submit_button: "Log in"
       invalid_credentials: "Invalid email or password"
+      account_not_activated: "Account not activated. Please check your email."
   users:
     sign_up: "Sign up"
     name: "Name"
@@ -120,9 +109,16 @@ en:
     show:
       title: "Business Card Details"
       back_to_list: "Back to List"
-      edit_business_card: "Edit"
-      delete_business_card: "Delete"
+      edit: "Edit"
+      delete: "Delete"
+      delete_confirm: "Are you sure you want to delete %{name}'s business card? This action cannot be undone."
       similar_cards_title: "Other Cards from Same Company"
+    messages:
+      created_successfully: "Business card was successfully created."
+      updated_successfully: "Business card was successfully updated."
+      deleted_successfully: "Business card was successfully deleted."
+      delete_failed: "Failed to delete business card."
+      not_found: "The specified page does not exist."
     form:
       name_label: "Name"
       company_name_label: "Company"
