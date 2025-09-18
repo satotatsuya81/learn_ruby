@@ -1,0 +1,79 @@
+ <%# 名刺新規作成フォーム画面 %>
+  <% content_for :title, "名刺新規作成" %>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="mb-0">名刺新規作成</h2>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @business_card, local: true, class: "row g-3" do |form| %>
+            <%# バリデーションエラーの表示 %>
+            <% if @business_card.errors.any? %>
+              <div class="col-12">
+                <div class="alert alert-danger">
+                  <h6>入力エラーが発生しました:</h6>
+                  <ul class="mb-0">
+                    <% @business_card.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            <% end %>
+
+            <%# 名前入力（必須） %>
+            <div class="col-md-6">
+              <%= form.label :name, "名前", class: "form-label" %>
+              <%= form.text_field :name, class: "form-control", required: true %>
+            </div>
+
+            <%# 会社名入力（必須） %>
+            <div class="col-md-6">
+              <%= form.label :company_name, "会社名", class: "form-label" %>
+              <%= form.text_field :company_name, class: "form-control", required: true %>
+            </div>
+
+            <%# 役職入力（任意） %>
+            <div class="col-md-6">
+              <%= form.label :title, "役職", class: "form-label" %>
+              <%= form.text_field :title, class: "form-control" %>
+            </div>
+
+            <%# メールアドレス入力（任意） %>
+            <div class="col-md-6">
+              <%= form.label :email, "メールアドレス", class: "form-label" %>
+              <%= form.email_field :email, class: "form-control" %>
+            </div>
+
+            <%# 電話番号入力（任意） %>
+            <div class="col-md-6">
+              <%= form.label :phone, "電話番号", class: "form-label" %>
+              <%= form.telephone_field :phone, class: "form-control" %>
+            </div>
+
+            <%# 住所入力（任意） %>
+            <div class="col-12">
+              <%= form.label :address, "住所", class: "form-label" %>
+              <%= form.text_area :address, class: "form-control", rows: 2 %>
+            </div>
+
+            <%# メモ入力（任意） %>
+            <div class="col-12">
+              <%= form.label :notes, "メモ", class: "form-label" %>
+              <%= form.text_area :notes, class: "form-control", rows: 3 %>
+            </div>
+
+            <%# 送信ボタン %>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <%= link_to "キャンセル", business_cards_path, class: "btn btn-secondary" %>
+                <%= form.submit "名刺を作成", class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>

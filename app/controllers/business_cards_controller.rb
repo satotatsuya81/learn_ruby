@@ -21,6 +21,20 @@ class BusinessCardsController < ApplicationController
       @business_card = current_user.business_cards.build
   end
 
+  # 名刺作成処理
+  def create
+    @business_card = current_user.business_cards.build(business_card_params)
+
+    if @business_card.save
+      flash[:success] = "名刺が正常に作成されました。"
+      # 成功時: 名刺詳細ページにリダイレクト & 成功メッセージ表示
+      redirect_to @business_card
+    else
+      # 失敗時: 新規作成フォームを再表示（エラーメッセージ付き）
+      render :new, status: :unprocessable_content
+    end
+  end
+
   private
 
   # ログインが必要なページへのアクセス制限
@@ -38,5 +52,10 @@ class BusinessCardsController < ApplicationController
     end
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path
+  end
+
+  # Strong Parameters: 許可するパラメータを明示的に定義
+  def business_card_params
+    params.require(:business_card).permit(:name, :company_name, :title, :email, :phone, :address, :notes)
   end
 end
