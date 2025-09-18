@@ -133,3 +133,23 @@ class ApiClient {
 // シングルトンインスタンスをエクスポート
 // アプリケーション全体で共通のAPIクライアントを使用
 export const apiClient = new ApiClient();
+
+export const deleteBusinessCard = (id: number): Promise<void> => {
+  return apiClient.deleteBusinessCard(id);
+};
+
+export const getBusinessCards = (params?: BusinessCardSearchParams): Promise<BusinessCard[]> => {
+  return apiClient.getBusinessCards(params);
+};
+
+export const getBusinessCard = (id: number): Promise<BusinessCard> => {
+  return apiClient.getBusinessCard(id);
+};
+
+export const createBusinessCard = (data: BusinessCardFormData): Promise<BusinessCard> => {
+  return apiClient.createBusinessCard(data);
+};
+
+export const updateBusinessCard = (id: number, data: BusinessCardFormData): Promise<BusinessCard> => {
+  return apiClient.updateBusinessCard(id, data);
+};
