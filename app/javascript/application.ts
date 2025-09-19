@@ -9,7 +9,7 @@ import "./controllers";
 import "bootstrap";
 
 // TypeScript型定義をアプリケーション全体で利用可能にする
-export * from "@/types/business_card";
+export * from "@/types/BusinessCard";
 export * from "@/types/user";
 export * from "@/types/api";
 

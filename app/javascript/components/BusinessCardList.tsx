@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-  import { BusinessCard } from '../types/business_card';
+  import { BusinessCard } from '../types/BusinessCard';
   import { BusinessCardItem } from './BusinessCardItem';
   import { DeleteConfirmModal } from './DeleteConfirmModal';
   import { deleteBusinessCard } from '../utils/api';

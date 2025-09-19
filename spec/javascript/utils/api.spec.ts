@@ -1,5 +1,5 @@
 import { apiClient } from '@/utils/api';
-import { BusinessCard, BusinessCardFormData } from '@/types/business_card';
+import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
 
 // テスト用のモック設定
 describe('ApiClient', () => {

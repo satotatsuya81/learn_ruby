@@ -1,6 +1,6 @@
 // TypeScript型安全なAPIクライアント
 // Rails APIとの通信を型安全に行うためのクライアント実装
-import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/business_card';
+import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/BusinessCard';
 
 // API通信の標準レスポンス型
 interface ApiResponse<T> {

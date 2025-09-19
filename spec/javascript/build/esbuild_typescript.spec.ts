@@ -9,7 +9,7 @@
     */
 
    // 未使用のimportを削除し、実際に使用する型のみをimport
-   import { BusinessCard } from '@/types/business_card';
+   import { BusinessCard } from '@/types/BusinessCard';
    import { apiClient } from '@/utils/api';
 
    describe('esbuildとRailsの統合テスト', () => {
@@ -52,7 +52,7 @@
        expect(() => {
          // @/ パスエイリアスでimportが成功することを間接的に確認
          // 実際のimportは上で行われており、エラーが発生していないことを確認
-         const types = require.resolve('@/types/business_card');
+         const types = require.resolve('@/types/BusinessCard');
          expect(types).toBeDefined();
        }).not.toThrow();
      });

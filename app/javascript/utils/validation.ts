@@ -1,4 +1,4 @@
-import { BusinessCardFormData } from '@/types/business_card';
+import { BusinessCardFormData } from '@/types/BusinessCard';
 
 export interface ValidationResult {
     isValid: boolean;        // バリデーション成功/失敗

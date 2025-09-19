@@ -5,7 +5,7 @@ import {
     validateRequiredField,
     validateBusinessCardForm
   } from '../../../app/javascript/utils/validation';
-  import { BusinessCardFormData } from '../../../app/javascript/types/business_card';
+  import { BusinessCardFormData } from '../../../app/javascript/types/BusinessCard';
 
   describe('バリデーションユーティリティ', () => {
     describe('validateEmail', () => {

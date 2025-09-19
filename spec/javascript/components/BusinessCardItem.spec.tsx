@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
   import { BusinessCardItem } from '../../../app/javascript/components/BusinessCardItem';
-  import { BusinessCard } from '../../../app/javascript/types/business_card';
+  import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
 
   // テスト用のモックデータ - 実際の名刺データの構造を反映
   const mockBusinessCard: BusinessCard = {
