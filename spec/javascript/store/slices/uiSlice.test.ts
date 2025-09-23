@@ -2,12 +2,15 @@ import uiReducer, {
     setLoading,
     setError,
     clearError,
-    setDeleteConfirmModal,
-    clearDeleteConfirmModal
+    openDeleteConfirm,
+    closeDeleteConfirm
   } from '@/store/slices/uiSlice'
 
   describe('UI状態管理Slice', () => {
     const initialState = {
+      sidebarOpen: false,
+      modalOpen: false,
+      theme: 'light' as const,
       loading: false,
       error: null,
       deleteConfirm: {
@@ -56,13 +59,12 @@ import uiReducer, {
 
     // 削除確認モーダルのテスト
     describe('削除確認モーダルの管理', () => {
-      it('setDeleteConfirmModalで削除確認モーダルの情報を設定できること', () => {
+      it('openDeleteConfirmで削除確認モーダルの情報を設定できること', () => {
         const modalData = {
-          isOpen: true,
           cardId: 123,
           cardName: '山田太郎'
         }
-        const action = setDeleteConfirmModal(modalData)
+        const action = openDeleteConfirm(modalData)
         const state = uiReducer(initialState, action)
 
         expect(state.deleteConfirm.isOpen).toBe(true)
@@ -70,7 +72,7 @@ import uiReducer, {
         expect(state.deleteConfirm.cardName).toBe('山田太郎')
       })
 
-      it('clearDeleteConfirmModalで削除確認モーダルの情報をクリアできること', () => {
+      it('closeDeleteConfirmで削除確認モーダルの情報をクリアできること', () => {
         const currentState = {
           ...initialState,
           deleteConfirm: {
@@ -79,7 +81,7 @@ import uiReducer, {
             cardName: '山田太郎'
           }
         }
-        const action = clearDeleteConfirmModal()
+        const action = closeDeleteConfirm()
         const state = uiReducer(currentState, action)
 
         expect(state.deleteConfirm.isOpen).toBe(false)
