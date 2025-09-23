@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserLoginData } from '@/types/User';
+import { UserLoginData } from '../types/User';
 
 interface LoginFormProps {
   loginPath: string;
@@ -29,7 +29,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ newPasswordResetPath }) => {
     setErrors([]);
 
     try {
-      const { loginUser } = await import('@/utils/api');
+      const { loginUser } = await import('../utils/api');
 
       const loginData: UserLoginData = {
         email: formData.email,

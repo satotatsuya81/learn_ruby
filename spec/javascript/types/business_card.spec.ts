@@ -1,7 +1,7 @@
 // BusinessCard型定義の型安全性テスト
 // 現在実装されている型定義のみをテスト
 
-import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/BusinessCard';
+import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '../../../app/javascript/types/BusinessCard';
 
 describe('BusinessCard型定義', () => {
   describe('BusinessCard インターフェース', () => {

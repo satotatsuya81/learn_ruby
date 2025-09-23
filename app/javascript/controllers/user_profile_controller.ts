@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
-import { UserProfile } from "@/components/UserProfile";
-import { User, UserUpdateData } from "@/types/User";
+import { UserProfile } from "../components/UserProfile";
+import { User, UserUpdateData } from "../types/User";
 
 export default class extends Controller {
   static values = {
@@ -30,7 +30,7 @@ export default class extends Controller {
     const editable = this.editableValue;
 
     const handleUpdate = async (data: UserUpdateData): Promise<void> => {
-      const { updateUserProfile } = await import('@/utils/api');
+      const { updateUserProfile } = await import('../utils/api');
       await updateUserProfile(user.id, data);
       window.location.reload();
     };
