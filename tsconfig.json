@@ -19,18 +19,17 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "typeRoots": [
-      "./app/javascript/types",
-      "./node_modules/@types"
-    ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./app/javascript/*"],
-      "@/types/User": ["./app/javascript/types/User.ts"],
-      "@/types/*": ["./app/javascript/types/*"],
-      "@/utils/*": ["./app/javascript/utils/*"],
-      "@/controllers/*": ["./app/javascript/controllers/*"]
-    }
+      "@/*": ["app/javascript/*"],
+      "@/types/*": ["app/javascript/types/*"],
+      "@/utils/*": ["app/javascript/utils/*"],
+      "@/controllers/*": ["app/javascript/controllers/*"]
+    },
+    "typeRoots": [
+      "app/javascript/types",
+      "node_modules/@types"
+    ]
   },
   "include": [
     "app/javascript/**/*",
