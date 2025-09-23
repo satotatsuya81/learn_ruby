@@ -1,6 +1,6 @@
 import { apiClient } from '@/utils/api';
 import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
-import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/User';
+import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/user';
 
 // テスト用のモック設定
 describe('ApiClient', () => {

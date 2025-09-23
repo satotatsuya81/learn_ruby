@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { UserProfile } from "@/components/UserProfile";
-import { User, UserUpdateData } from "@/types/User";
+import { User, UserUpdateData } from "@/types/user";
 
 export default class extends Controller {
   static values = {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserLoginData } from '@/types/User';
+import { UserLoginData } from '@/types/user';
 
 interface LoginFormProps {
   loginPath: string;

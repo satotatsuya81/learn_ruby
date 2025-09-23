@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserRegistrationData } from '@/types/User';
+import { UserRegistrationData } from '@/types/user';
 import { validateUserRegistration } from '@/utils/validation';
 
 interface UserRegistrationFormProps {

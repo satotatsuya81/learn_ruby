@@ -1,7 +1,7 @@
 // TypeScript型安全なAPIクライアント
 // Rails APIとの通信を型安全に行うためのクライアント実装
 import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/BusinessCard';
-import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/User';
+import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/user';
 import { HttpHeaders } from '@/types/common';
 
 // API通信の標準レスポンス型

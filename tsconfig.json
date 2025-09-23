@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM"],
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
@@ -21,21 +21,16 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "typeRoots": [
-      "./app/javascript/types",
-      "./node_modules/@types"
+      "app/javascript/types",
+      "node_modules/@types"
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./app/javascript/*"],
-      "@/types/*": ["./app/javascript/types/*"],
-      "@/utils/*": ["./app/javascript/utils/*"],
-      "@/controllers/*": ["./app/javascript/controllers/*"]
-    },
-    "allowImportingTsExtensions": false,
-    "noResolve": false,
-    "declaration": false,
-    "composite": false,
-    "moduleDetection": "force"
+      "@/*": ["app/javascript/*"],
+      "@/types/*": ["app/javascript/types/*"],
+      "@/utils/*": ["app/javascript/utils/*"],
+      "@/controllers/*": ["app/javascript/controllers/*"]
+    }
   },
   "include": [
     "app/javascript/**/*",
@@ -45,7 +40,6 @@
     "node_modules",
     "dist",
     "tmp",
-    "app/assets/builds",
-    "node_modules/@types/node"
+    "app/assets/builds"
   ]
 }
