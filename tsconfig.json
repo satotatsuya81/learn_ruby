@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "module": "ESNext",
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "module": "ES2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "allowJs": true,
@@ -24,8 +24,15 @@
       "./app/javascript/types",
       "./node_modules/@types"
     ],
-    "rootDir": ".",
-    "outDir": "./dist"
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/javascript/*"],
+      "@/types/*": ["./app/javascript/types/*"],
+      "@/utils/*": ["./app/javascript/utils/*"],
+      "@/controllers/*": ["./app/javascript/controllers/*"]
+    },
+    "allowImportingTsExtensions": false,
+    "noResolve": false
   },
   "include": [
     "app/javascript/**/*",
