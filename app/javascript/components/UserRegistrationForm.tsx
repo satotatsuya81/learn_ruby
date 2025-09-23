@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { UserRegistrationData } from '../types/User';
-import { validateUserRegistration } from '../utils/validation';
+import { UserRegistrationData } from '@/types/User';
+import { validateUserRegistration } from '@/utils/validation';
 
 interface UserRegistrationFormProps {
   signupPath: string;
@@ -65,7 +65,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({ signupPath,
     setGeneralError('');
 
     try {
-      const { createUser } = await import('../utils/api');
+      const { createUser } = await import('@/utils/api');
 
       const userData: UserRegistrationData = {
         name: formData.name,
