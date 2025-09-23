@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BusinessCard } from '../types/BusinessCard';
-import { getBusinessCards, deleteBusinessCard } from '../utils/api';
+import { BusinessCard } from '@/types/BusinessCard';
+import { getBusinessCards, deleteBusinessCard } from '@/utils/api';
 
 export interface UseBusinessCardsResult {
   businessCards: BusinessCard[];

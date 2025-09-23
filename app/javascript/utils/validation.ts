@@ -1,5 +1,5 @@
-import { BusinessCardFormData } from '../types/BusinessCard';
-import { FormErrors } from '../types/common';
+import { BusinessCardFormData } from '@/types/BusinessCard';
+import { FormErrors } from '@/types/common';
 
 export interface ValidationResult {
     isValid: boolean;        // バリデーション成功/失敗

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BusinessCard, BusinessCardFormData } from '../types/BusinessCard';
+import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
 
 interface BusinessCardFormProps {
   mode: 'create' | 'edit';

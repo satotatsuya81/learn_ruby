@@ -11,19 +11,19 @@ import { Application } from "@hotwired/stimulus";
 import "bootstrap";
 
 // デバッグユーティリティ
-import { initializeDebug } from "./utils/debug";
+import { initializeDebug } from "@/utils/debug";
 
 // TypeScript型定義をアプリケーション全体で利用可能にする
-export * from "./types/BusinessCard";
-export * from "./utils/api";
+export * from "@/types/BusinessCard";
+export * from "@/utils/api";
 
 // React統合のためのStimulusコントローラー
-import BusinessCardFormController from "./controllers/business_card_form_controller"
-import BusinessCardDetailController from "./controllers/business_card_detail_controller"
-import HomePageController from "./controllers/home_page_controller"
-import UserProfileController from "./controllers/user_profile_controller"
-import LoginFormController from "./controllers/login_form_controller"
-import UserRegistrationFormController from "./controllers/user_registration_form_controller"
+import BusinessCardFormController from "@/controllers/business_card_form_controller"
+import BusinessCardDetailController from "@/controllers/business_card_detail_controller"
+import HomePageController from "@/controllers/home_page_controller"
+import UserProfileController from "@/controllers/user_profile_controller"
+import LoginFormController from "@/controllers/login_form_controller"
+import UserRegistrationFormController from "@/controllers/user_registration_form_controller"
 
 // Turboイベントによる初期化関数
 function initializeApplication() {
@@ -100,7 +100,7 @@ function initializeReactComponents() {
 async function mountBusinessCardList(container: HTMLElement) {
   try {
     const { createRoot } = await import('react-dom/client');
-    const { BusinessCardList } = await import('./components/BusinessCardList');
+    const { BusinessCardList } = await import('@/components/BusinessCardList');
 
     const businessCardsData = container.dataset.businessCards;
     const businessCards = businessCardsData ? JSON.parse(businessCardsData) : [];

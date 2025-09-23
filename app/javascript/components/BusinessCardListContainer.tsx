@@ -1,10 +1,10 @@
 import React from 'react';
-import { BusinessCard } from '../types/BusinessCard';
-import { BusinessCardItem } from './BusinessCardItem';
-import { SearchFilter } from './SearchFilter';
-import { DeleteConfirmModal } from './DeleteConfirmModal';
-import { useBusinessCardFilter } from '../hooks/useBusinessCardFilter';
-import { useModal } from '../hooks/useModal';
+import { BusinessCard } from '@/types/BusinessCard';
+import { BusinessCardItem } from '@/components/BusinessCardItem';
+import { SearchFilter } from '@/components/SearchFilter';
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { useBusinessCardFilter } from '@/hooks/useBusinessCardFilter';
+import { useModal } from '@/hooks/useModal';
 
 interface BusinessCardListProps {
   businessCards: BusinessCard[];
@@ -44,7 +44,7 @@ export const BusinessCardListContainer: React.FC<BusinessCardListProps> = ({
     if (cardToDelete) {
       try {
         // 削除処理はBusinessCardListにそのまま委譲
-        await import('../utils/api').then(({ deleteBusinessCard }) =>
+        await import('@/utils/api').then(({ deleteBusinessCard }) =>
           deleteBusinessCard(cardToDelete.id)
         );
         closeDeleteModal();

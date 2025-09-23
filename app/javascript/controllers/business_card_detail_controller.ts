@@ -1,9 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
-import { BusinessCardDetail } from "../components/BusinessCardDetail";
-import { SimilarCards } from "../components/SimilarCards";
-import { BusinessCard } from "../types/BusinessCard";
+import { BusinessCardDetail } from "@/components/BusinessCardDetail";
+import { SimilarCards } from "@/components/SimilarCards";
+import { BusinessCard } from "@/types/BusinessCard";
 
 export default class extends Controller {
   static values = {
@@ -37,7 +37,7 @@ export default class extends Controller {
     const handleDelete = async (id: number): Promise<void> => {
       if (confirm(`${businessCard.name}を削除してもよろしいですか？`)) {
         try {
-          const { deleteBusinessCard } = await import('../utils/api');
+          const { deleteBusinessCard } = await import('@/utils/api');
           await deleteBusinessCard(id);
           window.location.href = '/business_cards';
         } catch (error) {

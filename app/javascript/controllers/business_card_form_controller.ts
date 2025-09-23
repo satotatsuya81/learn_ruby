@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
-import { BusinessCardForm } from "../components/BusinessCardForm";
-import { BusinessCard, BusinessCardFormData } from "../types/BusinessCard";
+import { BusinessCardForm } from "@/components/BusinessCardForm";
+import { BusinessCard, BusinessCardFormData } from "@/types/BusinessCard";
 
 interface BusinessCardFormProps {
   mode: 'create' | 'edit';
@@ -58,10 +58,10 @@ export default class extends Controller {
 
     const handleSubmit = async (formData: BusinessCardFormData): Promise<void> => {
       if (mode === 'create') {
-        const { createBusinessCard } = await import('../utils/api');
+        const { createBusinessCard } = await import('@/utils/api');
         await createBusinessCard(formData);
       } else {
-        const { updateBusinessCard } = await import('../utils/api');
+        const { updateBusinessCard } = await import('@/utils/api');
         if (businessCard === null) {
           throw new Error('Business card is required for edit mode');
         }

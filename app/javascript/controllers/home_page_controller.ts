@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
-import { HomePage } from "../components/HomePage";
+import { HomePage } from "@/components/HomePage";
 
 interface HomePageStats {
   totalBusinessCards: number;

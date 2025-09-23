@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { BusinessCard } from '../types/BusinessCard';
+import { BusinessCard } from '@/types/BusinessCard';
 
 export interface FilterBase {
   name: string;

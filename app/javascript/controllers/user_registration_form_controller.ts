@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import React from "react"
 import { createRoot } from "react-dom/client"
-import UserRegistrationForm from "../components/UserRegistrationForm"
+import UserRegistrationForm from "@/components/UserRegistrationForm"
 
 // Rails 8 + React 18 + TypeScript統合
 // Stimulusコントローラー: ユーザー登録フォーム

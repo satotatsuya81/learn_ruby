@@ -36,7 +36,7 @@
 
 ## 実装手順（TDD）
 ### 1. テスト作成フェーズ
-- [ ] `spec/javascript/store/slices/businessCardsSlice.test.ts` - Business Cards Sliceのテスト
+- [×] `spec/javascript/store/slices/businessCardsSlice.test.ts` - Business Cards Sliceのテスト
 - [ ] `spec/javascript/store/slices/uiSlice.test.ts` - UI Sliceのテスト
 - [ ] `spec/javascript/hooks/useAppDispatch.test.ts` - カスタムhookのテスト
 - [ ] `spec/javascript/hooks/useAppSelector.test.ts` - カスタムhookのテスト
@@ -44,11 +44,11 @@
 - [ ] テストが失敗することを確認
 
 ### 2. 実装フェーズ
-- [ ] Redux Toolkit の依存関係をpackage.jsonに追加
-- [ ] TypeScript型定義ファイルの作成
-- [ ] Redux store の設定と初期化
-- [ ] Business Cards Slice の実装（CRUD操作）
-- [ ] UI Slice の実装（ローディング状態、エラー状態）
+- [×] Redux Toolkit の依存関係をpackage.jsonに追加
+- [×] TypeScript型定義ファイルの作成
+- [×] Redux store の設定と初期化
+- [×] Business Cards Slice の実装（CRUD操作）
+- [×] UI Slice の実装（ローディング状態、エラー状態）
 - [ ] 型安全なカスタムhooksの実装
 - [ ] API通信ユーティリティの実装
 - [ ] 既存Reactコンポーネントとの連携
@@ -87,8 +87,8 @@ export type AppDispatch = typeof store.dispatch
 ### app/javascript/store/slices/businessCardsSlice.ts
 ```typescript
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { BusinessCard } from '../../types/businessCard'
-import { api } from '../../utils/api'
+import { BusinessCard } from '@/types/businessCard'
+import { api } from '@/utils/api'
 
 interface BusinessCardsState {
   cards: BusinessCard[]

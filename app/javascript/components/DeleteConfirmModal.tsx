@@ -1,5 +1,5 @@
 import React from 'react';
-  import { BusinessCard } from '../types/BusinessCard';
+  import { BusinessCard } from '@/types/BusinessCard';
 
   // プロパティの型定義
   interface DeleteConfirmModalProps {

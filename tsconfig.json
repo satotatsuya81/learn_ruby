@@ -29,7 +29,8 @@
       "@/*": ["app/javascript/*"],
       "@/types/*": ["app/javascript/types/*"],
       "@/utils/*": ["app/javascript/utils/*"],
-      "@/controllers/*": ["app/javascript/controllers/*"]
+      "@/controllers/*": ["app/javascript/controllers/*"],
+      "@/store/*": ["app/javascript/store/*"]
     }
   },
   "include": [

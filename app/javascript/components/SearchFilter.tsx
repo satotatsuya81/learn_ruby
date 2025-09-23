@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterBase, UseBusinessCardFilterResult } from '../hooks/useBusinessCardFilter';
+import { FilterBase, UseBusinessCardFilterResult } from '@/hooks/useBusinessCardFilter';
 
 interface SearchFilterProps {
   filter: FilterBase;

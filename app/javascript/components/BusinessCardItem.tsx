@@ -1,5 +1,5 @@
 import React from 'react';
-import { BusinessCard } from '../types/BusinessCard';
+import { BusinessCard } from '@/types/BusinessCard';
 
 // BusinessCardItemコンポーネントのProps型定義
 interface BusinessCardItemProps {

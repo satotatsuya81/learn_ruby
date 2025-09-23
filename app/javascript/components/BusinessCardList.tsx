@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { BusinessCard } from '../types/BusinessCard';
-import { BusinessCardItem } from './BusinessCardItem';
-import { SearchFilter } from './SearchFilter';
-import { DeleteConfirmModal } from './DeleteConfirmModal';
-import { deleteBusinessCard } from '../utils/api';
-import { useBusinessCardFilter } from '../hooks/useBusinessCardFilter';
-import { useModal } from '../hooks/useModal';
+import { BusinessCard } from '@/types/BusinessCard';
+import { BusinessCardItem } from '@/components/BusinessCardItem';
+import { SearchFilter } from '@/components/SearchFilter';
+import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { deleteBusinessCard } from '@/utils/api';
+import { useBusinessCardFilter } from '@/hooks/useBusinessCardFilter';
+import { useModal } from '@/hooks/useModal';
 
 interface BusinessCardListProps {
   businessCards: BusinessCard[];
