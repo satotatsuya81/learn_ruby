@@ -32,7 +32,9 @@
       "@/controllers/*": ["./app/javascript/controllers/*"]
     },
     "allowImportingTsExtensions": false,
-    "noResolve": false
+    "noResolve": false,
+    "declaration": false,
+    "composite": false
   },
   "include": [
     "app/javascript/**/*",

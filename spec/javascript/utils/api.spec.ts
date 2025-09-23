@@ -1,6 +1,6 @@
-import { apiClient } from '../../../app/javascript/utils/api';
-import { BusinessCard, BusinessCardFormData } from '../../../app/javascript/types/BusinessCard';
-import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '../../../app/javascript/types/User';
+import { apiClient } from '@/utils/api';
+import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
+import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/User';
 
 // テスト用のモック設定
 describe('ApiClient', () => {

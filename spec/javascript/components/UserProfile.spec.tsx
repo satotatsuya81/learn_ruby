@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserProfile } from '../../../app/javascript/components/UserProfile';
-import { User } from '../../../app/javascript/types/User';
+import { User } from '@/types/User';
 
 describe('UserProfile', () => {
   const mockUser: User = {

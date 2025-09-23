@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, UserUpdateData } from '../types/User';
+import { User, UserUpdateData } from '@/types/User';
 
 interface UserProfileProps {
   user: User;

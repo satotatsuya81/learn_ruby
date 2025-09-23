@@ -9,8 +9,8 @@
     */
 
    // 未使用のimportを削除し、実際に使用する型のみをimport
-   import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
-   import { apiClient } from '../../../app/javascript/utils/api';
+   import { BusinessCard } from '@/types/BusinessCard';
+   import { apiClient } from '@/utils/api';
 
    describe('esbuildとRailsの統合テスト', () => {
      // TypeScript型定義の読み込みテスト
