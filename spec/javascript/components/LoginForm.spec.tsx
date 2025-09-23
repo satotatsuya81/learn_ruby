@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import LoginForm from '../../../app/javascript/components/LoginForm';
+import LoginForm from '@/components/LoginForm';
 
 // API mock
 const mockLoginUser = jest.fn();
-jest.mock('../../../app/javascript/utils/api', () => ({
+jest.mock('@/utils/api', () => ({
   __esModule: true,
   loginUser: (...args: any[]) => mockLoginUser(...args)
 }));

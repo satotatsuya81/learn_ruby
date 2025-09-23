@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BusinessCardDetail } from '../../../app/javascript/components/BusinessCardDetail';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { BusinessCardDetail } from '@/components/BusinessCardDetail';
+import { BusinessCard } from '@/types//BusinessCard';
 
 describe('BusinessCardDetail', () => {
   const mockBusinessCard: BusinessCard = {

@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BusinessCardForm } from '../../../app/javascript/components/BusinessCardForm';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { BusinessCardForm } from '@/components/BusinessCardForm';
+import { BusinessCard } from '@/types//BusinessCard';
 
 // APIモックの設定
 const mockCreateBusinessCard = jest.fn();
 const mockUpdateBusinessCard = jest.fn();
 
-jest.mock('../../../app/javascript/utils/api', () => ({
+jest.mock('@/utils/api', () => ({
   createBusinessCard: mockCreateBusinessCard,
   updateBusinessCard: mockUpdateBusinessCard,
 }));

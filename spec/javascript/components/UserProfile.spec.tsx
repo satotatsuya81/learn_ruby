@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UserProfile } from '../../../app/javascript/components/UserProfile';
+import { UserProfile } from '@/components/UserProfile';
 import { User } from '@/types/user';
 
 describe('UserProfile', () => {

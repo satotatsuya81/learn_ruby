@@ -1,7 +1,7 @@
 // Jest用のモックデータファクトリー
   // 名刺データの様々なパターンを生成するヘルパー関数
 
-  import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+  import { BusinessCard } from '@/types//BusinessCard';
 
   // 基本的な名刺データを生成するファクトリー関数
   export const createBusinessCard = (overrides: Partial<BusinessCard> = {}): BusinessCard => {

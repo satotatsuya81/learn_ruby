@@ -1,12 +1,12 @@
 import { Application } from '@hotwired/stimulus';
 
 // Individual controller imports
-import LoginFormController from '../../../app/javascript/controllers/login_form_controller';
-import UserRegistrationFormController from '../../../app/javascript/controllers/user_registration_form_controller';
-import HomePageController from '../../../app/javascript/controllers/home_page_controller';
-import BusinessCardDetailController from '../../../app/javascript/controllers/business_card_detail_controller';
-import BusinessCardFormController from '../../../app/javascript/controllers/business_card_form_controller';
-import UserProfileController from '../../../app/javascript/controllers/user_profile_controller';
+import LoginFormController from '@/controllers/login_form_controller';
+import UserRegistrationFormController from '@/controllers/user_registration_form_controller';
+import HomePageController from '@/controllers/home_page_controller';
+import BusinessCardDetailController from '@/controllers/business_card_detail_controller';
+import BusinessCardFormController from '@/controllers/business_card_form_controller';
+import UserProfileController from '@/controllers/user_profile_controller';
 
 // React and DOM mocking
 const mockCreateRoot = jest.fn();
@@ -30,13 +30,13 @@ jest.mock('react-dom/client', () => ({
 }));
 
 // Mock individual React components
-jest.mock('../../../app/javascript/components/LoginForm', () => 'LoginForm');
-jest.mock('../../../app/javascript/components/UserRegistrationForm', () => 'UserRegistrationForm');
-jest.mock('../../../app/javascript/components/HomePage', () => ({ HomePage: 'HomePage' }));
-jest.mock('../../../app/javascript/components/BusinessCardDetail', () => ({ BusinessCardDetail: 'BusinessCardDetail' }));
-jest.mock('../../../app/javascript/components/SimilarCards', () => ({ SimilarCards: 'SimilarCards' }));
-jest.mock('../../../app/javascript/components/BusinessCardForm', () => ({ BusinessCardForm: 'BusinessCardForm' }));
-jest.mock('../../../app/javascript/components/UserProfile', () => ({ UserProfile: 'UserProfile' }));
+jest.mock('@/components/LoginForm', () => 'LoginForm');
+jest.mock('@/components/UserRegistrationForm', () => 'UserRegistrationForm');
+jest.mock('@/components/HomePage', () => ({ HomePage: 'HomePage' }));
+jest.mock('@/components/BusinessCardDetail', () => ({ BusinessCardDetail: 'BusinessCardDetail' }));
+jest.mock('@/components/SimilarCards', () => ({ SimilarCards: 'SimilarCards' }));
+jest.mock('@/components/BusinessCardForm', () => ({ BusinessCardForm: 'BusinessCardForm' }));
+jest.mock('@/components/UserProfile', () => ({ UserProfile: 'UserProfile' }));
 
 // Console mocks
 const originalConsoleLog = console.log;

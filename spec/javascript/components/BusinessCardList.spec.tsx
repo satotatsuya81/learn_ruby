@@ -1,10 +1,10 @@
   import { render, screen, fireEvent } from '@testing-library/react';
-  import { BusinessCardList } from '../../../app/javascript/components/BusinessCardList';
-  import * as api from '../../../app/javascript/utils/api';
+  import { BusinessCardList } from '@/components/BusinessCardList';
+  import * as api from '@/utils/api';
   // ファクトリー関数をインポート
   import { createBusinessCards } from '../factories/businessCardFactory';
 
-  jest.mock('../../../app/javascript/utils/api');
+  jest.mock('@/utils/api');
   const mockApi = api as jest.Mocked<typeof api>;
 
   describe('BusinessCardList', () => {

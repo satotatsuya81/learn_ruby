@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { SearchFilter } from '../../../app/javascript/components/SearchFilter';
-import { FilterBase } from '../../../app/javascript/hooks/useBusinessCardFilter';
+import { SearchFilter } from '@/components/SearchFilter';
+import { FilterBase } from '@/hooks/useBusinessCardFilter';
 
 describe('SearchFilter', () => {
   const mockFilter: FilterBase = {

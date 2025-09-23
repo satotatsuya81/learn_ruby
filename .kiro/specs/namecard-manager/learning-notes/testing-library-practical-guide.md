@@ -290,7 +290,7 @@ export { customRender as render };
 
 ```typescript
 // spec/javascript/factories/business-card-factory.ts
-import { BusinessCard } from '../../../app/javascript/types/business_card';
+import { BusinessCard } from '@/types//business_card';
 
 let idCounter = 1;
 

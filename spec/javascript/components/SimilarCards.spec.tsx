@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { SimilarCards } from '../../../app/javascript/components/SimilarCards';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { SimilarCards } from '@/components/SimilarCards';
+import { BusinessCard } from '@/types//BusinessCard';
 
 describe('SimilarCards', () => {
   const mockSimilarCards: BusinessCard[] = [

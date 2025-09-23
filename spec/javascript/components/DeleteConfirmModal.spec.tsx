@@ -1,6 +1,6 @@
   import { render, screen, fireEvent } from '@testing-library/react';
-  import { DeleteConfirmModal } from '../../../app/javascript/components/DeleteConfirmModal';
-  import { BusinessCard } from '../../../app/javascript/types/BusinessCard'; // パス修正
+  import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+  import { BusinessCard } from '@/types//BusinessCard'; // パス修正
 
   describe('DeleteConfirmModal', () => {
     const mockBusinessCard: BusinessCard = {

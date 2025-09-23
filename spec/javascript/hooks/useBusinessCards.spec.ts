@@ -1,11 +1,11 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useBusinessCards } from '../../../app/javascript/hooks/useBusinessCards';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { useBusinessCards } from '@/hooks/useBusinessCards';
+import { BusinessCard } from '@/types//BusinessCard';
 
 // API mock
 const mockGetBusinessCards = jest.fn();
 const mockDeleteBusinessCard = jest.fn();
-jest.mock('../../../app/javascript/utils/api', () => ({
+jest.mock('@/utils/api', () => ({
   getBusinessCards: (...args: any[]) => mockGetBusinessCards(...args),
   deleteBusinessCard: (...args: any[]) => mockDeleteBusinessCard(...args)
 }));

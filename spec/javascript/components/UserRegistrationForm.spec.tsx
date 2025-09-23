@@ -1,18 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import UserRegistrationForm from '../../../app/javascript/components/UserRegistrationForm';
+import UserRegistrationForm from '@/components/UserRegistrationForm';
 
 // API mock
 const mockCreateUser = jest.fn();
-jest.mock('../../../app/javascript/utils/api', () => ({
+jest.mock('@/utils/api', () => ({
   __esModule: true,
   createUser: (...args: any[]) => mockCreateUser(...args)
 }));
 
 // Validation mock
 const mockValidateUserRegistration = jest.fn();
-jest.mock('../../../app/javascript/utils/validation', () => ({
+jest.mock('@/utils/validation', () => ({
   validateUserRegistration: (...args: any[]) => mockValidateUserRegistration(...args)
 }));
 

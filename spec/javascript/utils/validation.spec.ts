@@ -4,8 +4,8 @@ import {
     validateWebsite,
     validateRequiredField,
     validateBusinessCardForm
-  } from '../../../app/javascript/utils/validation';
-  import { BusinessCardFormData } from '../../../app/javascript/types/BusinessCard';
+  } from '@/utils/validation';
+  import { BusinessCardFormData } from '@/types//BusinessCard';
 
   describe('バリデーションユーティリティ', () => {
     describe('validateEmail', () => {

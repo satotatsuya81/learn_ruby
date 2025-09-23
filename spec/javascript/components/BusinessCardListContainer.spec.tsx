@@ -1,25 +1,25 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { BusinessCardListContainer } from '../../../app/javascript/components/BusinessCardListContainer';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { BusinessCardListContainer } from '@/components/BusinessCardListContainer';
+import { BusinessCard } from '@/types//BusinessCard';
 
 // API mock
 const mockDeleteBusinessCard = jest.fn();
-jest.mock('../../../app/javascript/utils/api', () => ({
+jest.mock('@/utils/api', () => ({
   __esModule: true,
   deleteBusinessCard: (...args: any[]) => mockDeleteBusinessCard(...args)
 }));
 
 // useBusinessCardFilter mock
 const mockUseBusinessCardFilter = jest.fn();
-jest.mock('../../../app/javascript/hooks/useBusinessCardFilter', () => ({
+jest.mock('@/hooks/useBusinessCardFilter', () => ({
   useBusinessCardFilter: (...args: any[]) => mockUseBusinessCardFilter(...args)
 }));
 
 // useModal mock
 const mockUseModal = jest.fn();
-jest.mock('../../../app/javascript/hooks/useModal', () => ({
+jest.mock('@/hooks/useModal', () => ({
   useModal: (...args: any[]) => mockUseModal(...args)
 }));
 

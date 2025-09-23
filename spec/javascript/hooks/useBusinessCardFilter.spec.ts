@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
-import { useBusinessCardFilter } from '../../../app/javascript/hooks/useBusinessCardFilter';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { useBusinessCardFilter } from '@/hooks/useBusinessCardFilter';
+import { BusinessCard } from '@/types//BusinessCard';
 
 const mockBusinessCards: BusinessCard[] = [
   {

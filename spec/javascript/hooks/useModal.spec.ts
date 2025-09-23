@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
-import { useModal } from '../../../app/javascript/hooks/useModal';
-import { BusinessCard } from '../../../app/javascript/types/BusinessCard';
+import { useModal } from '@/hooks/useModal';
+import { BusinessCard } from '@/types//BusinessCard';
 
 const mockBusinessCard: BusinessCard = {
   id: 1,
