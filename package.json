@@ -13,8 +13,6 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "type-check": "tsc --project ./tsconfig.json --noEmit",
-    "type-check:debug": "tsc --project ./tsconfig.json --noEmit --diagnostics --traceResolution --listFiles",
-    "type-check:single": "echo 'Single file debug disabled due to CLI limitations'",
     "lint": "eslint app/javascript/**/*.ts --project ./tsconfig.json --max-warnings 0",
     "lint:fix": "eslint app/javascript/**/*.ts --project ./tsconfig.json --fix",
     "setup-security": "safe-chain setup",
