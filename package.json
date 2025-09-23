@@ -13,6 +13,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit",
+    "type-check:debug": "tsc --noEmit --diagnostics --traceResolution --listFiles",
     "lint": "eslint app/javascript/**/*.ts --max-warnings 0",
     "lint:fix": "eslint app/javascript/**/*.ts --fix",
     "setup-security": "safe-chain setup",

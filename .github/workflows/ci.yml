@@ -22,8 +22,26 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm ci
 
-      - name: TypeScript type checking
-        run: npm run type-check
+      - name: Debug environment info
+        run: |
+          echo "Node version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "TypeScript version: $(npx tsc --version)"
+          echo "Working directory: $(pwd)"
+          echo "Current tsconfig.json content:"
+          cat tsconfig.json
+          echo "Files in types directory:"
+          ls -la app/javascript/types/ || echo "Types directory not found"
+          echo "File permissions on User.ts:"
+          ls -la app/javascript/types/User.ts || echo "User.ts not found"
+          echo "Contents of User.ts first 10 lines:"
+          head -10 app/javascript/types/User.ts || echo "Cannot read User.ts"
+
+      - name: Module resolution debug
+        run: node debug-resolution.js
+
+      - name: TypeScript type checking (with debug info)
+        run: npm run type-check:debug
 
       - name: ESLint for TypeScript
         run: npx eslint app/javascript/**/*.ts --max-warnings 0
