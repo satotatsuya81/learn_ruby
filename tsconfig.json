@@ -3,7 +3,7 @@
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "jsx": "react-jsx",
     "allowJs": true,
     "checkJs": false,
@@ -21,10 +21,10 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/javascript/*"],
-      "@/types/*": ["app/javascript/types/*"],
-      "@/utils/*": ["app/javascript/utils/*"],
-      "@/controllers/*": ["app/javascript/controllers/*"]
+      "@/*": ["./app/javascript/*"],
+      "@/types/*": ["./app/javascript/types/*"],
+      "@/utils/*": ["./app/javascript/utils/*"],
+      "@/controllers/*": ["./app/javascript/controllers/*"]
     }
   },
   "include": [
