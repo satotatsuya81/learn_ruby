@@ -28,9 +28,11 @@
       "@/controllers/*": ["./app/javascript/controllers/*"]
     },
     "typeRoots": [
-      "app/javascript/types",
-      "node_modules/@types"
-    ]
+      "./app/javascript/types",
+      "./node_modules/@types"
+    ],
+    "rootDir": ".",
+    "outDir": "./dist"
   },
   "include": [
     "app/javascript/**/*",
