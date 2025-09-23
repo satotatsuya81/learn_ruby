@@ -14,6 +14,7 @@
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit",
     "type-check:debug": "tsc --noEmit --diagnostics --traceResolution --listFiles",
+    "type-check:single": "tsc --project ./tsconfig.json --noEmit --traceResolution app/javascript/components/LoginForm.tsx",
     "lint": "eslint app/javascript/**/*.ts --max-warnings 0",
     "lint:fix": "eslint app/javascript/**/*.ts --fix",
     "setup-security": "safe-chain setup",

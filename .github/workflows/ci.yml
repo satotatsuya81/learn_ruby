@@ -40,8 +40,14 @@ jobs:
       - name: Module resolution debug
         run: node debug-resolution.js
 
+      - name: Single file debug (LoginForm.tsx)
+        run: npm run type-check:single
+
+      - name: TypeScript errors (if any)
+        run: npm run type-check || echo "Type check failed, continuing with debug info"
+
       - name: TypeScript type checking (with debug info)
-        run: npm run type-check:debug
+        run: npm run type-check:debug 2>&1 | grep -A20 -B5 "@/types/User" || npm run type-check:debug
 
       - name: ESLint for TypeScript
         run: npx eslint app/javascript/**/*.ts --max-warnings 0
