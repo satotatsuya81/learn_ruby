@@ -244,7 +244,7 @@ class Api::V1::BaseController < ApplicationController
     }, status: status
   end
 
-  def render_error(message, status = :unprocessable_entity, errors = {})
+  def render_error(message, status = :unprocessable_content, errors = {})
     render json: {
       success: false,
       message: message,
@@ -336,13 +336,13 @@ RSpec.describe 'Business Cards', type: :system do
   describe 'creating a business card' do
     it 'allows user to create a new business card' do
       click_link '新しい名刺を追加'
-      
+
       fill_in '名前', with: '田中太郎'
       fill_in '会社名', with: 'サンプル株式会社'
       fill_in '役職', with: 'エンジニア'
-      
+
       click_button '保存'
-      
+
       expect(page).to have_content '名刺を作成しました'
       expect(page).to have_content '田中太郎'
     end
@@ -354,7 +354,7 @@ RSpec.describe 'Business Cards', type: :system do
     it 'finds business cards by name' do
       fill_in '検索', with: '田中'
       click_button '検索'
-      
+
       expect(page).to have_content '田中太郎'
     end
   end
@@ -372,13 +372,13 @@ FactoryBot.define do
     title { Faker::Job.title }
     email { Faker::Internet.email }
     phone { Faker::PhoneNumber.phone_number }
-    
+
     trait :with_tags do
       after(:create) do |business_card|
         create_list(:tag, 2, business_cards: [business_card])
       end
     end
-    
+
     trait :with_image do
       after(:build) do |business_card|
         business_card.card_image.attach(
@@ -399,11 +399,11 @@ end
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   include SessionsHelper
-  
+
   protect_from_forgery with: :exception
-  
+
   private
-  
+
   def logged_in_user
     unless logged_in?
       store_location
@@ -411,7 +411,7 @@ class ApplicationController < ActionController::Base
       redirect_to login_url
     end
   end
-  
+
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user)
@@ -424,7 +424,7 @@ end
 # app/controllers/business_cards_controller.rb
 class BusinessCardsController < ApplicationController
   private
-  
+
   def business_card_params
     params.require(:business_card).permit(
       :name, :company, :title, :email, :phone, :address, :notes, :card_image
@@ -438,18 +438,18 @@ end
 # app/models/business_card.rb
 class BusinessCard < ApplicationRecord
   has_one_attached :card_image
-  
+
   validate :acceptable_image
-  
+
   private
-  
+
   def acceptable_image
     return unless card_image.attached?
-    
+
     unless card_image.blob.byte_size <= 5.megabyte
       errors.add(:card_image, "ファイルサイズは5MB以下にしてください")
     end
-    
+
     acceptable_types = ["image/jpeg", "image/png"]
     unless acceptable_types.include?(card_image.blob.content_type)
       errors.add(:card_image, "JPEG または PNG ファイルをアップロードしてください")
@@ -519,16 +519,16 @@ end
 Rails.application.configure do
   # YJIT本番環境での有効化
   config.yjit = true
-  
+
   # SSL強制
   config.force_ssl = true
-  
+
   # 静的ファイル配信
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  
+
   # ログレベル
   config.log_level = :info
-  
+
   # キャッシュ設定
   config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
 end
@@ -543,7 +543,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       mysql:
         image: mysql:8.0
@@ -554,16 +554,16 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Ruby 3.3
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3
           bundler-cache: true
-      
+
       - name: Set up database
         run: |
           bundle exec rails db:create
@@ -571,13 +571,13 @@ jobs:
         env:
           RAILS_ENV: test
           RUBY_YJIT_ENABLE: 1
-      
+
       - name: Run tests
         run: bundle exec rspec
         env:
           RAILS_ENV: test
           RUBY_YJIT_ENABLE: 1
-      
+
       - name: Run security checks
         run: |
           bundle exec brakeman --no-pager
@@ -591,7 +591,7 @@ jobs:
 # config/initializers/instrumentation.rb
 ActiveSupport::Notifications.subscribe "process_action.action_controller" do |name, started, finished, unique_id, data|
   duration = finished - started
-  
+
   if duration > 1.0  # 1秒以上の処理をログ出力
     Rails.logger.warn "Slow request: #{data[:controller]}##{data[:action]} took #{duration}s"
   end
@@ -600,14 +600,14 @@ end
 # パフォーマンス監視
 class ApplicationController < ActionController::Base
   around_action :log_performance
-  
+
   private
-  
+
   def log_performance
     start_time = Time.current
     yield
     duration = Time.current - start_time
-    
+
     Rails.logger.info "#{controller_name}##{action_name} completed in #{duration}s"
   end
 end
@@ -620,7 +620,7 @@ class ErrorMonitor
   def self.capture_exception(exception, context = {})
     Rails.logger.error "Exception: #{exception.class} - #{exception.message}"
     Rails.logger.error exception.backtrace.join("\n")
-    
+
     # 外部監視サービスへの送信（Sentry等）
     # Sentry.capture_exception(exception, extra: context)
   end
@@ -629,16 +629,16 @@ end
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   rescue_from StandardError, with: :handle_exception
-  
+
   private
-  
+
   def handle_exception(exception)
     ErrorMonitor.capture_exception(exception, {
       user_id: current_user&.id,
       request_id: request.uuid,
       params: params.to_unsafe_h
     })
-    
+
     render 'errors/500', status: :internal_server_error
   end
 end

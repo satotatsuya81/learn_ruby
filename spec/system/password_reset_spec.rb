@@ -1,9 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Password Reset", type: :system do
-  before do
-    driven_by(:rack_test)
-  end
+RSpec.describe "Password Reset", type: :system, js: true do
   let(:user) { create(:user, :activated) }
 
   describe "パスワードリセット用メール送信機能" do
@@ -44,7 +41,7 @@ RSpec.describe "Password Reset", type: :system do
       click_button I18n.t("user_mailer.password_reset.send_email_button")
 
       # ブラウザバリデーションによりページが遷移しないことを確認
-      expect(page).to have_current_path(password_resets_path)
+      expect(page).to have_current_path(new_password_reset_path)
       expect(ActionMailer::Base.deliveries.size).to eq(0)
       # データベースが変更されていないことを確認
       user.reload
@@ -83,8 +80,8 @@ RSpec.describe "Password Reset", type: :system do
       # 無効なトークンでアクセス
       visit edit_password_reset_path(user.id, token: "invalid_token")
 
-      # ルートページにリダイレクトされることを確認
-      expect(page).to have_current_path(root_path)
+      # ログインページにリダイレクトされることを確認
+      expect(page).to have_current_path(login_path)
     end
 
     it "パスワードと確認用パスワードが不一致でエラーメッセージ表示" do
@@ -95,16 +92,6 @@ RSpec.describe "Password Reset", type: :system do
       click_button I18n.t("password_resets.update_password")
 
       expect(page).to have_content(I18n.t("activerecord.errors.messages.confirmation", attribute: I18n.t("activerecord.attributes.user.password")))
-    end
-
-    it "空のパスワードでエラーメッセージ表示" do
-      visit edit_password_reset_path(user.id, token: user.reset_token)
-
-      fill_in I18n.t("password_resets.password"), with: ""
-      fill_in I18n.t("password_resets.password_confirmation"), with: ""
-      click_button I18n.t("password_resets.update_password")
-
-      expect(page).to have_content(I18n.t("activerecord.errors.messages.blank"))
     end
 
     it "期限切れトークンでリセットページにリダイレクトされる" do

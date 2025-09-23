@@ -1,4 +1,6 @@
 require 'rails_helper'
+require 'json'
+require 'cgi'
 
 RSpec.describe "BusinessCards", type: :request do
   # テスト用ユーザー作成、名刺のテストデータ作成
@@ -13,10 +15,23 @@ RSpec.describe "BusinessCards", type: :request do
         post login_path, params: { session: { email: user.email, password: user.password } }
       end
       it 'レスポンスが成功し、ユーザーの名刺が表示されること' do
+        # HTML形式
         get business_cards_path
         expect(response).to have_http_status(200)
+        expect(response.content_type).to include('text/html')
         expect(response.body).to include(user_business_card.name)
         expect(response.body).not_to include(other_user_business_card.name)
+
+        # JSON形式
+        get business_cards_path, headers: { 'Accept' => 'application/json' }
+        expect(response).to have_http_status(200)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+
+        json_response = JSON.parse(response.body)
+        expect(json_response).to have_key('business_cards')
+        names = json_response['business_cards'].map { |card| card['name'] }
+        expect(names).to include(user_business_card.name)
+        expect(names).not_to include(other_user_business_card.name)
       end
 
       it "インデックスページに正しいタイトルが表示されること" do
@@ -27,7 +42,13 @@ RSpec.describe "BusinessCards", type: :request do
 
     context 'ログインしていない場合' do
       it 'ログインページにリダイレクトされること' do
+        # HTML形式
         get business_cards_path
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(login_path)
+
+        # JSON形式でも同様にリダイレクト
+        get business_cards_path, headers: { 'Accept' => 'application/json' }
         expect(response).to have_http_status(302)
         expect(response).to redirect_to(login_path)
       end
@@ -80,9 +101,16 @@ RSpec.describe "BusinessCards", type: :request do
                             name: "同僚太郎")
 
         get business_card_path(user_business_card)
+        # レスポンスが成功すること
+        expect(response).to have_http_status(:ok)
+
+        # React BusinessCardDetailコンポーネントのdata属性が存在すること
+        expect(response.body).to include('data-controller="business-card-detail"')
+        expect(response.body).to include('data-business-card-detail-similar-cards-value')
+
+        # 類似名刺のデータがdata属性に含まれること
         expect(response.body).to include(similar_card.name)
-        # 類似名刺セクションの存在を確認
-        expect(response.body).to include('類似名刺')
+        expect(response.body).to include(similar_card.company_name)
       end
 
       it '類似名刺は最大3件まで表示されること' do
@@ -195,7 +223,31 @@ RSpec.describe "BusinessCards", type: :request do
           post business_cards_path, params: invalid_params
           expect(response).to have_http_status(:unprocessable_content)
           expect(response).to render_template(:new)
-          expect(response.body).to include('エラー')
+
+          # React BusinessCardFormコンポーネントのdata属性が存在すること
+          expect(response.body).to include('data-controller="business-card-form"')
+          expect(response.body).to include('data-business-card-form-errors-value')
+
+          # バリデーションエラーメッセージがdata属性に含まれること
+          expect(response.body).to include('名前を入力してください')
+          expect(response.body).to include('会社名を入力してください')
+        end
+
+        it "エラーメッセージの詳細内容が正しく設定されること" do
+          post business_cards_path, params: invalid_params
+
+          # data属性からエラーメッセージのJSONを抽出・検証
+          errors_match = response.body.match(/data-business-card-form-errors-value="(\[[^\]]*\])"/m)
+          expect(errors_match).not_to be_nil
+
+          errors_json = CGI.unescapeHTML(errors_match[1])
+          errors_array = JSON.parse(errors_json)
+
+          # エラーメッセージの内容を詳細に検証
+          expect(errors_array).to be_an(Array)
+          expect(errors_array.size).to eq(2)
+          expect(errors_array).to include('名前 名前を入力してください')
+          expect(errors_array).to include('会社名 会社名を入力してください')
         end
       end
     end
@@ -228,7 +280,7 @@ RSpec.describe "BusinessCards", type: :request do
       it "名刺が削除され、一覧にリダイレクトすること" do
         card = create(:business_card, user: user, name: "削除太郎")
 
-        # 削除リクエストを送信し、データベースのレコード数が1つ減ることを確認
+        # HTML形式での削除
         expect {
           delete business_card_path(card)
         }.to change(BusinessCard, :count).by(-1)
@@ -237,7 +289,20 @@ RSpec.describe "BusinessCards", type: :request do
         expect(response).to redirect_to(business_cards_path)
 
         # 削除成功のフラッシュメッセージが設定されることを確認
-        expect(flash[:notice]).to eq(I18n.t('business_cards.messages.deleted_successfully'))
+        expect(flash[:success]).to eq("名刺が正常に削除されました。")
+
+        # JSON形式での削除
+        card2 = create(:business_card, user: user, name: "JSON削除太郎")
+        expect {
+          delete business_card_path(card2), headers: { 'Accept' => 'application/json' }
+        }.to change(BusinessCard, :count).by(-1)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be true
+        expect(json_response['message']).to be_present
       end
     end
 
@@ -249,12 +314,20 @@ RSpec.describe "BusinessCards", type: :request do
         other_user = create(:user)
         other_card = create(:business_card, user: other_user, name: "他人太郎")
 
+        # HTML形式
         expect {
           delete business_card_path(other_card)
         }.not_to change(BusinessCard, :count)
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
+        expect(flash[:error]).to eq("指定されたページは存在しません。")
+
+        # JSON形式でも同様に削除できない
+        expect {
+          delete business_card_path(other_card), headers: { 'Accept' => 'application/json' }
+        }.not_to change(BusinessCard, :count)
+
+        expect(response).to redirect_to(root_path)
       end
     end
 
@@ -270,7 +343,7 @@ RSpec.describe "BusinessCards", type: :request do
         }.not_to change(BusinessCard, :count)
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:error]).to eq(I18n.t('business_cards.messages.not_found'))
+        expect(flash[:error]).to eq("指定されたページは存在しません。")
       end
     end
 

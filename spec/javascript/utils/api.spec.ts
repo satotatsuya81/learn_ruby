@@ -1,5 +1,6 @@
 import { apiClient } from '@/utils/api';
 import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
+import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/User';
 
 // テスト用のモック設定
 describe('ApiClient', () => {
@@ -8,17 +9,21 @@ describe('ApiClient', () => {
     // fetchのグローバルモック
     global.fetch = jest.fn();
 
-    // CSRFトークンのモック
-    const mockMetaElement = document.createElement('meta');
-    mockMetaElement.name = 'csrf-token';
-    mockMetaElement.content = 'test-csrf-token';
-    document.head.appendChild(mockMetaElement);
+    // CSRFトークンのモック - document.querySelectorをモック化
+    const mockElement = {
+      content: 'test-csrf-token'
+    } as HTMLMetaElement;
+
+    jest.spyOn(document, 'querySelector').mockImplementation((selector: string) => {
+      if (selector === 'meta[name="csrf-token"]') {
+        return mockElement;
+      }
+      return null;
+    });
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    // DOMをクリーンアップ
-    document.head.innerHTML = '';
+    jest.restoreAllMocks();
   });
 
   describe('getBusinessCards', () => {
@@ -43,6 +48,9 @@ describe('ApiClient', () => {
       // fetchのレスポンスをモック
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
         json: jest.fn().mockResolvedValueOnce(mockBusinessCards)
       });
 
@@ -52,7 +60,7 @@ describe('ApiClient', () => {
       // 期待する結果の検証
       expect(result).toEqual(mockBusinessCards);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/v1/business_cards',
+        '/business_cards',
         expect.objectContaining({
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
@@ -67,6 +75,9 @@ describe('ApiClient', () => {
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
         json: jest.fn().mockResolvedValueOnce(mockBusinessCards)
       });
 
@@ -78,7 +89,7 @@ describe('ApiClient', () => {
       await apiClient.getBusinessCards(searchParams);
 
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/v1/business_cards?query=%E7%94%B0%E4%B8%AD&company_name=%E3%83%86%E3%82%B9%E3%83%88',
+        '/business_cards?query=%E7%94%B0%E4%B8%AD&company_name=%E3%83%86%E3%82%B9%E3%83%88',
         expect.any(Object)
       );
     });
@@ -106,6 +117,9 @@ describe('ApiClient', () => {
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
         json: jest.fn().mockResolvedValueOnce(mockCreatedCard)
       });
 
@@ -113,15 +127,20 @@ describe('ApiClient', () => {
 
       expect(result).toEqual(mockCreatedCard);
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/v1/business_cards',
+        '/business_cards',
         expect.objectContaining({
           method: 'POST',
           body: expect.any(FormData),
           headers: expect.objectContaining({
-            'X-CSRF-Token': 'test-csrf-token'
+            'X-CSRF-Token': 'test-csrf-token',
+            'Accept': 'application/json'
           })
         })
       );
+
+      // Content-Typeが設定されていないことを確認（FormDataの場合）
+      const call = (global.fetch as jest.Mock).mock.calls[0];
+      expect(call[1].headers['Content-Type']).toBeUndefined();
     });
   });
 
@@ -132,6 +151,9 @@ describe('ApiClient', () => {
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
         json: jest.fn().mockResolvedValueOnce({
           error: 'バリデーションエラー',
           details: { name: ['名前は必須です'] }
@@ -154,6 +176,189 @@ describe('ApiClient', () => {
 
       // console.errorのモックを復元
       consoleSpy.mockRestore();
+    });
+  });
+
+  describe('ユーザー関連API', () => {
+    describe('createUser', () => {
+      it('FormDataを使用してユーザー登録のPOSTリクエストを送信する', async () => {
+        const mockUserData: UserRegistrationData = {
+          name: '田中太郎',
+          email: 'tanaka@example.com',
+          password: 'password123',
+          password_confirmation: 'password123'
+        };
+
+        const mockCreatedUser: User = {
+          id: 1,
+          name: '田中太郎',
+          email: 'tanaka@example.com',
+          activated: true,
+          admin: false,
+          created_at: '2025-01-01T00:00:00Z',
+          updated_at: '2025-01-01T00:00:00Z'
+        };
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+          ok: true,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValueOnce(mockCreatedUser)
+        });
+
+        const result = await apiClient.createUser(mockUserData);
+
+        expect(result).toEqual(mockCreatedUser);
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/users',
+          expect.objectContaining({
+            method: 'POST',
+            body: expect.any(FormData),
+            headers: expect.objectContaining({
+              'X-CSRF-Token': 'test-csrf-token',
+              'Accept': 'application/json'
+            })
+          })
+        );
+
+        // FormDataの内容を確認
+        const call = (global.fetch as jest.Mock).mock.calls[0];
+        const formData = call[1].body as FormData;
+        expect(formData.get('user[name]')).toBe('田中太郎');
+        expect(formData.get('user[email]')).toBe('tanaka@example.com');
+        expect(formData.get('user[password]')).toBe('password123');
+        expect(formData.get('user[password_confirmation]')).toBe('password123');
+      });
+    });
+
+    describe('loginUser', () => {
+      it('FormDataを使用してログインのPOSTリクエストを送信する', async () => {
+        const mockLoginData: UserLoginData = {
+          email: 'tanaka@example.com',
+          password: 'password123',
+          remember_me: true
+        };
+
+        const mockUser: User = {
+          id: 1,
+          name: '田中太郎',
+          email: 'tanaka@example.com',
+          activated: true,
+          admin: false,
+          created_at: '2025-01-01T00:00:00Z',
+          updated_at: '2025-01-01T00:00:00Z'
+        };
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+          ok: true,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValueOnce(mockUser)
+        });
+
+        const result = await apiClient.loginUser(mockLoginData);
+
+        expect(result).toEqual(mockUser);
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/login',
+          expect.objectContaining({
+            method: 'POST',
+            body: expect.any(FormData),
+            headers: expect.objectContaining({
+              'X-CSRF-Token': 'test-csrf-token',
+              'Accept': 'application/json'
+            })
+          })
+        );
+
+        // FormDataの内容を確認
+        const call = (global.fetch as jest.Mock).mock.calls[0];
+        const formData = call[1].body as FormData;
+        expect(formData.get('session[email]')).toBe('tanaka@example.com');
+        expect(formData.get('session[password]')).toBe('password123');
+        expect(formData.get('session[remember_me]')).toBe('true');
+      });
+    });
+
+    describe('updateUserProfile', () => {
+      it('JSONを使用してユーザープロフィールのPATCHリクエストを送信する', async () => {
+        const mockUpdateData: UserUpdateData = {
+          name: '田中太郎（更新）',
+          email: 'tanaka_updated@example.com'
+        };
+
+        const mockUpdatedUser: User = {
+          id: 1,
+          name: '田中太郎（更新）',
+          email: 'tanaka_updated@example.com',
+          activated: true,
+          admin: false,
+          created_at: '2025-01-01T00:00:00Z',
+          updated_at: '2025-01-01T01:00:00Z'
+        };
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+          ok: true,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValueOnce(mockUpdatedUser)
+        });
+
+        const result = await apiClient.updateUserProfile(1, mockUpdateData);
+
+        expect(result).toEqual(mockUpdatedUser);
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/users/1',
+          expect.objectContaining({
+            method: 'PATCH',
+            body: JSON.stringify({ user: mockUpdateData }),
+            headers: expect.objectContaining({
+              'X-CSRF-Token': 'test-csrf-token',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            })
+          })
+        );
+      });
+    });
+
+    describe('getCurrentUser', () => {
+      it('現在のユーザー情報を取得するGETリクエストを送信する', async () => {
+        const mockCurrentUser: User = {
+          id: 1,
+          name: '田中太郎',
+          email: 'tanaka@example.com',
+          activated: true,
+          admin: false,
+          created_at: '2025-01-01T00:00:00Z',
+          updated_at: '2025-01-01T00:00:00Z'
+        };
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+          ok: true,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValueOnce(mockCurrentUser)
+        });
+
+        const result = await apiClient.getCurrentUser();
+
+        expect(result).toEqual(mockCurrentUser);
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/current_user',
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-CSRF-Token': 'test-csrf-token',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            })
+          })
+        );
+      });
     });
   });
 });

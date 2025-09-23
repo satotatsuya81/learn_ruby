@@ -1,4 +1,5 @@
-import { BusinessCardFormData } from '@/types/BusinessCard';
+import { BusinessCardFormData } from '../types/BusinessCard';
+import { FormErrors } from '../types/common';
 
 export interface ValidationResult {
     isValid: boolean;        // バリデーション成功/失敗
@@ -8,7 +9,7 @@ export interface ValidationResult {
   // フォーム全体のバリデーション結果
   export interface FormValidationResult {
     isValid: boolean;                    // 全体の成功/失敗
-    errors: Record<string, string>;      // フィールド名をキーとするエラーメッセージ
+    errors: FormErrors;                  // 型安全なエラーメッセージ
   }
 
   // メールアドレスのバリデーション
@@ -113,6 +114,103 @@ export interface ValidationResult {
       if (!websiteValidation.isValid) {
         errors.website = websiteValidation.message;
       }
+    }
+
+    return {
+      isValid: Object.keys(errors).length === 0,
+      errors
+    };
+  }
+
+  // ユーザー名のバリデーション
+  export function validateUserName(name: string): ValidationResult {
+    if (!name || name.trim() === '') {
+      return { isValid: false, message: '名前は必須です' };
+    }
+
+    const trimmedName = name.trim();
+
+    if (trimmedName.length < 2) {
+      return { isValid: false, message: '名前は2文字以上で入力してください' };
+    }
+
+    if (trimmedName.length > 50) {
+      return { isValid: false, message: '名前は50文字以内で入力してください' };
+    }
+
+    return { isValid: true, message: '' };
+  }
+
+  // パスワードのバリデーション
+  export function validatePassword(password: string): ValidationResult {
+    if (!password) {
+      return { isValid: false, message: 'パスワードは必須です' };
+    }
+
+    if (password.length < 6) {
+      return { isValid: false, message: 'パスワードは6文字以上で入力してください' };
+    }
+
+    if (password.length > 100) {
+      return { isValid: false, message: 'パスワードは100文字以内で入力してください' };
+    }
+
+    return { isValid: true, message: '' };
+  }
+
+  // パスワード（確認）のバリデーション
+  export function validatePasswordConfirmation(password: string, confirmation: string): ValidationResult {
+    if (!confirmation) {
+      return { isValid: false, message: 'パスワード（確認）は必須です' };
+    }
+
+    if (password !== confirmation) {
+      return { isValid: false, message: 'パスワードが一致しません' };
+    }
+
+    return { isValid: true, message: '' };
+  }
+
+  // ユーザー登録用メールバリデーション（必須）
+  export function validateUserEmail(email: string): ValidationResult {
+    if (!email || email.trim() === '') {
+      return { isValid: false, message: 'メールアドレスは必須です' };
+    }
+
+    // 既存のvalidateEmailを再利用（ただし必須チェック後）
+    return validateEmail(email);
+  }
+
+  // ユーザー登録フォーム全体のバリデーション
+  export function validateUserRegistration(formData: {
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+  }): FormValidationResult {
+    const errors: Record<string, string> = {};
+
+    const nameValidation = validateUserName(formData.name);
+    if (!nameValidation.isValid) {
+      errors.name = nameValidation.message;
+    }
+
+    const emailValidation = validateUserEmail(formData.email);
+    if (!emailValidation.isValid) {
+      errors.email = emailValidation.message;
+    }
+
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      errors.password = passwordValidation.message;
+    }
+
+    const passwordConfirmationValidation = validatePasswordConfirmation(
+      formData.password,
+      formData.passwordConfirmation
+    );
+    if (!passwordConfirmationValidation.isValid) {
+      errors.passwordConfirmation = passwordConfirmationValidation.message;
     }
 
     return {

@@ -11,10 +11,17 @@ class UsersController < ApplicationController
       # ユーザ登録成功時の処理（例: ログイン、リダイレクトなど）
       @user.activation_email
       flash[:info] = t("users.check_email_for_activation")
-      redirect_to root_url
+
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.json { render json: { message: t("users.check_email_for_activation") }, status: :created }
+      end
     else
       # ユーザ登録失敗時の処理（例: フォームの再表示,精査エラー）
-      render "new", status: :unprocessable_content
+      respond_to do |format|
+        format.html { render "new", status: :unprocessable_content }
+        format.json { render json: { errors: @user.errors.full_messages }, status: :unprocessable_content }
+      end
     end
   end
 

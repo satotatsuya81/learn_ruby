@@ -25,9 +25,9 @@
     it('削除ボタンクリックで削除確認モーダルを表示する', () => {
       render(<BusinessCardList businessCards={mockBusinessCards} />);
 
-      fireEvent.click(screen.getAllByTestId('delete-button')[0]);
+      fireEvent.click(screen.getAllByRole('button', { name: '削除' })[0]);
 
-      expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+      expect(screen.getByText('削除確認')).toBeInTheDocument();
       expect(screen.getByText('以下の名刺を削除してもよろしいですか？')).toBeInTheDocument();
     });
   });

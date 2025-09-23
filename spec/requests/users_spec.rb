@@ -82,7 +82,11 @@ require 'rails_helper'
 
         it "バリデーションエラーが表示されること" do
           post users_path, params: invalid_params
-          expect(response.body).to include('エラー')
+          # React統合後も、バリデーションエラーはdata属性として渡される
+          expect(response.body).to include('data-user-registration-form-errors-value')
+          # 実際のエラーメッセージが含まれることを確認
+          expect(response.body).to include('名前 を入力してください')
+          expect(response.body).to include('メールアドレス は不正な値です')
         end
       end
 
@@ -120,7 +124,11 @@ require 'rails_helper'
 
         it "バリデーションエラーが表示されること" do
           post users_path, params: duplicate_email_params
-          expect(response.body).to include('エラー')
+          # React統合後も、バリデーションエラーはdata属性として渡される
+          expect(response.body).to include('data-user-registration-form-errors-value')
+          # 実際のエラーメッセージが含まれることを確認（翻訳の有無に関わらず）
+          expect(response.body).to include('メールアドレス')
+          expect(response.body).to include('taken')
         end
       end
 

@@ -4,16 +4,21 @@
 // Stimulusコントローラーの自動読み込み設定
 import { application } from "./application";
 
-// 既存のStimulusコントローラーを段階的にTypeScript化する際の
-// import文をここに追加していく予定
-
-// 例：将来のTypeScript Stimulusコントローラー
-// import BusinessCardController from "./business_card_controller"
-// import SearchController from "./search_controller"
+// React統合のためのStimulusコントローラー
+import BusinessCardFormController from "./business_card_form_controller"
+import BusinessCardDetailController from "./business_card_detail_controller"
+import HomePageController from "./home_page_controller"
+import UserProfileController from "./user_profile_controller"
 
 // コントローラーの登録
-// application.register("business-card", BusinessCardController)
-// application.register("search", SearchController)
+application.register("business-card-form", BusinessCardFormController)
+application.register("business-card-detail", BusinessCardDetailController)
+application.register("home-page", HomePageController)
+application.register("user-profile", UserProfileController)
+
+// デバッグモードの設定
+application.debug = true
+window.Stimulus = application
 
 // TypeScript移行完了の目安：
 // - 全てのStimulusコントローラーがTypeScript化されている

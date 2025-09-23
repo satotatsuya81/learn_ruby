@@ -1,6 +1,8 @@
 // TypeScript型安全なAPIクライアント
 // Rails APIとの通信を型安全に行うためのクライアント実装
-import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/BusinessCard';
+import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '../types/BusinessCard';
+import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '../types/User';
+import { HttpHeaders } from '../types/common';
 
 // API通信の標準レスポンス型
 interface ApiResponse<T> {
@@ -18,20 +20,17 @@ interface ApiError {
 // 型安全なAPIクライアントクラス
 class ApiClient {
   private baseUrl: string;
-  private csrfToken: string;
 
   constructor() {
-    // Rails API v1エンドポイントのベースURL
-    this.baseUrl = '/api/v1';
-    // Rails CSRFトークンを取得
-    this.csrfToken = this.getCSRFToken();
+    // Rails APIエンドポイントのベースURL（標準RESTfulルート）
+    this.baseUrl = '';
   }
 
   // HTMLヘッダーからCSRFトークンを取得
   // Railsが自動生成するCSRFトークンを読み取り
   private getCSRFToken(): string {
-    const meta = document.querySelector('meta[name="csrf-token"]');
-    return meta !== null ? (meta as HTMLMetaElement).content : '';
+    const meta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+    return meta?.content || '';
   }
 
   // 型安全なHTTPリクエスト共通メソッド
@@ -40,16 +39,23 @@ class ApiClient {
     endpoint: string,
     options: {
       method?: string;
-      headers?: Record<string, string>;
+      headers?: HttpHeaders;
       body?: BodyInit;
     } = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': this.csrfToken,
+    // CSRFトークンを毎回取得（詳細画面の成功パターンに合わせる）
+    const csrfToken = this.getCSRFToken();
+    const headers: HttpHeaders = {
+      'X-CSRF-Token': csrfToken,
+      'Accept': 'application/json',
       ...options.headers,
     };
+
+    // FormDataでない場合のみContent-Typeを設定
+    if (!(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     try {
       const response = await fetch(url, {
@@ -58,8 +64,27 @@ class ApiClient {
       });
 
       if (!response.ok) {
-        const error = await response.json() as ApiError;
-        throw new Error(error.error || 'API request failed');
+        // レスポンスのContent-Typeを確認
+        const contentType = response.headers.get('content-type');
+
+        if (contentType !== null && contentType.includes('application/json')) {
+          // JSONレスポンスの場合
+          const error = await response.json() as ApiError;
+          throw new Error(error.error || 'API request failed');
+        } else {
+          // HTMLレスポンスの場合（406 Not Acceptableなど）
+          const htmlResponse = await response.text();
+          console.error('Non-JSON response received:', htmlResponse);
+          throw new Error(`Server error (${response.status}): Expected JSON but received HTML. Please check server configuration.`);
+        }
+      }
+
+      // 成功レスポンスもContent-Typeを確認
+      const contentType = response.headers.get('content-type');
+      if (contentType === null || !contentType.includes('application/json')) {
+        const htmlResponse = await response.text();
+        console.error('Non-JSON success response received:', htmlResponse);
+        throw new Error('Expected JSON response but received HTML');
       }
 
       const data = await response.json() as T;
@@ -98,15 +123,9 @@ class ApiClient {
       }
     });
 
-    // FormData使用時はContent-Typeヘッダーを設定しない（ブラウザが自動設定）
-    const headers: Record<string, string> = {
-      'X-CSRF-Token': this.csrfToken,
-    };
-
     const response = await this.request<BusinessCard>('/business_cards', {
       method: 'POST',
       body: formData,
-      headers,
     });
     return response.data;
   }
@@ -128,6 +147,56 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // ユーザー登録API
+  // POSTリクエストで新規ユーザーを作成
+  async createUser(data: UserRegistrationData): Promise<User> {
+    const formData = new FormData();
+    formData.append('user[name]', data.name);
+    formData.append('user[email]', data.email);
+    formData.append('user[password]', data.password);
+    formData.append('user[password_confirmation]', data.password_confirmation);
+
+    const response = await this.request<User>('/users', {
+      method: 'POST',
+      body: formData,
+    });
+    return response.data;
+  }
+
+  // ログインAPI
+  // POSTリクエストでセッションを作成
+  async loginUser(data: UserLoginData): Promise<User> {
+    const formData = new FormData();
+    formData.append('session[email]', data.email);
+    formData.append('session[password]', data.password);
+    if (data.remember_me !== undefined) {
+      formData.append('session[remember_me]', data.remember_me.toString());
+    }
+
+    const response = await this.request<User>('/login', {
+      method: 'POST',
+      body: formData,
+    });
+    return response.data;
+  }
+
+  // ユーザープロフィール更新API
+  // PATCHリクエストで既存ユーザーを更新
+  async updateUserProfile(id: number, data: UserUpdateData): Promise<User> {
+    const response = await this.request<User>(`/users/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ user: data }),
+    });
+    return response.data;
+  }
+
+  // 現在のユーザー情報取得API
+  // GETリクエストで現在ログイン中のユーザー情報を取得
+  async getCurrentUser(): Promise<User> {
+    const response = await this.request<User>('/current_user');
+    return response.data;
+  }
 }
 
 // シングルトンインスタンスをエクスポート
@@ -135,6 +204,7 @@ class ApiClient {
 export const apiClient = new ApiClient();
 
 export const deleteBusinessCard = (id: number): Promise<void> => {
+  console.log("Deleting business card with ID:", id);
   return apiClient.deleteBusinessCard(id);
 };
 
@@ -152,4 +222,21 @@ export const createBusinessCard = (data: BusinessCardFormData): Promise<Business
 
 export const updateBusinessCard = (id: number, data: BusinessCardFormData): Promise<BusinessCard> => {
   return apiClient.updateBusinessCard(id, data);
+};
+
+// ユーザー関連のエクスポート関数
+export const createUser = (data: UserRegistrationData): Promise<User> => {
+  return apiClient.createUser(data);
+};
+
+export const loginUser = (data: UserLoginData): Promise<User> => {
+  return apiClient.loginUser(data);
+};
+
+export const updateUserProfile = (id: number, data: UserUpdateData): Promise<User> => {
+  return apiClient.updateUserProfile(id, data);
+};
+
+export const getCurrentUser = (): Promise<User> => {
+  return apiClient.getCurrentUser();
 };

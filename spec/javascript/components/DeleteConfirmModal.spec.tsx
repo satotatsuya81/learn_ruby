@@ -36,7 +36,7 @@
         );
 
         // モーダルが表示されていないことを確認
-        expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+        expect(screen.queryByText('削除確認')).not.toBeInTheDocument();
       });
 
       it('businessCardがnullの場合はモーダルが表示されない', () => {
@@ -50,7 +50,7 @@
         );
 
         // モーダルが表示されていないことを確認
-        expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+        expect(screen.queryByText('削除確認')).not.toBeInTheDocument();
       });
 
       it('isOpenがtrueかつbusinessCardが存在する場合はモーダルが表示される', () => {
@@ -64,7 +64,6 @@
         );
 
         // モーダルが表示されていることを確認
-        expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
         expect(screen.getByText('削除確認')).toBeInTheDocument();
       });
     });
@@ -101,7 +100,7 @@
         );
 
         // 確認ボタンをクリック
-        fireEvent.click(screen.getByTestId('confirm-button'));
+        fireEvent.click(screen.getByRole('button', { name: '削除' }));
 
         // onConfirmコールバックが1回呼ばれることを確認
         expect(mockOnConfirm).toHaveBeenCalledTimes(1);
@@ -119,7 +118,7 @@
         );
 
         // キャンセルボタンをクリック
-        fireEvent.click(screen.getByTestId('cancel-button'));
+        fireEvent.click(screen.getByRole('button', { name: 'キャンセル' }));
 
         // onCancelコールバックが1回呼ばれることを確認
         expect(mockOnCancel).toHaveBeenCalledTimes(1);

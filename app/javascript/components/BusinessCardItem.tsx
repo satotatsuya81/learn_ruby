@@ -18,7 +18,7 @@ const handleDeleteClick = () => {
 };
 
 return (
-    <div className="card mb-3" data-testid="business-card-item">
+    <div className="card mb-3">
         <div className="card-body">
             {/* 名前を表示 */}
             <h5 className="card-title">{businessCard.name}</h5>
@@ -36,9 +36,9 @@ return (
                 編集
             </a>
             <button
+                type="button"
                 className="btn btn-danger btn-sm"
                 onClick={handleDeleteClick}
-                data-testid="delete-button"
             >
                 削除
             </button>

@@ -80,7 +80,7 @@ RSpec.describe User, type: :model do
       expect(user.authenticate('incorrectpassword')).to be_falsey
     end
 
-    it 'パスワード確認がパスワードと一致しない場合は無効であること' do
+    it 'パスワード（確認）がパスワードと一致しない場合は無効であること' do
       user.password = 'securepassword'
       user.password_confirmation = 'differentpassword'
       expect(user).not_to be_valid
