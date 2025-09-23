@@ -42,7 +42,7 @@ class ApiClient {
       headers?: HttpHeaders;
       body?: BodyInit;
     } = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     // CSRFトークンを毎回取得（詳細画面の成功パターンに合わせる）
     const csrfToken = this.getCSRFToken();
@@ -87,8 +87,8 @@ class ApiClient {
         throw new Error('Expected JSON response but received HTML');
       }
 
-      const data = await response.json() as T;
-      return { data, success: true };
+      const apiResponse = await response.json() as ApiResponse<T>;
+      return apiResponse.data;
     } catch (error) {
       console.error('API Error:', error);
       throw error;
@@ -100,15 +100,13 @@ class ApiClient {
   async getBusinessCards(params?: BusinessCardSearchParams): Promise<BusinessCard[]> {
     const queryString = params ? new URLSearchParams(params as Record<string, string>).toString() : '';
     const endpoint = `/business_cards${queryString ? `?${queryString}` : ''}`;
-    const response = await this.request<BusinessCard[]>(endpoint);
-    return response.data;
+    return await this.request<BusinessCard[]>(endpoint);
   }
 
   // 単一名刺取得API
   // 指定されたIDの名刺データを型安全に取得
   async getBusinessCard(id: number): Promise<BusinessCard> {
-    const response = await this.request<BusinessCard>(`/business_cards/${id}`);
-    return response.data;
+    return await this.request<BusinessCard>(`/business_cards/${id}`);
   }
 
     // 名刺作成API - FormData対応
@@ -123,21 +121,19 @@ class ApiClient {
       }
     });
 
-    const response = await this.request<BusinessCard>('/business_cards', {
+    return await this.request<BusinessCard>('/business_cards', {
       method: 'POST',
       body: formData,
     });
-    return response.data;
   }
 
   // 名刺更新API
   // PATCHリクエストで既存名刺を更新
   async updateBusinessCard(id: number, data: BusinessCardFormData): Promise<BusinessCard> {
-    const response = await this.request<BusinessCard>(`/business_cards/${id}`, {
+    return await this.request<BusinessCard>(`/business_cards/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ business_card: data }),
     });
-    return response.data;
   }
 
   // 名刺削除API
@@ -157,11 +153,10 @@ class ApiClient {
     formData.append('user[password]', data.password);
     formData.append('user[password_confirmation]', data.password_confirmation);
 
-    const response = await this.request<User>('/users', {
+    return await this.request<User>('/users', {
       method: 'POST',
       body: formData,
     });
-    return response.data;
   }
 
   // ログインAPI
@@ -174,28 +169,25 @@ class ApiClient {
       formData.append('session[remember_me]', data.remember_me.toString());
     }
 
-    const response = await this.request<User>('/login', {
+    return await this.request<User>('/login', {
       method: 'POST',
       body: formData,
     });
-    return response.data;
   }
 
   // ユーザープロフィール更新API
   // PATCHリクエストで既存ユーザーを更新
   async updateUserProfile(id: number, data: UserUpdateData): Promise<User> {
-    const response = await this.request<User>(`/users/${id}`, {
+    return await this.request<User>(`/users/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ user: data }),
     });
-    return response.data;
   }
 
   // 現在のユーザー情報取得API
   // GETリクエストで現在ログイン中のユーザー情報を取得
   async getCurrentUser(): Promise<User> {
-    const response = await this.request<User>('/current_user');
-    return response.data;
+    return await this.request<User>('/current_user');
   }
 }
 

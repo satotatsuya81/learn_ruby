@@ -51,7 +51,7 @@ describe('ApiClient', () => {
         headers: {
           get: jest.fn().mockReturnValue('application/json')
         },
-        json: jest.fn().mockResolvedValueOnce(mockBusinessCards)
+        json: jest.fn().mockResolvedValueOnce({ data: mockBusinessCards, success: true })
       });
 
       // APIクライアントのメソッドを呼び出し
@@ -78,7 +78,7 @@ describe('ApiClient', () => {
         headers: {
           get: jest.fn().mockReturnValue('application/json')
         },
-        json: jest.fn().mockResolvedValueOnce(mockBusinessCards)
+        json: jest.fn().mockResolvedValueOnce({ data: mockBusinessCards, success: true })
       });
 
       const searchParams = {
@@ -120,7 +120,7 @@ describe('ApiClient', () => {
         headers: {
           get: jest.fn().mockReturnValue('application/json')
         },
-        json: jest.fn().mockResolvedValueOnce(mockCreatedCard)
+        json: jest.fn().mockResolvedValueOnce({ data: mockCreatedCard, success: true })
       });
 
       const result = await apiClient.createBusinessCard(mockFormData);
@@ -204,7 +204,7 @@ describe('ApiClient', () => {
           headers: {
             get: jest.fn().mockReturnValue('application/json')
           },
-          json: jest.fn().mockResolvedValueOnce(mockCreatedUser)
+          json: jest.fn().mockResolvedValueOnce({ data: mockCreatedUser, success: true })
         });
 
         const result = await apiClient.createUser(mockUserData);
@@ -255,7 +255,7 @@ describe('ApiClient', () => {
           headers: {
             get: jest.fn().mockReturnValue('application/json')
           },
-          json: jest.fn().mockResolvedValueOnce(mockUser)
+          json: jest.fn().mockResolvedValueOnce({ data: mockUser, success: true })
         });
 
         const result = await apiClient.loginUser(mockLoginData);
@@ -304,7 +304,7 @@ describe('ApiClient', () => {
           headers: {
             get: jest.fn().mockReturnValue('application/json')
           },
-          json: jest.fn().mockResolvedValueOnce(mockUpdatedUser)
+          json: jest.fn().mockResolvedValueOnce({ data: mockUpdatedUser, success: true })
         });
 
         const result = await apiClient.updateUserProfile(1, mockUpdateData);
@@ -342,7 +342,7 @@ describe('ApiClient', () => {
           headers: {
             get: jest.fn().mockReturnValue('application/json')
           },
-          json: jest.fn().mockResolvedValueOnce(mockCurrentUser)
+          json: jest.fn().mockResolvedValueOnce({ data: mockCurrentUser, success: true })
         });
 
         const result = await apiClient.getCurrentUser();
