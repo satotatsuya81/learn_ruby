@@ -37,9 +37,9 @@
 ## 実装手順（TDD）
 ### 1. テスト作成フェーズ
 - [×] `spec/javascript/store/slices/businessCardsSlice.test.ts` - Business Cards Sliceのテスト
-- [ ] `spec/javascript/store/slices/uiSlice.test.ts` - UI Sliceのテスト
-- [ ] `spec/javascript/hooks/useAppDispatch.test.ts` - カスタムhookのテスト
-- [ ] `spec/javascript/hooks/useAppSelector.test.ts` - カスタムhookのテスト
+- [×] `spec/javascript/store/slices/uiSlice.test.ts` - UI Sliceのテスト
+- [×] `spec/javascript/hooks/useAppDispatch.test.ts` - カスタムhookのテスト
+- [×] `spec/javascript/hooks/useAppSelector.test.ts` - カスタムhookのテスト
 - [ ] `spec/javascript/utils/api.test.ts` - API通信ユーティリティのテスト
 - [ ] テストが失敗することを確認
 
@@ -49,7 +49,7 @@
 - [×] Redux store の設定と初期化
 - [×] Business Cards Slice の実装（CRUD操作）
 - [×] UI Slice の実装（ローディング状態、エラー状態）
-- [ ] 型安全なカスタムhooksの実装
+- [×] 型安全なカスタムhooksの実装
 - [ ] API通信ユーティリティの実装
 - [ ] 既存Reactコンポーネントとの連携
 
