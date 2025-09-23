@@ -132,7 +132,7 @@ RSpec.describe "User Authentication", type: :system, js: true do
           click_button I18n.t('navigation.logout')
 
           # ホームページにリダイレクトされることを確認
-          expect(current_path).to eq(login_path, wait: 10)
+          expect(current_path).to eq(login_path)
           expect(page).to have_link(I18n.t('navigation.login'))
           expect(page).not_to have_button(I18n.t('navigation.logout'))
         end
