@@ -278,7 +278,7 @@ describe('ApiClient', () => {
         const formData = call[1].body as FormData;
         expect(formData.get('session[email]')).toBe('tanaka@example.com');
         expect(formData.get('session[password]')).toBe('password123');
-        expect(formData.get('session[remember_me]')).toBe('true');
+        expect(formData.get('session[remember_me]')).toBe('1');
       });
     });
 

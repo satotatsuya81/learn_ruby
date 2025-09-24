@@ -28,8 +28,7 @@ RSpec.describe "BusinessCards", type: :request do
         expect(response.content_type).to eq('application/json; charset=utf-8')
 
         json_response = JSON.parse(response.body)
-        expect(json_response).to have_key('business_cards')
-        names = json_response['business_cards'].map { |card| card['name'] }
+        names = json_response['data'].map { |card| card['name'] }
         expect(names).to include(user_business_card.name)
         expect(names).not_to include(other_user_business_card.name)
       end
