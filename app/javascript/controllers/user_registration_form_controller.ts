@@ -32,7 +32,6 @@ export default class extends Controller<HTMLElement> {
     try {
       console.log("UserRegistrationForm component mounting...")
 
-      // React 18の新しいAPI使用
       const root = createRoot(this.element)
 
       root.render(

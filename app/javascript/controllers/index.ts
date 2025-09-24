@@ -20,9 +20,4 @@ application.register("user-profile", UserProfileController)
 application.debug = true
 window.Stimulus = application
 
-// TypeScript移行完了の目安：
-// - 全てのStimulusコントローラーがTypeScript化されている
-// - 型安全なDOMアクセスが実装されている
-// - イベントハンドリングが型定義されている
-
 export { application };

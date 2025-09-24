@@ -61,10 +61,22 @@ RSpec.describe "BusinessCards", type: :request do
       end
 
       it '自分の名刺の詳細ページが表示されること' do
+        # HTML形式
         get business_card_path(user_business_card)
         expect(response).to have_http_status(200)
         expect(response.body).to include(user_business_card.name)
         expect(response.body).to include(user_business_card.company_name)
+
+        # JSON形式
+        get business_card_path(user_business_card), headers: { 'Accept' => 'application/json' }
+        expect(response).to have_http_status(200)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+
+        json_response = JSON.parse(response.body)
+        expect(json_response['success']).to be true
+        expect(json_response['data']['id']).to eq(user_business_card.id)
+        expect(json_response['data']['name']).to eq(user_business_card.name)
+        expect(json_response['data']['company_name']).to eq(user_business_card.company_name)
       end
 
       it '他人の名刺の詳細ページにアクセスするとトップページにリダイレクトされること' do

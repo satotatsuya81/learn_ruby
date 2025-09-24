@@ -35,6 +35,19 @@ class UsersController < ApplicationController
     redirect_to root_url
   end
 
+  # 現在ログイン中のユーザー情報を返すAPI（TypeScript フロントエンド用）
+  def current
+    if logged_in?
+      respond_to do |format|
+        format.json { render json: { data: current_user, success: true } }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: { success: false, error: 'Not authenticated' }, status: :unauthorized }
+      end
+    end
+  end
+
   private
 
   # Strong Parameters：許可するパラメータを限定

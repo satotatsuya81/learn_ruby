@@ -20,6 +20,11 @@ class BusinessCardsController < ApplicationController
                                 .where(company_name: @business_card.company_name)
                                 .where.not(id: @business_card.id)
                                 .limit(3)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { data: @business_card, success: true } }
+    end
   end
 
   # GET /business_cards/new
@@ -35,11 +40,16 @@ class BusinessCardsController < ApplicationController
 
     if @business_card.save
       flash[:success] = t("business_cards.messages.created_successfully")
-      # 成功時: 名刺一覧ページにリダイレクト & 成功メッセージ表示
-      redirect_to business_cards_path
+
+      respond_to do |format|
+        format.html { redirect_to business_cards_path }
+        format.json { render json: { data: @business_card, success: true, message: t("business_cards.messages.created_successfully") } }
+      end
     else
-      # 失敗時: 新規作成フォームを再表示（エラーメッセージ付き）
-      render :new, status: :unprocessable_content
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: { success: false, errors: @business_card.errors.full_messages }, status: :unprocessable_content }
+      end
     end
   end
 
@@ -56,13 +66,13 @@ class BusinessCardsController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_to @business_card }
-        format.json { render json: { success: true, business_card: @business_card } }
+        format.json { render json: { data: @business_card, success: true, message: t("business_cards.messages.updated_successfully") } }
       end
     else
       # 失敗時: 編集フォームを再表示（エラーメッセージ付き）
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: { success: false, errors: @business_card.errors.full_messages }, status: :unprocessable_contents }
+        format.json { render json: { success: false, errors: @business_card.errors.full_messages }, status: :unprocessable_content }
       end
     end
   end
@@ -85,7 +95,7 @@ class BusinessCardsController < ApplicationController
           flash[:alert] = t("business_cards.messages.delete_failed")
           redirect_to business_cards_path
         end
-        format.json { render json: { success: false, errors: @business_card.errors.full_messages }, status: :unprocessable_contents }
+        format.json { render json: { success: false, errors: @business_card.errors.full_messages }, status: :unprocessable_content }
       end
     end
   end

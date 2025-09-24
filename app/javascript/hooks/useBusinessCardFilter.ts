@@ -30,7 +30,6 @@ export const useBusinessCardFilter = (
     job_title: ''
   });
 
-  // Eight記事の動的プロパティ管理パターン
   const updateFilter = useCallback(<K extends keyof FilterBase>(
     key: K,
     value: FilterBase[K]

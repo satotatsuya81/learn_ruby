@@ -50,7 +50,6 @@ export default class extends Controller {
       console.log("Starting React component mount...");
       console.log("Creating root for element:", this.element);
 
-      // React 18の新しいcreateRoot APIを使用
       this.root = createRoot(this.element);
       console.log("Root created successfully");
 

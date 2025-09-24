@@ -3,7 +3,6 @@ import React from "react"
 import { createRoot } from "react-dom/client"
 import LoginForm from "@/components/LoginForm"
 
-// Rails 8 + React 18 + TypeScript統合
 // Stimulusコントローラー: ログインフォーム
 export default class extends Controller<HTMLElement> {
   static values = {
@@ -32,7 +31,6 @@ export default class extends Controller<HTMLElement> {
     try {
       console.log("LoginForm component mounting...")
 
-      // React 18の新しいAPI使用
       const root = createRoot(this.element)
 
       root.render(

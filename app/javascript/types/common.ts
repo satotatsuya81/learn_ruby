@@ -54,14 +54,7 @@ export interface AppConfig {
   environment?: 'development' | 'test' | 'production';
 }
 
-// API response wrapper for consistent error handling
-export interface ApiResponse<T = unknown> {
-  data?: T;
-  error?: string;
-  errors?: ValidationErrors;
-  message?: string;
-  status: number;
-}
+// Removed: ApiResponse is now centralized in api.ts
 
 // Filter state for business card filtering
 export interface FilterState {

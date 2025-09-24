@@ -1,6 +1,7 @@
 import { apiClient } from '@/utils/api';
 import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
 import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/user';
+import { ApiError } from '@/types/api';
 
 // テスト用のモック設定
 describe('ApiClient', () => {
@@ -177,6 +178,84 @@ describe('ApiClient', () => {
       // console.errorのモックを復元
       consoleSpy.mockRestore();
     });
+
+    it('タイムアウトエラーで適切なApiErrorを投げる', async () => {
+      // テスト中のconsole.errorを一時的に抑制
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      // AbortErrorをシミュレート
+      const abortError = new Error('The user aborted a request');
+      abortError.name = 'AbortError';
+      (global.fetch as jest.Mock).mockRejectedValueOnce(abortError);
+
+      try {
+        await apiClient.getBusinessCards();
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect((error as ApiError).message).toBe('Request timeout');
+        expect((error as ApiError).status).toBe(408);
+      }
+
+      // console.errorのモックを復元
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('型定義の検証', () => {
+    it('BusinessCardApiResponseの型が正しく動作する', async () => {
+      const mockBusinessCard: BusinessCard = {
+        id: 1,
+        name: '田中太郎',
+        company_name: '株式会社テスト',
+        created_at: '2025-01-01T00:00:00Z',
+        updated_at: '2025-01-01T00:00:00Z',
+        user_id: 1
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
+        json: jest.fn().mockResolvedValueOnce({ data: mockBusinessCard, success: true })
+      });
+
+      const result = await apiClient.getBusinessCard(1);
+
+      // TypeScriptの型チェックが実行時に適用されることを確認
+      expect(result).toEqual(mockBusinessCard);
+      expect(typeof result.id).toBe('number');
+      expect(typeof result.name).toBe('string');
+      expect(typeof result.company_name).toBe('string');
+    });
+
+    it('UserApiResponseの型が正しく動作する', async () => {
+      const mockUser: User = {
+        id: 1,
+        name: '田中太郎',
+        email: 'tanaka@example.com',
+        activated: true,
+        admin: false,
+        created_at: '2025-01-01T00:00:00Z',
+        updated_at: '2025-01-01T00:00:00Z'
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json')
+        },
+        json: jest.fn().mockResolvedValueOnce({ data: mockUser, success: true })
+      });
+
+      const result = await apiClient.getCurrentUser();
+
+      // TypeScriptの型チェックが実行時に適用されることを確認
+      expect(result).toEqual(mockUser);
+      expect(typeof result.id).toBe('number');
+      expect(typeof result.name).toBe('string');
+      expect(typeof result.email).toBe('string');
+    });
   });
 
   describe('ユーザー関連API', () => {
@@ -283,7 +362,7 @@ describe('ApiClient', () => {
     });
 
     describe('updateUserProfile', () => {
-      it('JSONを使用してユーザープロフィールのPATCHリクエストを送信する', async () => {
+      it('FormDataを使用してユーザープロフィールのPATCHリクエストを送信する', async () => {
         const mockUpdateData: UserUpdateData = {
           name: '田中太郎（更新）',
           email: 'tanaka_updated@example.com'
@@ -314,14 +393,22 @@ describe('ApiClient', () => {
           '/users/1',
           expect.objectContaining({
             method: 'PATCH',
-            body: JSON.stringify({ user: mockUpdateData }),
+            body: expect.any(FormData),
             headers: expect.objectContaining({
               'X-CSRF-Token': 'test-csrf-token',
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Accept': 'application/json'
             })
           })
         );
+
+        // FormDataの内容を確認
+        const call = (global.fetch as jest.Mock).mock.calls[0];
+        const formData = call[1].body as FormData;
+        expect(formData.get('user[name]')).toBe('田中太郎（更新）');
+        expect(formData.get('user[email]')).toBe('tanaka_updated@example.com');
+
+        // Content-Typeが設定されていないことを確認（FormDataの場合）
+        expect(call[1].headers['Content-Type']).toBeUndefined();
       });
     });
 
