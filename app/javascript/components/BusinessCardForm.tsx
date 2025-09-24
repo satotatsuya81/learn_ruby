@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BusinessCard, BusinessCardFormData } from '@/types/BusinessCard';
+import { FlashMessage } from '@/components/FlashMessage';
 
 interface BusinessCardFormProps {
   mode: 'create' | 'edit';
@@ -110,23 +111,27 @@ export const BusinessCardForm: React.FC<BusinessCardFormProps> = ({
       <form onSubmit={handleSubmit}>
         {/* エラーメッセージ表示 */}
         {errors.general && (
-          <div className="alert alert-danger" role="alert">
-            {errors.general}
-          </div>
+          <FlashMessage
+            message={errors.general}
+            type="danger"
+            onClose={() => setErrors(prev => ({ ...prev, general: '' }))}
+            autoClose={false}
+          />
         )}
 
         {/* バリデーションエラーがある場合の全体エラーメッセージ */}
         {Object.keys(errors).filter(key => key !== 'general').length > 0 && (
-          <div className="alert alert-danger" role="alert">
-            <strong>入力エラーが発生しました:</strong>
-            <ul className="mb-0 mt-2">
-              {Object.entries(errors)
+          <FlashMessage
+            message={[
+              '入力エラーが発生しました:',
+              ...Object.entries(errors)
                 .filter(([key]) => key !== 'general')
-                .map(([key, message]) => (
-                  <li key={key}>{message}</li>
-                ))}
-            </ul>
-          </div>
+                .map(([, message]) => `• ${message}`)
+            ]}
+            type="danger"
+            onClose={() => setErrors({ general: '' })}
+            autoClose={false}
+          />
         )}
 
         {/* 必須項目 */}

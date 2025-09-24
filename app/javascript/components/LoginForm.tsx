@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { UserLoginData } from '@/types/user';
+import { FlashMessage } from '@/components/FlashMessage';
 
 interface LoginFormProps {
   loginPath: string;
@@ -74,17 +75,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ newPasswordResetPath }) => {
 
               {/* エラーメッセージ表示 */}
               {errors.length > 0 && (
-                <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                  {errors.map((error, index) => (
-                    <div key={index}>{error}</div>
-                  ))}
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setErrors([])}
-                    aria-label="Close"
-                  ></button>
-                </div>
+                <FlashMessage
+                  message={errors}
+                  type="danger"
+                  onClose={() => setErrors([])}
+                  autoClose={false}
+                />
               )}
 
               <form onSubmit={handleSubmit} className="needs-validation" noValidate>

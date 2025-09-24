@@ -16,6 +16,7 @@
       searchQuery: '',
       loading: false,
       error: null,
+      successMessage: null,
     }
 
     // テスト用のモックデータ（BusinessCard型に準拠）

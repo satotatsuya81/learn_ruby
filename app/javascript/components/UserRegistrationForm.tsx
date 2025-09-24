@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { UserRegistrationData } from '@/types/user';
+import { FlashMessage } from '@/components/FlashMessage';
 import { validateUserRegistration } from '@/utils/validation';
 
 interface UserRegistrationFormProps {
@@ -124,15 +125,12 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({ signupPath,
 
               {/* 全般エラーメッセージ */}
               {generalError && (
-                <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                  {generalError}
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setGeneralError('')}
-                    aria-label="Close"
-                  ></button>
-                </div>
+                <FlashMessage
+                  message={generalError}
+                  type="danger"
+                  onClose={() => setGeneralError('')}
+                  autoClose={false}
+                />
               )}
 
               <form onSubmit={handleSubmit} className="needs-validation" noValidate>

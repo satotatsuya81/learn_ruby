@@ -7,12 +7,7 @@
         <h4 class="card-title mb-0"><%= t('password_resets.reset_password') %></h4>
       </div>
       <div class="card-body">
-        <% flash.each do |type, message| %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <%= message %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        <% end %>
+        <%= render 'shared/flash_messages' %>
 
         <%= form_with(url: password_resets_path, scope: :password_reset, local: true, class: "form") do |f| %>
           <div class="mb-3">

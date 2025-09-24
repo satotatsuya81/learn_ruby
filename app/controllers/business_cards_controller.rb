@@ -9,7 +9,7 @@ class BusinessCardsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: { business_cards: @business_cards } }
+      format.json { render json: { data: @business_cards, success: true } }
     end
   end
 

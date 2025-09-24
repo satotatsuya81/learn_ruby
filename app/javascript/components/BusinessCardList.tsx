@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { BusinessCard } from '@/types/BusinessCard';
 import { BusinessCardItem } from '@/components/BusinessCardItem';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
+import { FlashMessage } from '@/components/FlashMessage';
 import { useModal } from '@/hooks/useModal';
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import type { RootState } from '@/store';
 import {
   fetchBusinessCards,
   deleteBusinessCard as deleteBusinessCardAction,
-  setSearchQuery
+  setSearchQuery,
+  clearSuccessMessage,
+  clearError
 } from '@/store/slices/businessCardsSlice';
 
 // Redux状態管理を使用するため、propsは不要
@@ -24,7 +27,8 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
     filteredCards,
     searchQuery,
     loading,
-    error
+    error,
+    successMessage
   } = useAppSelector((state: RootState) => state.businessCards);
 
   const {
@@ -35,13 +39,14 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
   } = useModal<BusinessCard>();
 
   useEffect(() => {
-    if (cards.length === 0 && !loading) {
+    if (cards && cards.length === 0 && !loading) {
       dispatch(fetchBusinessCards());
     }
-  }, [dispatch, cards.length, loading]);
+  }, [dispatch, cards?.length, loading]);
+
 
   const handleDeleteClick = (id: number) => {
-    const card = filteredCards.find((bc: BusinessCard) => bc.id === id);
+    const card = filteredCards?.find((bc: BusinessCard) => bc.id === id);
     if (card) {
       openDeleteModal(card);
     }
@@ -72,6 +77,14 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
   const handleClearFilter = () => {
     dispatch(setSearchQuery(''));
   };
+
+  const handleClearError = useCallback(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  const handleClearSuccess = useCallback(() => {
+    dispatch(clearSuccessMessage());
+  }, [dispatch]);
 
   if (loading) {
     return (
@@ -113,12 +126,24 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
 
       <div className="business-card-list">
         {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
+          <FlashMessage
+            message={error}
+            type="danger"
+            onClose={handleClearError}
+            autoClose={false}
+          />
         )}
 
-        {filteredCards.length === 0 ? (
+        {successMessage && (
+          <FlashMessage
+            message={successMessage}
+            type="success"
+            onClose={handleClearSuccess}
+            autoClose={true}
+          />
+        )}
+
+        {!filteredCards || filteredCards.length === 0 ? (
           <div className="text-center py-5">
             <div className="text-muted">
               {searchQuery
@@ -137,7 +162,7 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
           </div>
         ) : (
           <div className="row">
-            {filteredCards.map((businessCard: BusinessCard) => (
+            {filteredCards?.map((businessCard: BusinessCard) => (
               <div key={businessCard.id} className="col-md-6 col-lg-4 mb-3">
                 <BusinessCardItem
                   businessCard={businessCard}

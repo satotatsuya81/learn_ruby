@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, UserUpdateData } from '@/types/user';
+import { FlashMessage } from '@/components/FlashMessage';
 
 interface UserProfileProps {
   user: User;
@@ -125,9 +126,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       <div className="card-body">
         {/* エラーメッセージ表示 */}
         {errors.general && (
-          <div className="alert alert-danger" role="alert">
-            {errors.general}
-          </div>
+          <FlashMessage
+            message={errors.general}
+            type="danger"
+            onClose={() => setErrors(prev => ({ ...prev, general: '' }))}
+            autoClose={false}
+          />
         )}
 
         {!isEditing ? (

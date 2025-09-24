@@ -166,7 +166,8 @@ class ApiClient {
     formData.append('session[email]', data.email);
     formData.append('session[password]', data.password);
     if (data.remember_me !== undefined) {
-      formData.append('session[remember_me]', data.remember_me.toString());
+      // remember_meの値は"1"または何も送信しない形式に変更
+      formData.append('session[remember_me]', data.remember_me ? '1' : '0');
     }
 
     return await this.request<User>('/login', {

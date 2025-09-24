@@ -11,6 +11,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
     searchQuery: string             // 検索クエリ
     loading: boolean                // ローディング状態
     error: string | null            // エラーメッセージ
+    successMessage: string | null   // 成功メッセージ
   }
 
   // 初期状態の定義（テストの期待値と完全一致）
@@ -20,6 +21,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
     searchQuery: '',
     loading: false,
     error: null,
+    successMessage: null,
   }
 
   // 非同期アクション: 名刺データの取得
@@ -84,6 +86,10 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
       clearError: (state) => {
         state.error = null
       },
+      // 成功メッセージのクリア
+      clearSuccessMessage: (state) => {
+        state.successMessage = null
+      },
     },
     extraReducers: (builder) => {
       builder
@@ -120,10 +126,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
         .addCase(deleteBusinessCard.fulfilled, (state, action: PayloadAction<number>) => {
           state.cards = state.cards.filter((card: BusinessCard) => card.id !== action.payload)
           state.filteredCards = state.filteredCards.filter((card: BusinessCard) => card.id !== action.payload)
+          state.successMessage = '名刺を削除しました'
+          state.error = null
         })
     },
   })
 
  // アクションとリデューサーをエクスポート
-export const { setSearchQuery, clearError } = businessCardsSlice.actions
+export const { setSearchQuery, clearError, clearSuccessMessage } = businessCardsSlice.actions
 export default businessCardsSlice.reducer

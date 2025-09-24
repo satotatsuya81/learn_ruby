@@ -6,13 +6,7 @@
     <%= link_to t('business_cards.show.new'), new_business_card_path, class: "btn btn-primary" %>
   </div>
 
-  <!-- 成功メッセージ -->
-  <% if notice %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <%= notice %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% end %>
+  <!-- フラッシュメッセージはReactコンポーネント内で管理 -->
 
   <!-- React BusinessCardList コンポーネント -->
   <div id="business-card-list-root"
