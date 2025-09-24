@@ -3,6 +3,9 @@
 import { BusinessCard, BusinessCardFormData, BusinessCardSearchParams } from '@/types/BusinessCard';
 import { User, UserRegistrationData, UserLoginData, UserUpdateData } from '@/types/user';
 import { HttpHeaders } from '@/types/common';
+
+// FormData作成で使用される型の統合型
+type FormDataInput = BusinessCardFormData | UserRegistrationData | UserLoginData | UserUpdateData | Record<string, unknown>;
 import {
   ApiSuccessResponse,
   ApiErrorResponse,
@@ -31,7 +34,7 @@ class ApiClient {
 
   // FormDataオブジェクト作成のための共通ヘルパー
   // Rails規約に従ったネストパラメータ形式でFormDataを作成
-  private createFormData(data: Record<string, any>, prefix = ''): FormData {
+  private createFormData(data: FormDataInput, prefix = ''): FormData {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -73,7 +76,7 @@ class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
       controller.abort();
-    }, options.timeout || 30000); // デフォルト30秒
+    }, options.timeout ?? 30000); // デフォルト30秒
 
     try {
       const response = await fetch(url, {

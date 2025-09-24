@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       end
     else
       respond_to do |format|
-        format.json { render json: { success: false, error: 'Not authenticated' }, status: :unauthorized }
+        format.json { render json: { success: false, error: "Not authenticated" }, status: :unauthorized }
       end
     end
   end
