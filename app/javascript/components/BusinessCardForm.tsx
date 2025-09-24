@@ -6,14 +6,17 @@ interface BusinessCardFormProps {
   businessCard?: BusinessCard;
   onSubmit: (formData: BusinessCardFormData) => Promise<void>;
   onCancel: () => void;
+  loading?: boolean;
 }
 
 export const BusinessCardForm: React.FC<BusinessCardFormProps> = ({
   mode,
   businessCard,
   onSubmit,
-  onCancel
+  onCancel,
+  loading = false
 }) => {
+
   // フォームデータの初期値設定
   const [formData, setFormData] = useState<BusinessCardFormData>({
     name: businessCard?.name || '',
@@ -28,7 +31,6 @@ export const BusinessCardForm: React.FC<BusinessCardFormProps> = ({
     notes: businessCard?.notes || ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // 入力フィールドの変更処理
@@ -91,14 +93,10 @@ export const BusinessCardForm: React.FC<BusinessCardFormProps> = ({
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
       await onSubmit(formData);
     } catch (error) {
       setErrors({ general: error instanceof Error ? error.message : 'フォームの送信に失敗しました' });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -282,15 +280,15 @@ export const BusinessCardForm: React.FC<BusinessCardFormProps> = ({
           <button
             type="submit"
             className="btn btn-primary me-2"
-            disabled={isSubmitting}
+            disabled={loading}
           >
-            {isSubmitting ? '送信中...' : (mode === 'create' ? '名刺を作成' : '名刺を更新')}
+            {loading ? '送信中...' : (mode === 'create' ? '名刺を作成' : '名刺を更新')}
           </button>
           <button
             type="button"
             className="btn btn-secondary"
             onClick={handleCancel}
-            disabled={isSubmitting}
+            disabled={loading}
           >
             キャンセル
           </button>

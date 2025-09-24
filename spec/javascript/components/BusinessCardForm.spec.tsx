@@ -1,20 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BusinessCardForm } from '@/components/BusinessCardForm';
 import { BusinessCard } from '@/types//BusinessCard';
-
-// APIモックの設定
-const mockCreateBusinessCard = jest.fn();
-const mockUpdateBusinessCard = jest.fn();
-
-jest.mock('@/utils/api', () => ({
-  createBusinessCard: mockCreateBusinessCard,
-  updateBusinessCard: mockUpdateBusinessCard,
-}));
+import { BusinessCardForm } from '@/components/BusinessCardForm';
 
 describe('BusinessCardForm', () => {
   const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
   const mockOnCancel = jest.fn();
+
 
   const existingCard: BusinessCard = {
     id: 1,
@@ -34,8 +26,6 @@ describe('BusinessCardForm', () => {
   };
 
   beforeEach(() => {
-    mockCreateBusinessCard.mockClear();
-    mockUpdateBusinessCard.mockClear();
     mockOnSubmit.mockClear();
     mockOnCancel.mockClear();
   });
@@ -287,30 +277,21 @@ describe('BusinessCardForm', () => {
   });
 
   describe('ローディング状態', () => {
-    it('送信中はボタンが無効化される', async () => {
-      const user = userEvent.setup();
-
-      // 遅延するmockOnSubmitを作成
-      const slowMockOnSubmit = jest.fn(() => new Promise<void>(resolve => setTimeout(resolve, 100)));
-
+    it('loading=trueの時にボタンが無効化される', () => {
       render(
         <BusinessCardForm
           mode="create"
-          onSubmit={slowMockOnSubmit}
+          onSubmit={mockOnSubmit}
           onCancel={mockOnCancel}
+          loading={true}
         />
       );
 
-      await user.type(screen.getByLabelText('名前'), '田中太郎');
-      await user.type(screen.getByLabelText('会社名'), 'テスト株式会社');
+      const submitButton = screen.getByRole('button', { name: '送信中...' });
+      const cancelButton = screen.getByRole('button', { name: 'キャンセル' });
 
-      const submitButton = screen.getByRole('button', { name: /名刺を/ });
-      await user.click(submitButton);
-
-      // ローディング中の確認
-      await waitFor(() => {
-        expect(submitButton).toBeDisabled();
-      });
+      expect(submitButton).toBeDisabled();
+      expect(cancelButton).toBeDisabled();
     });
   });
 });

@@ -13,6 +13,10 @@ import "bootstrap";
 // デバッグユーティリティ
 import { initializeDebug } from "@/utils/debug";
 
+// Redux関連のインポートを追加
+import { Provider } from 'react-redux';
+import { store } from '@/store';
+
 // TypeScript型定義をアプリケーション全体で利用可能にする
 export * from "@/types/BusinessCard";
 export * from "@/utils/api";
@@ -72,6 +76,12 @@ function initializeApplication() {
   // StimulusをグローバルからアクセスできるようにExport
   (window as any).Stimulus = application;
 
+  // Redux store をグローバルからアクセスできるようにExport（開発時のデバッグ用）
+  if (process.env.NODE_ENV !== 'production') {
+    (window as any).ReduxStore = store;
+    console.log("🔧 Redux store available at window.ReduxStore");
+  }
+
   // アプリケーション初期化完了ログ
   console.log("=== INITIALIZATION COMPLETE ===");
   console.log("TypeScript Application with React initialized successfully");
@@ -102,11 +112,16 @@ async function mountBusinessCardList(container: HTMLElement) {
     const { createRoot } = await import('react-dom/client');
     const { BusinessCardList } = await import('@/components/BusinessCardList');
 
-    // Redux状態管理を使用するため、propsは不要
+    // Redux Provider でラップしたコンポーネントをレンダリング
     const root = createRoot(container);
-    root.render(React.createElement(BusinessCardList, {}));
+    root.render(
+        React.createElement(
+          Provider,
+          { store, children: React.createElement(BusinessCardList) }
+        )
+    );
 
-    console.log('✅ BusinessCardList mounted successfully');
+    console.log('✅ BusinessCardList mounted with Redux Provider successfully');
   } catch (error) {
     console.error('❌ BusinessCardList mount failed:', error);
     container.innerHTML = `
@@ -123,6 +138,7 @@ declare global {
   interface Window {
     Stimulus: Application;
     React: typeof React;
+    ReduxStore?: typeof store; // 開発時のデバッグ用
   }
 }
 
