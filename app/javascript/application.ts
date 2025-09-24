@@ -102,11 +102,9 @@ async function mountBusinessCardList(container: HTMLElement) {
     const { createRoot } = await import('react-dom/client');
     const { BusinessCardList } = await import('@/components/BusinessCardList');
 
-    const businessCardsData = container.dataset.businessCards;
-    const businessCards = businessCardsData ? JSON.parse(businessCardsData) : [];
-
+    // Redux状態管理を使用するため、propsは不要
     const root = createRoot(container);
-    root.render(React.createElement(BusinessCardList, { businessCards }));
+    root.render(React.createElement(BusinessCardList, {}));
 
     console.log('✅ BusinessCardList mounted successfully');
   } catch (error) {

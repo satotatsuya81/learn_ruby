@@ -40,7 +40,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
   )
 
   // フィルタリング関数: 検索クエリで名刺をフィルタリング（テスト要求のみ）
-  function filterCards(cards: BusinessCard[], searchQuery: string): BusinessCard[] {
+  function filterCards(cards: BusinessCard[] | undefined, searchQuery: string): BusinessCard[] {
+    // cardsが未定義または空の場合は空配列を返す（安全な処理）
+    if (!cards || !Array.isArray(cards)) {
+      return [];
+    }
+
     return cards.filter(card => {
       // 検索クエリによるフィルタリング（名前または会社名）
       return searchQuery === '' ||

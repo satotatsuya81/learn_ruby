@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { BusinessCard } from '@/types/BusinessCard';
 import { BusinessCardItem } from '@/components/BusinessCardItem';
-import { SearchFilter } from '@/components/SearchFilter';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
-import { deleteBusinessCard } from '@/utils/api';
-import { useBusinessCardFilter } from '@/hooks/useBusinessCardFilter';
 import { useModal } from '@/hooks/useModal';
+import { useAppSelector, useAppDispatch } from '@/hooks';
+import type { RootState } from '@/store';
+import {
+  fetchBusinessCards,
+  deleteBusinessCard as deleteBusinessCardAction,
+  setSearchQuery
+} from '@/store/slices/businessCardsSlice';
 
-interface BusinessCardListProps {
-  businessCards: BusinessCard[];
-}
+// Redux状態管理を使用するため、propsは不要
+interface BusinessCardListProps {}
 
-export const BusinessCardList: React.FC<BusinessCardListProps> = ({
-  businessCards
-}) => {
-  // hooks活用パターン
+// Redux版をメインのコンポーネントとして使用
+export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
+  // Redux状態管理を使用した実装
+  const dispatch = useAppDispatch();
+
   const {
-    filter,
+    cards,
     filteredCards,
-    updateFilter,
-    clearFilter,
-    hasActiveFilters
-  } = useBusinessCardFilter(businessCards);
+    searchQuery,
+    loading,
+    error
+  } = useAppSelector((state: RootState) => state.businessCards);
 
   const {
     isOpen: isModalOpen,
@@ -30,10 +34,14 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = ({
     closeModal: closeDeleteModal
   } = useModal<BusinessCard>();
 
-  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    if (cards.length === 0 && !loading) {
+      dispatch(fetchBusinessCards());
+    }
+  }, [dispatch, cards.length, loading]);
 
   const handleDeleteClick = (id: number) => {
-    const card = businessCards.find(bc => bc.id === id);
+    const card = filteredCards.find((bc: BusinessCard) => bc.id === id);
     if (card) {
       openDeleteModal(card);
     }
@@ -46,30 +54,62 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = ({
   const handleDeleteConfirm = async () => {
     if (businessCardToDelete) {
       try {
-        await deleteBusinessCard(businessCardToDelete.id);
+        await dispatch(deleteBusinessCardAction(businessCardToDelete.id)).unwrap();
         closeDeleteModal();
-        setError(null);
-        window.location.reload();
       } catch (error) {
-        console.error('削除に失敗しました:', error);
-        const errorMessage = error instanceof Error ? error.message : '削除に失敗しました';
-        setError(errorMessage);
+        console.error('名刺の削除に失敗しました:', error);
+        // エラーをユーザーに通知
+        alert('名刺の削除に失敗しました。しばらくしてからお試しください。');
         closeDeleteModal();
       }
     }
   };
 
+  const handleSearchChange = (query: string) => {
+    dispatch(setSearchQuery(query));
+  };
+
+  const handleClearFilter = () => {
+    dispatch(setSearchQuery(''));
+  };
+
+  if (loading) {
+    return (
+      <div className="business-card-list-container">
+        <div className="text-center py-5">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <div className="mt-2">名刺を読み込み中...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="business-card-list-container">
-      {/* Eight記事で重視されているFilter機能 */}
-      <SearchFilter
-        filter={filter}
-        onFilterChange={updateFilter}
-        onClearFilter={clearFilter}
-        hasActiveFilters={hasActiveFilters}
-        totalCount={businessCards.length}
-        filteredCount={filteredCards.length}
-      />
+      <div className="mb-3">
+        <div className="row">
+          <div className="col-md-6">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="名前や会社名で検索..."
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
+          <div className="col-md-6">
+            <button
+              className="btn btn-outline-secondary"
+              onClick={handleClearFilter}
+              disabled={!searchQuery}
+            >
+              フィルターをクリア
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div className="business-card-list">
         {error && (
@@ -81,15 +121,15 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = ({
         {filteredCards.length === 0 ? (
           <div className="text-center py-5">
             <div className="text-muted">
-              {hasActiveFilters
+              {searchQuery
                 ? '🔍 検索条件に合う名刺が見つかりませんでした'
                 : '📇 まだ名刺が登録されていません'
               }
             </div>
-            {hasActiveFilters && (
+            {searchQuery && (
               <button
                 className="btn btn-link"
-                onClick={clearFilter}
+                onClick={handleClearFilter}
               >
                 フィルターをクリア
               </button>
@@ -97,7 +137,7 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = ({
           </div>
         ) : (
           <div className="row">
-            {filteredCards.map(businessCard => (
+            {filteredCards.map((businessCard: BusinessCard) => (
               <div key={businessCard.id} className="col-md-6 col-lg-4 mb-3">
                 <BusinessCardItem
                   businessCard={businessCard}
@@ -118,3 +158,5 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = ({
     </div>
   );
 };
+
+
