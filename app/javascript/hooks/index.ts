@@ -6,3 +6,4 @@
   export { useModal } from '@/hooks/useModal';
   export { useBusinessCardFilter } from '@/hooks/useBusinessCardFilter';
   export { useBusinessCards } from '@/hooks/useBusinessCards';
+  export { useDebounce } from '@/hooks/useDebounce';
