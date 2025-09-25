@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 import { FilterBase, UseBusinessCardFilterResult } from '@/hooks/useBusinessCardFilter';
 
 interface SearchFilterProps {
@@ -13,6 +14,7 @@ interface SearchFilterProps {
 /**
  * Filter系コンポーネント
  * 動的プロパティ管理パターンを活用した検索フィルター
+ * デバウンス機能により、連続入力時のパフォーマンスを最適化
  */
 export const SearchFilter: React.FC<SearchFilterProps> = ({
   filter,
@@ -22,6 +24,55 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
   totalCount,
   filteredCount
 }) => {
+  // 内部状態で入力値を管理（単一のオブジェクトで管理）
+  const [localFilter, setLocalFilter] = React.useState<FilterBase>(filter);
+
+  // 各フィールドにデバウンス機能を適用（300ms遅延）
+  const debouncedFilter = {
+    name: useDebounce(localFilter.name, 300),
+    company_name: useDebounce(localFilter.company_name, 300),
+    department: useDebounce(localFilter.department, 300),
+    job_title: useDebounce(localFilter.job_title, 300)
+  };
+
+  // 前回のデバウンス値を記録（初回実行防止用）
+  const prevDebouncedRef = React.useRef(debouncedFilter);
+
+  // デバウンスされたフィルターが変更された時のハンドラー（単一のuseEffect）
+  React.useEffect(() => {
+    const prev = prevDebouncedRef.current;
+
+    // 各フィールドの変更をチェックして、変更されたもののみonFilterChangeを呼ぶ
+    if (prev.name !== debouncedFilter.name) {
+      onFilterChange('name', debouncedFilter.name);
+    }
+    if (prev.company_name !== debouncedFilter.company_name) {
+      onFilterChange('company_name', debouncedFilter.company_name);
+    }
+    if (prev.department !== debouncedFilter.department) {
+      onFilterChange('department', debouncedFilter.department);
+    }
+    if (prev.job_title !== debouncedFilter.job_title) {
+      onFilterChange('job_title', debouncedFilter.job_title);
+    }
+
+    // 現在の値を保存
+    prevDebouncedRef.current = debouncedFilter;
+  }, [debouncedFilter, onFilterChange]);
+
+  // 外部からの変更を同期（単一のuseEffect）
+  React.useEffect(() => {
+    setLocalFilter(filter);
+  }, [filter]);
+
+  // 入力フィールドの値更新ハンドラー
+  const handleInputChange = React.useCallback((field: keyof FilterBase, value: string) => {
+    setLocalFilter(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }, []);
+
   return (
     <div className="search-filter-container mb-4">
       <div className="card">
@@ -46,8 +97,8 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
                 className="form-control"
                 id="name-filter"
                 placeholder="例: 田中"
-                value={filter.name}
-                onChange={(e) => onFilterChange('name', e.target.value)}
+                value={localFilter.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
               />
             </div>
             <div className="col-md-6">
@@ -57,8 +108,8 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
                 className="form-control"
                 id="company-filter"
                 placeholder="例: 株式会社"
-                value={filter.company_name}
-                onChange={(e) => onFilterChange('company_name', e.target.value)}
+                value={localFilter.company_name}
+                onChange={(e) => handleInputChange('company_name', e.target.value)}
               />
             </div>
             <div className="col-md-6">
@@ -68,8 +119,8 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
                 className="form-control"
                 id="department-filter"
                 placeholder="例: 営業部"
-                value={filter.department}
-                onChange={(e) => onFilterChange('department', e.target.value)}
+                value={localFilter.department}
+                onChange={(e) => handleInputChange('department', e.target.value)}
               />
             </div>
             <div className="col-md-6">
@@ -79,8 +130,8 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
                 className="form-control"
                 id="job-title-filter"
                 placeholder="例: 部長"
-                value={filter.job_title}
-                onChange={(e) => onFilterChange('job_title', e.target.value)}
+                value={localFilter.job_title}
+                onChange={(e) => handleInputChange('job_title', e.target.value)}
               />
             </div>
           </div>
