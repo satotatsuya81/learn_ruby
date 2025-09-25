@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { BusinessCard } from '@/types/BusinessCard';
 import { BusinessCardItem } from '@/components/BusinessCardItem';
 import { DeleteConfirmModal } from '@/components/DeleteConfirmModal';
-import { FlashMessage } from '@/components/FlashMessage';
 import { useModal } from '@/hooks/useModal';
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import type { RootState } from '@/store';
@@ -13,6 +12,8 @@ import {
   clearSuccessMessage,
   clearError
 } from '@/store/slices/businessCardsSlice';
+// トースト通知のアクションをインポート
+import { addToast } from '@/store/slices/uiSlice';
 
 // Redux状態管理を使用するため、propsは不要
 interface BusinessCardListProps {}
@@ -37,6 +38,30 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
     openModal: openDeleteModal,
     closeModal: closeDeleteModal
   } = useModal<BusinessCard>();
+
+  // エラーメッセージをトースト通知として表示し、状態をクリア
+  useEffect(() => {
+    if (error) {
+      dispatch(addToast({
+        message: error,
+        type: 'error',
+        duration: 5000
+      }));
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
+  // 成功メッセージをトースト通知として表示し、状態をクリア
+  useEffect(() => {
+    if (successMessage) {
+      dispatch(addToast({
+        message: successMessage,
+        type: 'success',
+        duration: 3000
+      }));
+      dispatch(clearSuccessMessage());
+    }
+  }, [successMessage, dispatch]);
 
   useEffect(() => {
     if (cards && cards.length === 0 && !loading) {
@@ -63,8 +88,12 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
         closeDeleteModal();
       } catch (error) {
         console.error('名刺の削除に失敗しました:', error);
-        // エラーをユーザーに通知
-        alert('名刺の削除に失敗しました。しばらくしてからお試しください。');
+        // エラーをトースト通知で表示（alertを削除）
+        dispatch(addToast({
+          message: '名刺の削除に失敗しました。しばらくしてからお試しください。',
+          type: 'error',
+          duration: 5000
+        }));
         closeDeleteModal();
       }
     }
@@ -78,13 +107,6 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
     dispatch(setSearchQuery(''));
   };
 
-  const handleClearError = useCallback(() => {
-    dispatch(clearError());
-  }, [dispatch]);
-
-  const handleClearSuccess = useCallback(() => {
-    dispatch(clearSuccessMessage());
-  }, [dispatch]);
 
   if (loading) {
     return (
@@ -125,23 +147,7 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
       </div>
 
       <div className="business-card-list">
-        {error && (
-          <FlashMessage
-            message={error}
-            type="danger"
-            onClose={handleClearError}
-            autoClose={false}
-          />
-        )}
-
-        {successMessage && (
-          <FlashMessage
-            message={successMessage}
-            type="success"
-            onClose={handleClearSuccess}
-            autoClose={true}
-          />
-        )}
+        {/* FlashMessageコンポーネントを削除 - トースト通知に完全移行 */}
 
         {!filteredCards || filteredCards.length === 0 ? (
           <div className="text-center py-5">
