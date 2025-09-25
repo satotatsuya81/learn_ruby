@@ -13,6 +13,7 @@ import uiReducer, {
       theme: 'light' as const,
       loading: false,
       error: null,
+      toasts: [],
       deleteConfirm: {
         isOpen: false,
         cardId: null,

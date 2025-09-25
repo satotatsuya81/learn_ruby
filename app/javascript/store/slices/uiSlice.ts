@@ -1,11 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+// トーストメッセージの型定義
+export interface ToastMessage {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info' | 'warning';
+  duration?: number;
+}
+
 // UI状態の型定義を拡張（テストで期待されるプロパティを追加）
 interface UiState {
   sidebarOpen: boolean      // サイドバーの開閉状態
   modalOpen: boolean        // モーダルの開閉状態
   theme: 'light' | 'dark'   // テーマ設定
   loading: boolean
+  toasts: ToastMessage[];
   error: string | null
   deleteConfirm: {
     isOpen: boolean
@@ -19,6 +28,7 @@ const initialState: UiState = {
   modalOpen: false,      // 初期状態: モーダルは閉じている
   theme: 'light',        // 初期状態: ライトテーマ
   loading: false,
+  toasts: [],
   error: null,
   deleteConfirm: {
     isOpen: false,
@@ -86,8 +96,18 @@ const uiSlice = createSlice({
         cardId: null,
         cardName: ''
       }
-    }
-  }
+    },
+    addToast: (state, action: PayloadAction<Omit<ToastMessage, 'id'>>) => {
+      const toast: ToastMessage = {
+        ...action.payload,
+        id: Date.now().toString(),
+      };
+      state.toasts.push(toast);
+    },
+    removeToast: (state, action: PayloadAction<string>) => {
+      state.toasts = state.toasts.filter((toast: ToastMessage) => toast.id !== action.payload);
+    },
+  },
 })
 
 export const {
@@ -102,7 +122,9 @@ export const {
   setError,
   clearError,
   openDeleteConfirm,
-  closeDeleteConfirm
+  closeDeleteConfirm,
+  addToast,
+  removeToast,
 } = uiSlice.actions
 
 export default uiSlice.reducer
