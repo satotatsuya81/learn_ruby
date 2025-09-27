@@ -111,13 +111,22 @@ async function mountBusinessCardList(container: HTMLElement) {
   try {
     const { createRoot } = await import('react-dom/client');
     const { BusinessCardList } = await import('@/components/BusinessCardList');
+    const { ErrorBoundary } = await import('@/components/ErrorBoundary');
 
-    // Redux Provider でラップしたコンポーネントをレンダリング
+    // Redux Provider とErrorBoundaryでラップしたコンポーネントをレンダリング
     const root = createRoot(container);
     root.render(
         React.createElement(
           Provider,
-          { store, children: React.createElement(BusinessCardList) }
+          {
+            store,
+            children: React.createElement(
+              ErrorBoundary,
+              {
+                children: React.createElement(BusinessCardList)
+              }
+            )
+          }
         )
     );
 

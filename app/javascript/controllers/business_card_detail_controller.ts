@@ -3,6 +3,8 @@ import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { BusinessCardDetail } from "@/components/BusinessCardDetail";
 import { SimilarCards } from "@/components/SimilarCards";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { BusinessCard } from "@/types/BusinessCard";
 
 export default class extends Controller {
@@ -17,6 +19,7 @@ export default class extends Controller {
 
   connect(): void {
     console.log("BusinessCardDetailController connected");
+    this.showLoadingSpinner();
     this.render();
   }
 
@@ -50,20 +53,36 @@ export default class extends Controller {
     // コンテナをクリア
     this.element.innerHTML = '';
 
-    // Reactコンポーネントをレンダー
+    // Reactコンポーネントをレンダー（ErrorBoundaryでラップ）
     this.root = createRoot(this.element);
     this.root.render(
-      React.createElement('div', null,
-        React.createElement(BusinessCardDetail, {
-          businessCard,
-          onEdit: handleEdit,
-          onDelete: handleDelete
-        }),
-        React.createElement(SimilarCards, {
-          similarCards,
-          currentCardId: businessCard.id
-        })
-      )
+      React.createElement(ErrorBoundary, {
+        children: React.createElement('div', null,
+          React.createElement(BusinessCardDetail, {
+            businessCard,
+            onEdit: handleEdit,
+            onDelete: handleDelete
+          }),
+          React.createElement(SimilarCards, {
+            similarCards,
+            currentCardId: businessCard.id
+          })
+        )
+      })
     );
+  }
+
+  // ローディングスピナーを表示
+  private showLoadingSpinner(): void {
+    const loadingContainer = document.getElementById('business-card-detail-loading');
+    if (loadingContainer) {
+      const spinnerRoot = createRoot(loadingContainer);
+      spinnerRoot.render(
+        React.createElement(LoadingSpinner, {
+          message: '名刺詳細を読み込み中...',
+          centered: true
+        })
+      );
+    }
   }
 }

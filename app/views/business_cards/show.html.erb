@@ -10,11 +10,7 @@
            data-business-card-detail-similar-cards-value="<%= @similar_cards.to_json %>">
 
         <!-- Loading表示（Reactがマウントされるまでの間） -->
-        <div class="text-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">読み込み中...</span>
-          </div>
-        </div>
+        <div class="text-center" id="business-card-detail-loading"></div>
       </div>
     </div>
   </div>

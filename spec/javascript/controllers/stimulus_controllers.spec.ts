@@ -37,6 +37,8 @@ jest.mock('@/components/BusinessCardDetail', () => ({ BusinessCardDetail: 'Busin
 jest.mock('@/components/SimilarCards', () => ({ SimilarCards: 'SimilarCards' }));
 jest.mock('@/components/BusinessCardForm', () => ({ BusinessCardForm: 'BusinessCardForm' }));
 jest.mock('@/components/UserProfile', () => ({ UserProfile: 'UserProfile' }));
+jest.mock('@/components/ErrorBoundary', () => ({ ErrorBoundary: 'ErrorBoundary' }));
+jest.mock('@/components/LoadingSpinner', () => ({ LoadingSpinner: 'LoadingSpinner' }));
 
 // Console mocks
 const originalConsoleLog = console.log;
@@ -143,9 +145,14 @@ describe('Stimulus Controllers', () => {
     it('Reactコンポーネントが正しくマウントされる', () => {
       expect(mockCreateRoot).toHaveBeenCalledWith(element);
       expect(mockRender).toHaveBeenCalledWith({
-        component: 'HomePage',
+        component: 'ErrorBoundary',
         props: {
-          stats: mockStats
+          children: {
+            component: 'HomePage',
+            props: {
+              stats: mockStats
+            }
+          }
         }
       });
     });

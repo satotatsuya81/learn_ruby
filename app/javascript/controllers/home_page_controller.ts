@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus";
 import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import { HomePage } from "@/components/HomePage";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface HomePageStats {
   totalBusinessCards: number;
@@ -23,6 +25,9 @@ export default class extends Controller {
     console.log("Stats value raw:", this.element.getAttribute('data-home-page-stats-value'));
     console.log("Stats value parsed:", this.statsValue);
     console.log("React available:", typeof window.React !== 'undefined');
+
+    // ローディング表示
+    this.showLoadingSpinner();
 
     // JSONパースのテスト
     try {
@@ -53,17 +58,33 @@ export default class extends Controller {
       this.root = createRoot(this.element);
       console.log("Root created successfully");
 
-      // HomePageコンポーネントをレンダリング
+      // HomePageコンポーネントをErrorBoundaryでラップしてレンダリング
       console.log("Rendering HomePage component with stats:", this.statsValue);
       this.root.render(
-        React.createElement(HomePage, {
-          stats: this.statsValue
+        React.createElement(ErrorBoundary, {
+          children: React.createElement(HomePage, {
+            stats: this.statsValue
+          })
         })
       );
       console.log("HomePage component rendered successfully");
     } catch (error) {
       console.error('HomePage component mount failed:', error);
       // エラーが発生した場合はフォールバック表示を維持
+    }
+  }
+
+  // ローディングスピナーを表示
+  private showLoadingSpinner(): void {
+    const loadingContainer = document.getElementById('loading-spinner');
+    if (loadingContainer) {
+      const spinnerRoot = createRoot(loadingContainer);
+      spinnerRoot.render(
+        React.createElement(LoadingSpinner, {
+          message: 'Reactコンポーネント読み込み中...',
+          centered: true
+        })
+      );
     }
   }
 

@@ -170,7 +170,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
         expect(page).to have_content("田中次郎")
 
         # 名前での検索（React コンポーネントの読み込みを待つ）
-        find('input[type="search"]', wait: 1).set("田中")
+        fill_in '名前', with: '田中'
 
         # デバウンス後の検索結果確認（1秒待機）
         expect(page).to have_content("田中太郎", wait: 1)
@@ -180,7 +180,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "会社名での検索が正常に動作すること" do
         # 会社名での検索
-        find('input[type="search"]', wait: 1).set("テスト")
+        fill_in '会社名', with: 'テスト'
 
         # 検索結果確認
         expect(page).to have_content("田中太郎", wait: 1)
@@ -190,7 +190,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "役職での検索が正常に動作すること" do
         # 役職での検索
-        find('input[type="search"]', wait: 1).set("部長")
+        fill_in '役職', with: '部長'
 
         # 検索結果確認
         expect(page).to have_content("田中太郎", wait: 1)
@@ -200,7 +200,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "部署での検索が正常に動作すること" do
         # 部署での検索
-        find('input[type="search"]', wait: 1).set("システム")
+        fill_in '部署', with: 'システム'
 
         # 検索結果確認
         expect(page).to have_content("佐藤花子", wait: 1)
@@ -210,7 +210,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "部分一致での検索が正常に動作すること" do
         # 部分一致での検索（名前の一部）
-        find('input[type="search"]', wait: 1).set("太")
+        fill_in '名前', with: '太'
 
         # 検索結果確認
         expect(page).to have_content("田中太郎", wait: 1)
@@ -220,7 +220,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "複数フィールドにマッチする検索語での動作確認" do
         # "田中"は名前フィールドの複数レコードにマッチ
-        find('input[type="search"]', wait: 1).set("田中")
+        fill_in '名前', with: '田中'
 
         # 検索結果確認
         expect(page).to have_content("田中太郎", wait: 1)
@@ -234,7 +234,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
         expect(page).to have_content("田中次郎")
 
         # 検索実行
-        find('input[type="search"]', wait: 1).set("田中")
+        fill_in '名前', with: '田中'
         expect(page).to have_content("田中太郎", wait: 1)
         expect(page).not_to have_content("佐藤花子")
 
@@ -249,7 +249,7 @@ RSpec.describe "Business Card Management", type: :system, js: true do
 
       it "該当する名刺がない場合は適切なメッセージが表示されること" do
         # 存在しない検索語で検索
-        find('input[type="search"]', wait: 1).set("存在しない検索語")
+        fill_in '名前', with: '存在しない検索語'
 
         # 該当なしメッセージの確認
         expect(page).to have_content("検索条件に合う名刺が見つかりませんでした", wait: 1)
