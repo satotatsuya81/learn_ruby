@@ -82,7 +82,11 @@ require 'rails_helper'
 
         it "バリデーションエラーが表示されること" do
           post users_path, params: invalid_params
-          expect(response.body).to include('エラー')
+          # React統合後も、バリデーションエラーはdata属性として渡される
+          expect(response.body).to include('data-user-registration-form-errors-value')
+          # 実際のエラーメッセージが含まれることを確認
+          expect(response.body).to include('名前 を入力してください')
+          expect(response.body).to include('メールアドレス は不正な値です')
         end
       end
 
@@ -120,7 +124,11 @@ require 'rails_helper'
 
         it "バリデーションエラーが表示されること" do
           post users_path, params: duplicate_email_params
-          expect(response.body).to include('エラー')
+          # React統合後も、バリデーションエラーはdata属性として渡される
+          expect(response.body).to include('data-user-registration-form-errors-value')
+          # 実際のエラーメッセージが含まれることを確認（翻訳の有無に関わらず）
+          expect(response.body).to include('メールアドレス')
+          expect(response.body).to include('taken')
         end
       end
 
@@ -143,6 +151,42 @@ require 'rails_helper'
           get user_path(id: "nonexistent")
           expect(response).to redirect_to(root_path)
           expect(flash[:danger]).to eq(I18n.t("users.user_not_found"))
+        end
+      end
+
+      # TypeScript フロントエンド用のcurrent_user APIエンドポイントのテスト
+      describe "GET /current_user" do
+        context "ログインしている場合" do
+          let(:user) { create(:user, :activated) }
+
+          before do
+            allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+            allow_any_instance_of(ApplicationController).to receive(:logged_in?).and_return(true)
+          end
+
+          it "JSONレスポンスで現在のユーザー情報を返すこと" do
+            get "/current_user", headers: { 'Accept' => 'application/json' }
+            expect(response).to have_http_status(:ok)
+            json_response = JSON.parse(response.body)
+            expect(json_response['success']).to be true
+            expect(json_response['data']['id']).to eq(user.id)
+            expect(json_response['data']['email']).to eq(user.email)
+          end
+        end
+
+        context "ログインしていない場合" do
+          before do
+            allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(nil)
+            allow_any_instance_of(ApplicationController).to receive(:logged_in?).and_return(false)
+          end
+
+          it "未認証エラーのJSONレスポンスを返すこと" do
+            get "/current_user", headers: { 'Accept' => 'application/json' }
+            expect(response).to have_http_status(:unauthorized)
+            json_response = JSON.parse(response.body)
+            expect(json_response['success']).to be false
+            expect(json_response['error']).to eq('Not authenticated')
+          end
         end
       end
     end

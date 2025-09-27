@@ -9,6 +9,7 @@ services:
     depends_on:
       - db
       - redis
+      - selenium_chrome
     environment:
       - DATABASE_URL=mysql2://root:password@db/business_card_manager_development
       - REDIS_URL=redis://redis:6379
@@ -16,7 +17,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
       - MYSQL_PORT=3306
-
+      - SELENIUM_DRIVER_URL=http://selenium_chrome:4444/wd/hub
 
   db:
     image: mysql:8.0
@@ -32,6 +33,18 @@ services:
     image: redis:7
     ports:
       - "6379:6379"
+
+  selenium_chrome:
+    image: seleniarm/standalone-chromium:latest
+    hostname: selenium_chrome
+    ports:
+      - "4444:4444"
+      - "7900:7900"  # VNC for debugging (optional)
+    environment:
+      - SE_VNC_NO_PASSWORD=1
+    volumes:
+      - /dev/shm:/dev/shm
+    shm_size: 2gb
 
 volumes:
   mysql_data:

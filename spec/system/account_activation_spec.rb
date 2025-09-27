@@ -45,7 +45,7 @@ RSpec.describe "Account Activation", type: :system do
       it "アカウントが有効化されないこと" do
         with_locale(:ja) do  # 一時的に日本語ロケールに切り替え
           visit edit_account_activation_path(id: user.id, token: 'invalidtoken')
-          expect(page).to have_current_path(root_path)
+          expect(page).to have_current_path(login_path)
           expect(page).to have_content(I18n.t("user_mailer.activation_email.invalid_link"))
           expect(user.reload.activated?).to be_falsey
         end
@@ -71,7 +71,7 @@ RSpec.describe "Account Activation", type: :system do
         user.activate  # ユーザーを有効化済みにする
         with_locale(:ja) do  # 一時的に日本語ロケールに切り替え
           visit edit_account_activation_path(id: user.id, token: user.activation_token)
-          expect(page).to have_current_path(root_path)
+          expect(page).to have_current_path(login_path)
         end
       end
 

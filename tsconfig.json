@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "app/javascript/types",
+      "node_modules/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/javascript/*"],
+      "@/types/*": ["app/javascript/types/*"],
+      "@/utils/*": ["app/javascript/utils/*"],
+      "@/controllers/*": ["app/javascript/controllers/*"],
+      "@/store/*": ["app/javascript/store/*"]
+    }
+  },
+  "include": [
+    "app/javascript/**/*",
+    "spec/javascript/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tmp",
+    "app/assets/builds"
+  ]
+}

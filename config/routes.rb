@@ -24,9 +24,12 @@ Rails.application.routes.draw do
   # /account_activations/:token/edit
   resources :account_activations, only: [ :edit ]
 
-    # パスワードリセット
-    # /password_resets/new, /password_resets (POST), /password_resets/:id/edit, /password_resets/:id (PATCH)
-    resources :password_resets, only: [ :new, :create, :edit, :update ]
+  # パスワードリセット
+  # /password_resets/new, /password_resets (POST), /password_resets/:id/edit, /password_resets/:id (PATCH)
+  resources :password_resets, only: [ :new, :create, :edit, :update ]
+
+  # 現在のユーザー情報取得API（TypeScript フロントエンド用）
+  get "/current_user", to: "users#current"
 
   # 名刺管理のルート
   # /business_cards, /business_cards/:id

@@ -21,6 +21,7 @@ RSpec.describe "PasswordResets", type: :request do
         }.to change { user.reload.reset_digest }.from(nil)
         expect(response).to redirect_to(root_url)
         follow_redirect!
+        follow_redirect!  # Follow the second redirect to login page
         expect(response.body).to include(I18n.t("password_resets.email_sent"))
         expect(ActionMailer::Base.deliveries.size).to eq(1)
       end
@@ -116,7 +117,7 @@ RSpec.describe "PasswordResets", type: :request do
       end
     end
 
-    context "パスワード確認が一致しない場合" do
+    context "パスワード（確認）が一致しない場合" do
       it "エラーメッセージが表示され、editテンプレートが再表示される" do
         patch password_reset_path(user.id), params: {
           token: user.reset_token,

@@ -3,77 +3,14 @@
 <div class="container">
   <div class="row">
     <div class="col-md-8 offset-md-2">
-      <div class="card">
-        <div class="card-header">
-          <h1><%= @business_card.name %></h1>
-        </div>
-        <div class="card-body">
-          <h5 class="text-primary"><%= @business_card.company_name %></h5>
 
-          <% if @business_card.job_title.present? %>
-            <p><strong><%= t('business_cards.card.job_title_label') %>:</strong> <%= @business_card.job_title %></p>
-          <% end %>
+      <!-- React BusinessCardDetail コンポーネント -->
+      <div data-controller="business-card-detail"
+           data-business-card-detail-card-value="<%= @business_card.to_json %>"
+           data-business-card-detail-similar-cards-value="<%= @similar_cards.to_json %>">
 
-          <% if @business_card.department.present? %>
-            <p><strong><%= t('business_cards.card.department_label') %>:</strong> <%= @business_card.department %></p>
-          <% end %>
-
-          <% if @business_card.email.present? %>
-            <p><strong><%= t('business_cards.card.email_label') %>:</strong> <%= mail_to @business_card.email %></p>
-          <% end %>
-
-          <% if @business_card.phone.present? %>
-            <p><strong><%= t('business_cards.card.phone_label') %>:</strong> <%= @business_card.phone %></p>
-          <% end %>
-
-          <% if @business_card.mobile.present? %>
-            <p><strong><%= t('business_cards.card.mobile_label') %>:</strong> <%= @business_card.mobile %></p>
-          <% end %>
-
-          <% if @business_card.website.present? %>
-            <p><strong><%= t('business_cards.card.website_label') %>:</strong> <%= link_to @business_card.website, @business_card.website, target: "_blank" %></p>
-          <% end %>
-
-          <% if @business_card.address.present? %>
-            <p><strong><%= t('business_cards.card.address_label') %>:</strong><br><%= simple_format(@business_card.address) %></p>
-          <% end %>
-
-          <% if @business_card.notes.present? %>
-            <p><strong><%= t('business_cards.card.notes_label') %>:</strong><br><%= simple_format(@business_card.notes) %></p>
-          <% end %>
-        </div>
-        <div class="card-footer d-flex justify-content-between">
-            <div>
-              <%= link_to t('business_cards.show.back_to_list'), business_cards_path, class: "btn btn-secondary" %>
-            </div>
-            <div>
-              <%= link_to t('business_cards.show.edit'), edit_business_card_path(@business_card), class: "btn btn-primary" %>
-              <%= link_to t('business_cards.show.delete'), business_card_path(@business_card),
-                  method: :delete,
-                  data: {
-                    confirm: t('business_cards.show.delete_confirm', name: @business_card.name)
-                  },
-                  class: "btn btn-danger ms-2" %>
-            </div>
-          </div>
-
-        <!-- 類似名刺セクション -->
-        <% if @similar_cards.any? %>
-          <div class="card mt-4">
-            <div class="card-header">
-              <h5><%= t('business_cards.show.similar_cards_title') %></h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <% @similar_cards.each do |similar_card| %>
-                  <div class="col-md-4 mb-2">
-                    <%= render 'business_card', business_card: similar_card, compact: true %>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
+        <!-- Loading表示（Reactがマウントされるまでの間） -->
+        <div class="text-center" id="business-card-detail-loading"></div>
       </div>
     </div>
   </div>

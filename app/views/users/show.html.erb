@@ -1,4 +1,20 @@
 <% provide(:title, @user.name) %>
+
+<!-- React UserProfile コンポーネント -->
+<div data-controller="user-profile"
+     data-user-profile-user-value="<%= @user.to_json %>"
+     data-user-profile-editable-value="<%= current_user == @user %>">
+
+  <!-- Loading表示（Reactがマウントされるまでの間） -->
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">読み込み中...</span>
+    </div>
+  </div>
+</div>
+
+<!-- フォールバック用の静的コンテンツ（JavaScript無効時） -->
+<noscript>
   <div class="row">
     <aside class="col-md-4">
       <section class="user_info">
@@ -11,3 +27,4 @@
       </section>
     </aside>
   </div>
+</noscript>

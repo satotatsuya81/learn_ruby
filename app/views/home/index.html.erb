@@ -1,37 +1,16 @@
-<div class="jumbotron bg-light p-5 rounded-lg mb-4">
-    <h1 class="display-4"><%= t('application.name') %></h1>
-    <p class="lead"><%= t('common.messages.welcome') %></p>
-    <hr class="my-4">
-    <p><%= t('application.description') %></p>
-    <!-- 将来的にはログイン後のダッシュボードリンクを追加予定 -->
-  </div>
+<!-- React HomePage コンポーネント -->
+<%
+  stats_data = {
+    totalBusinessCards: @total_business_cards || 0,
+    companiesCount: @companies_count || 0,
+    lastUpdated: @last_updated || '未更新'
+  }
+%>
+<div data-controller="home-page"
+     data-home-page-stats-value="<%= stats_data.to_json %>"
+     id="home-page-container">
 
-  <div class="row">
-    <div class="col-md-4">
-      <h3><%= t('sections.main_features') %></h3>
-      <ul class="list-unstyled">
-        <li>📇 <%= t('features.card_management') %></li>
-        <li>🏷️ <%= t('features.tagging') %></li>
-        <li>🔍 <%= t('features.search') %></li>
-        <li>📊 <%= t('features.analytics') %></li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <h3><%= t('sections.future_plans') %></h3>
-      <ul class="list-unstyled">
-        <li>🔐 <%= t('future_plans.authentication') %></li>
-        <li>📱 <%= t('future_plans.responsive') %></li>
-        <li>🤖 <%= t('future_plans.ocr') %></li>
-        <li>📈 <%= t('future_plans.dashboard') %></li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <h3><%= t('sections.tech_stack') %></h3>
-      <ul class="list-unstyled">
-        <li>💎 <%= t('tech_stack.rails') %></li>
-        <li>🅱️ <%= t('tech_stack.bootstrap') %></li>
-        <li>🗄️ <%= t('tech_stack.mysql') %></li>
-        <li>⚛️ <%= t('tech_stack.react') %></li>
-      </ul>
-    </div>
-  </div>
+  <!-- Loading表示（Reactがマウントされるまでの間） -->
+  <div class="text-center" id="loading-spinner"></div>
+</div>
+

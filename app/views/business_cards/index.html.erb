@@ -1,17 +1,15 @@
 <% content_for :title, t('business_cards.index.title') %>
 
 <div class="container">
-  <h1><%= t('business_cards.index.title') %></h1>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><%= t('business_cards.index.title') %></h1>
+    <%= link_to t('business_cards.show.new'), new_business_card_path, class: "btn btn-primary" %>
+  </div>
 
-  <% if @business_cards.any? %>
-    <div class="row">
-      <% @business_cards.each do |business_card| %>
-        <div class="col-md-4">
-          <%= render 'business_card', business_card: business_card %>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="text-muted"><%= t('business_cards.index.no_business_cards') %></p>
-  <% end %>
+  <!-- フラッシュメッセージはReactコンポーネント内で管理 -->
+
+  <!-- React BusinessCardList コンポーネント -->
+  <div id="business-card-list-root"
+       data-business-cards='<%= @business_cards.to_json %>'>
+  </div>
 </div>

@@ -38,7 +38,7 @@
 
 #### バックエンド
 - **Ruby**: 3.3 + YJIT（パフォーマンス最適化）
-- **Rails**: 7.0
+- **Rails**: 8.0
 - **データベース**: MySQL 8.0
 - **認証**: Rails標準（has_secure_password）
 - **ファイルストレージ**: Active Storage（開発）/ AWS S3（本番）

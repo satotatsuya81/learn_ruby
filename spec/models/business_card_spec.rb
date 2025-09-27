@@ -49,7 +49,7 @@ RSpec.describe BusinessCard, type: :model do
 
     describe ".recent" do
       it "作成日時で降順に並び替えられること" do
-        expect(BusinessCard.recent).to eq([ card3, card2, card1 ])
+        expect(user.business_cards.recent).to eq([ card3, card2, card1 ])
       end
     end
   end

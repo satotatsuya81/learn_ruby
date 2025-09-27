@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Read(///**)",
-      "Bash(bundle install)"
+      "Bash(bundle install)",
+      "Bash(xargs cat:*)",
+      "Bash(find:*)",
+      "Bash(bundle exec rspec:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run type-check:*)"
     ],
     "deny": [],
     "ask": []

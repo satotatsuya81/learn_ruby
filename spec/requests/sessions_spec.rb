@@ -124,6 +124,7 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(302)
         expect(response).to redirect_to(root_path)
         follow_redirect!
+        follow_redirect!  # Follow the second redirect to login page
         expect(response.body).to include("ログイン")
       end
 
@@ -148,6 +149,7 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(302)
         expect(response).to redirect_to(root_path)
         follow_redirect!
+        follow_redirect!  # Follow the second redirect to login page
         expect(response.body).to include("ログイン")
       end
     end

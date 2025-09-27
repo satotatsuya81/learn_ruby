@@ -46,6 +46,7 @@ RSpec.describe "AccountActivations", type: :request do
       it "フラッシュメッセージが表示されること" do
         get edit_account_activation_path(user.id), params: { token: 'wrongtoken' }
         follow_redirect!
+        follow_redirect!  # Follow the second redirect to login page
         expect(response.body).to include(I18n.t("user_mailer.activation_email.invalid_link"))
       end
     end
@@ -68,6 +69,7 @@ RSpec.describe "AccountActivations", type: :request do
       it "フラッシュメッセージが表示されること" do
         get edit_account_activation_path(user.id), params: { token: user.activation_token }
         follow_redirect!
+        follow_redirect!  # Follow the second redirect to login page
         expect(response.body).to include(I18n.t("user_mailer.activation_email.already_activated"))
       end
     end
