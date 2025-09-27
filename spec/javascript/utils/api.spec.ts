@@ -5,6 +5,8 @@ import { ApiError } from '@/types/api';
 
 // テスト用のモック設定
 describe('ApiClient', () => {
+  let consoleErrorSpy: jest.SpyInstance;
+
   // 各テストの前にfetchをモック化
   beforeEach(() => {
     // fetchのグローバルモック
@@ -21,9 +23,13 @@ describe('ApiClient', () => {
       }
       return null;
     });
+
+    // console.errorをモック化
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
+    consoleErrorSpy.mockRestore();
     jest.restoreAllMocks();
   });
 
@@ -445,6 +451,202 @@ describe('ApiClient', () => {
             })
           })
         );
+      });
+    });
+  });
+
+  describe('エラーハンドリング', () => {
+    describe('ネットワークエラー', () => {
+      it('ネットワーク接続失敗時のエラーハンドリング', async () => {
+        const networkError = new Error('Failed to fetch');
+        networkError.name = 'TypeError';
+
+        (global.fetch as jest.Mock).mockRejectedValue(networkError);
+
+        try {
+          await apiClient.getBusinessCards();
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Failed to fetch');
+          expect(error.name).toBe('TypeError');
+          expect(consoleErrorSpy).toHaveBeenCalledWith('API Error:', networkError);
+        }
+      });
+
+      it('DNS解決失敗時のエラーハンドリング', async () => {
+        const dnsError = new Error('DNS resolution failed');
+        dnsError.name = 'NetworkError';
+
+        (global.fetch as jest.Mock).mockRejectedValue(dnsError);
+
+        try {
+          await apiClient.createBusinessCard({ name: 'test', company_name: 'test' });
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('DNS resolution failed');
+          expect(error.name).toBe('NetworkError');
+          expect(consoleErrorSpy).toHaveBeenCalledWith('API Error:', dnsError);
+        }
+      });
+    });
+
+    describe('HTTPエラー', () => {
+      it('404エラー時のハンドリング', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+          ok: false,
+          status: 404,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValue({
+            error: 'Business card not found',
+            details: { id: ['Record not found'] }
+          })
+        });
+
+        try {
+          await apiClient.getBusinessCard(99999);
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Business card not found');
+          expect(error.status).toBe(404);
+          expect(error.details).toEqual({ id: ['Record not found'] });
+        }
+      });
+
+      it('500エラー時のハンドリング', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+          ok: false,
+          status: 500,
+          headers: {
+            get: jest.fn().mockReturnValue('application/json')
+          },
+          json: jest.fn().mockResolvedValue({
+            error: 'Internal server error',
+            details: { server: ['Database connection failed'] }
+          })
+        });
+
+        try {
+          await apiClient.createBusinessCard({ name: 'test', company_name: 'test' });
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Internal server error');
+          expect(error.status).toBe(500);
+          expect(error.details).toEqual({ server: ['Database connection failed'] });
+        }
+      });
+    });
+
+
+    describe('レスポンス型検証', () => {
+      it('JSONではないレスポンスが返された場合（成功レスポンス）', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+          ok: true,
+          status: 200,
+          headers: {
+            get: jest.fn().mockReturnValue('text/html')
+          },
+          text: jest.fn().mockResolvedValue('<html><body>HTML Response</body></html>')
+        });
+
+        try {
+          await apiClient.getBusinessCards();
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Expected JSON response but received HTML');
+          expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'Non-JSON success response received:',
+            '<html><body>HTML Response</body></html>'
+          );
+        }
+      });
+
+      it('JSONではないエラーレスポンスが返された場合', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+          ok: false,
+          status: 406,
+          headers: {
+            get: jest.fn().mockReturnValue('text/html')
+          },
+          text: jest.fn().mockResolvedValue('<html><body>406 Not Acceptable</body></html>')
+        });
+
+        try {
+          await apiClient.createBusinessCard({ name: 'test', company_name: 'test' });
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Server error (406): Expected JSON but received HTML. Please check server configuration.');
+          expect(error.status).toBe(406);
+          expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'Non-JSON response received:',
+            '<html><body>406 Not Acceptable</body></html>'
+          );
+        }
+      });
+
+      it('Content-Typeヘッダーがnullの場合の処理', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+          ok: true,
+          status: 200,
+          headers: {
+            get: jest.fn().mockReturnValue(null)
+          },
+          text: jest.fn().mockResolvedValue('Plain text response')
+        });
+
+        try {
+          await apiClient.getBusinessCard(1);
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('Expected JSON response but received HTML');
+          expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'Non-JSON success response received:',
+            'Plain text response'
+          );
+        }
+      });
+    });
+
+    describe('複合的なエラーケース', () => {
+      it('成功と失敗が混在する複数リクエスト', async () => {
+        // 最初は失敗、2回目は成功
+        (global.fetch as jest.Mock)
+          .mockRejectedValueOnce(new Error('First request failed'))
+          .mockResolvedValueOnce({
+            ok: true,
+            status: 200,
+            headers: {
+              get: jest.fn().mockReturnValue('application/json')
+            },
+            json: jest.fn().mockResolvedValue({ data: [] })
+          });
+
+        // 最初のリクエストは失敗
+        try {
+          await apiClient.getBusinessCards();
+          fail('エラーがスローされるべきです');
+        } catch (error: any) {
+          expect(error.message).toBe('First request failed');
+          expect(consoleErrorSpy).toHaveBeenCalledWith('API Error:', error);
+        }
+
+        // 2回目のリクエストは成功
+        const result = await apiClient.getBusinessCards();
+        expect(result).toEqual([]);
+      });
+
+      it('エラーログの出力確認', async () => {
+        const testError = new Error('Test API error');
+        (global.fetch as jest.Mock).mockRejectedValue(testError);
+
+        try {
+          await apiClient.getBusinessCards();
+        } catch (error) {
+          // エラーがcatchされることは想定内
+        }
+
+        expect(consoleErrorSpy).toHaveBeenCalledWith('API Error:', testError);
       });
     });
   });

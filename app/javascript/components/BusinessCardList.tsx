@@ -127,7 +127,7 @@ export const BusinessCardList: React.FC<BusinessCardListProps> = () => {
         <div className="row">
           <div className="col-md-6">
             <input
-              type="text"
+              type="search"
               className="form-control"
               placeholder="名前や会社名で検索..."
               value={searchQuery}

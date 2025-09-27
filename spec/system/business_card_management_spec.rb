@@ -122,4 +122,141 @@ RSpec.describe "Business Card Management", type: :system, js: true do
       end
     end
   end
+
+  describe "名刺検索機能" do
+    context "リアルタイム検索" do
+      before do
+        login(user)
+        @business_card_1 = create(:business_card,
+          user: user,
+          name: "田中太郎",
+          company_name: "テスト株式会社",
+          title: "営業部長",
+          department: "営業部",
+          email: "tanaka@test.com",
+          phone: "090-1234-5678",
+          address: "東京都千代田区",
+          notes: "重要顧客"
+        )
+        @business_card_2 = create(:business_card,
+          user: user,
+          name: "佐藤花子",
+          company_name: "サンプル会社",
+          title: "システム開発課長",
+          department: "システム開発課",
+          email: "sato@sample.co.jp",
+          phone: "03-9876-5432",
+          address: "大阪府大阪市",
+          notes: "技術担当者"
+        )
+        @business_card_3 = create(:business_card,
+          user: user,
+          name: "田中次郎",
+          company_name: "別の会社",
+          title: "取締役",
+          department: "経営企画室",
+          email: "jiro@betsu.jp",
+          phone: "080-1111-2222",
+          address: "神奈川県横浜市",
+          notes: "決裁権者"
+        )
+        visit business_cards_path
+      end
+
+      it "名前での検索が正常に動作すること" do
+        # 初期状態で全ての名刺が表示されることを確認
+        expect(page).to have_content("田中太郎")
+        expect(page).to have_content("佐藤花子")
+        expect(page).to have_content("田中次郎")
+
+        # 名前での検索（React コンポーネントの読み込みを待つ）
+        find('input[type="search"]', wait: 1).set("田中")
+
+        # デバウンス後の検索結果確認（1秒待機）
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).to have_content("田中次郎")
+        expect(page).not_to have_content("佐藤花子")
+      end
+
+      it "会社名での検索が正常に動作すること" do
+        # 会社名での検索
+        find('input[type="search"]', wait: 1).set("テスト")
+
+        # 検索結果確認
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).not_to have_content("佐藤花子")
+        expect(page).not_to have_content("田中次郎")
+      end
+
+      it "役職での検索が正常に動作すること" do
+        # 役職での検索
+        find('input[type="search"]', wait: 1).set("部長")
+
+        # 検索結果確認
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).to have_content("佐藤花子")
+        expect(page).not_to have_content("田中次郎")
+      end
+
+      it "部署での検索が正常に動作すること" do
+        # 部署での検索
+        find('input[type="search"]', wait: 1).set("システム")
+
+        # 検索結果確認
+        expect(page).to have_content("佐藤花子", wait: 1)
+        expect(page).not_to have_content("田中太郎")
+        expect(page).not_to have_content("田中次郎")
+      end
+
+      it "部分一致での検索が正常に動作すること" do
+        # 部分一致での検索（名前の一部）
+        find('input[type="search"]', wait: 1).set("太")
+
+        # 検索結果確認
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).not_to have_content("佐藤花子")
+        expect(page).not_to have_content("田中次郎")
+      end
+
+      it "複数フィールドにマッチする検索語での動作確認" do
+        # "田中"は名前フィールドの複数レコードにマッチ
+        find('input[type="search"]', wait: 1).set("田中")
+
+        # 検索結果確認
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).to have_content("田中次郎")
+        expect(page).not_to have_content("佐藤花子")
+      end
+
+      it "検索条件をクリアすると全ての名刺が再表示されること" do
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).to have_content("佐藤花子")
+        expect(page).to have_content("田中次郎")
+
+        # 検索実行
+        find('input[type="search"]', wait: 1).set("田中")
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).not_to have_content("佐藤花子")
+
+        # 検索条件をクリア
+        click_button "クリア"
+
+        # 全ての名刺が再表示されることを確認
+        expect(page).to have_content("田中太郎", wait: 1)
+        expect(page).to have_content("佐藤花子")
+        expect(page).to have_content("田中次郎")
+      end
+
+      it "該当する名刺がない場合は適切なメッセージが表示されること" do
+        # 存在しない検索語で検索
+        find('input[type="search"]', wait: 1).set("存在しない検索語")
+
+        # 該当なしメッセージの確認
+        expect(page).to have_content("検索条件に合う名刺が見つかりませんでした", wait: 1)
+        expect(page).not_to have_content("田中太郎")
+        expect(page).not_to have_content("佐藤花子")
+        expect(page).not_to have_content("田中次郎")
+      end
+    end
+  end
 end
