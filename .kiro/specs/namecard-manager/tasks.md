@@ -6,19 +6,19 @@
 
 ## フェーズ1: 開発環境構築とプロジェクト基盤
 
-- [ ] 1. 開発環境のセットアップ
+- [x] 1. 開発環境のセットアップ
   - devcontainer設定ファイルの作成（Ruby 3.3 + YJIT, Rails 7.0, MySQL 8.0, Node.js）
   - Docker Compose設定でMySQL、Redis、Railsアプリケーションコンテナを構成
   - VS Code設定とRuby/Rails開発用拡張機能の設定
   - _要件: Requirement 1（開発環境）_
 
-- [ ] 2. Railsプロジェクトの初期化
+- [×] 2. Railsプロジェクトの初期化
   - Rails 7.0アプリケーションの作成（API + フルスタック対応）
   - Gemfileの設定（RSpec, FactoryBot, Capybara, Bootstrap, Stimulus等）
   - データベース設定（MySQL接続、環境別設定）
   - _要件: 全体基盤_
 
-- [ ] 3. 基本的なプロジェクト構造の構築
+- [×] 3. 基本的なプロジェクト構造の構築
   - MVC基本構造の作成
   - ルーティング設定の基盤
   - アプリケーション設定（タイムゾーン、ロケール等）
@@ -26,25 +26,25 @@
 
 ## フェーズ2: 認証・ユーザー管理機能
 
-- [ ] 4. ユーザーモデルの実装
+- [×] 4. ユーザーモデルの実装
   - Userモデルの作成とマイグレーション
   - バリデーション実装（名前、メール、パスワード）
   - has_secure_passwordによる認証機能
   - _要件: Requirement 1_
 
-- [ ] 5. ユーザー認証機能の実装
+- [×] 5. ユーザー認証機能の実装
   - SessionsControllerの作成
   - ログイン・ログアウト機能の実装
   - Remember Me機能（永続化セッション）
   - _要件: Requirement 1_
 
-- [ ] 6. ユーザー登録機能の実装
+- [×] 6. ユーザー登録機能の実装
   - UsersControllerの作成
   - 新規登録フォームとバリデーション
   - アカウント有効化機能（メール認証）
   - _要件: Requirement 1_
 
-- [ ] 7. パスワードリセット機能の実装
+- [×] 7. パスワードリセット機能の実装
   - パスワードリセット用コントローラー
   - リセットトークン生成・検証
   - メール送信機能の実装
@@ -52,25 +52,25 @@
 
 ## フェーズ3: 名刺管理基本機能
 
-- [ ] 8. 名刺モデルの実装
+- [×] 8. 名刺モデルの実装
   - BusinessCardモデルの作成とマイグレーション
   - バリデーション実装（名前、会社名必須等）
   - Userとのアソシエーション設定
   - _要件: Requirement 2_
 
-- [ ] 9. 名刺CRUD機能の実装
+- [×] 9. 名刺CRUD機能の実装
   - BusinessCardsControllerの作成
   - 名刺一覧表示機能（index）
   - 名刺詳細表示機能（show）
   - _要件: Requirement 2_
 
-- [ ] 10. 名刺作成・編集機能の実装
+- [×] 10. 名刺作成・編集機能の実装
   - 名刺新規作成フォーム（new, create）
   - 名刺編集フォーム（edit, update）
   - Strong Parametersによる安全な更新
   - _要件: Requirement 2_
 
-- [ ] 11. 名刺削除機能の実装
+- [×] 11. 名刺削除機能の実装
   - 削除確認ダイアログの実装
   - 論理削除または物理削除の実装
   - 削除権限の確認
@@ -94,35 +94,35 @@
 - 後方互換性を保ちながら新技術を導入
 - テスト駆動開発（TDD）によるReactコンポーネント開発
 
-- [ ] 12. TypeScript基盤の構築
+- [×] 12. TypeScript基盤の構築
   - TypeScript設定ファイル（tsconfig.json）の作成
   - esbuild設定の TypeScript 対応
   - 既存JSファイルのTypeScript移行準備
   - ESLint + TypeScript設定の強化
   - _要件: Requirement 12_
 
-- [ ] 13. React基本コンポーネントの実装
+- [×] 13. React基本コンポーネントの実装
   - 名刺一覧のReactコンポーネント化（BusinessCardList.tsx）
   - 名刺カードコンポーネントの作成（BusinessCardItem.tsx）
   - 削除確認モーダルのReact化（DeleteConfirmModal.tsx）
   - Rails ERBからReactコンポーネントへの段階的置き換え
   - _要件: Requirement 12_
 
-- [ ] 14. Redux状態管理の導入
+- [×] 14. Redux状態管理の導入
   - Redux Toolkit の設定と初期化
   - Business Cards用のSliceとActionの実装
   - 型安全なRedux Store の構築
   - React コンポーネントとRedux の連携
   - _要件: Requirement 12_
 
-- [ ] 15. API通信層のTypeScript化
+- [×] 15. API通信層のTypeScript化
   - Rails API エンドポイントの型定義
   - axiosベースのHTTPクライアント実装
   - CSRF トークン対応とエラーハンドリング
   - APIレスポンスの型安全性確保
   - _要件: Requirement 12_
 
-- [ ] 16. インタラクティブ機能の実装
+- [×] 16. インタラクティブ機能の実装
   - リアルタイム検索・フィルタリング機能
   - 楽観的更新によるUX向上
   - フラッシュメッセージのToast通知化

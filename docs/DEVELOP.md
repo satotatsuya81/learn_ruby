@@ -130,6 +130,70 @@ EXPOSE 3000
 CMD ["rails", "server", "-b", "0.0.0.0"]
 ```
 
+## 💻 フロントエンド技術スタック
+
+### React/TypeScript統合（実装済み）
+```typescript
+// app/javascript/packs/application.js
+import { createRoot } from 'react-dom/client'
+import BusinessCardDashboard from '../components/BusinessCardDashboard'
+
+// React コンポーネントの初期化
+document.addEventListener('DOMContentLoaded', () => {
+  const dashboardElement = document.getElementById('business-card-dashboard')
+  if (dashboardElement) {
+    const root = createRoot(dashboardElement)
+    root.render(<BusinessCardDashboard />)
+  }
+})
+```
+
+### 統合されたビルドシステム
+```javascript
+// webpack.config.js
+const path = require('path')
+
+module.exports = {
+  entry: {
+    application: './app/javascript/packs/application.js'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  }
+}
+```
+
+### TypeScript設定
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES6",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["app/javascript/**/*"]
+}
+```
+
+### 実装済みReactコンポーネント
+- **BusinessCardDashboard** - 統計ダッシュボード（TypeScript）
+- **BusinessCardList** - 名刺一覧コンポーネント（インタラクティブ）
+- **SearchFilters** - 高度検索・フィルタリング
+- **ToastNotifications** - ユーザーフィードバックシステム
+
 ## 🏛️ アーキテクチャ詳細
 
 ### MVC + Services アーキテクチャ
@@ -256,6 +320,33 @@ end
 ```
 
 ## 🧪 テスト戦略
+
+### 現在のテスト実行方法
+```bash
+# Ruby/Railsテストの実行
+bundle exec rspec
+
+# JavaScript/TypeScriptテストの実行
+npm test
+
+# カバレッジ付きテスト実行
+npm run test:coverage
+
+# 特定のテストファイル実行
+bundle exec rspec spec/models/business_card_spec.rb
+
+# 特定のテストケース実行
+bundle exec rspec spec/models/business_card_spec.rb:10
+```
+
+### テスト環境設定
+```bash
+# テスト環境のデータベースセットアップ
+RAILS_ENV=test rails db:create db:migrate
+
+# テストデータのリセット
+RAILS_ENV=test rails db:reset
+```
 
 ### テストピラミッド実装
 
@@ -694,7 +785,7 @@ Metrics/BlockLength:
 
 ### 公式ドキュメント
 - [Ruby 3.3 Documentation](https://docs.ruby-lang.org/en/3.3/)
-- [Rails 7.0 Guides](https://guides.rubyonrails.org/v7.0/)
+- [Rails 8.0 Guides](https://guides.rubyonrails.org/v8.0/)
 - [YJIT Performance Guide](https://github.com/ruby/ruby/blob/master/doc/yjit/yjit.md)
 
 ### ベストプラクティス
