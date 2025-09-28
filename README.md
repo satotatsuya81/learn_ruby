@@ -265,13 +265,11 @@ bundle exec rspec spec/system/
 - **要件定義書**: [.kiro/specs/namecard-manager/requirements.md](.kiro/specs/namecard-manager/requirements.md)
 - **設計書**: [.kiro/specs/namecard-manager/design.md](.kiro/specs/namecard-manager/design.md)
 - **タスクリスト**: [.kiro/specs/namecard-manager/tasks.md](.kiro/specs/namecard-manager/tasks.md)
-- **学習記録**: [dev/learning/](dev/learning/)
-- **技術比較**: [dev/comparison/](dev/comparison/)
 
 ## 📞 連絡先
 
 **開発者**: 佐藤辰哉
-**GitHub**: https://github.com/sato-tatsuya
+**GitHub**: https://github.com/satotatsuya81
 **開発期間**: 2025年9月11日〜継続中
 
 ## 📄 ライセンス
