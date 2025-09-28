@@ -60,7 +60,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Use RSpec for tests [https://rspec.info/]
-  gem "rspec-rails", "~> 7.0"
+  gem "rspec-rails", "~> 8.0"
 
   # Use Factory Bot for fixtures replacement [https://github.com/factory-bot/factory_bot_rails]
   gem "factory_bot_rails", "~> 6.0"
